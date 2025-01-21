@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/awsgo"
 	"github.com/SebastianPE0/DressShop_E-commerce-Platform/models"
-	"github.com/SebastianPE0/DressShop_E-commerce_Platform/awsgo"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/secretsmanager"
 )

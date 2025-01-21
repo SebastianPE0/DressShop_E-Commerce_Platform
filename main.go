@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/SebastianPE0/DressShop_E-commerce_Platform/awsgo"
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/awsgo"
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/bd"
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/models"
 	"github.com/aws/aws-lambda-go/events"
 	lambda "github.com/aws/aws-lambda-go/lambda"
 )
@@ -16,13 +18,33 @@ func main() {
 }
 
 func EjecutoLambda(ctx context.Context, event events.CognitoEventUserPoolsPostConfirmation) (events.CognitoEventUserPoolsPostConfirmation, error) {
-	awsgo.InicializoAws()
+	awsgo.InicializoAWS()
 	if !ValidoParametros() {
 
 		fmt.Println("Error en los parámetros. Debe enviar `SecretName`")
 		err := errors.New("error en los parámetros, debe enviar SecretName")
 		return event, err
 	}
+
+	var datos models.SignUp
+
+	for row, att := range event.Request.UserAttributes {
+		switch row {
+		case "email":
+			datos.UserEmail = att
+			fmt.Println("Email = " + datos.UserEmail)
+		case "sub":
+			datos.UserUUID = att
+			fmt.Println("Sub = " + datos.UserUUID)
+		}
+	}
+
+	err := bd.ReadSecret()
+	if err != nil {
+		fmt.Println("Error al leer el Secret " + err.Error())
+		return event, err
+	}
+
 }
 
 func ValidoParametros() bool {
