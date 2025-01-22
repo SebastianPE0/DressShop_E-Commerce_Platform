@@ -1,4 +1,4 @@
-module github.com/SebastianPE0/DressShop_E-commerce-Platform
+module github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Auth/Lambda
 
 go 1.23.4
 

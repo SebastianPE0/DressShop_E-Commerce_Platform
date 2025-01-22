@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/SebastianPE0/DressShop_E-commerce-Platform/awsgo"
-	"github.com/SebastianPE0/DressShop_E-commerce-Platform/bd"
-	"github.com/SebastianPE0/DressShop_E-commerce-Platform/models"
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Auth/Lambda/awsgo"
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Auth/Lambda/bd"
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Auth/Lambda/models"
 	"github.com/aws/aws-lambda-go/events"
 	lambda "github.com/aws/aws-lambda-go/lambda"
 )

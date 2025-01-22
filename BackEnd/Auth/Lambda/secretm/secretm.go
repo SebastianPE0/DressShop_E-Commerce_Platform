@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/SebastianPE0/DressShop_E-commerce-Platform/Lambda/awsgo"
-	"github.com/SebastianPE0/DressShop_E-commerce-Platform/Lambda/models"
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Auth/Lambda/awsgo"
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Auth/Lambda/models"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/secretsmanager"
 )
