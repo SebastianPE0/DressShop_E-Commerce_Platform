@@ -3,8 +3,8 @@ package bd
 import (
 	"fmt"
 
-	"github.com/SebastianPE0/DressShop_E-commerce-Platform/models"
-	"github.com/SebastianPE0/DressShop_E-commerce-Platform/tools"
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Auth/Lambda/models"
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Auth/Lambda/tools"
 	_ "github.com/go-sql-driver/mysql"
 )
 
