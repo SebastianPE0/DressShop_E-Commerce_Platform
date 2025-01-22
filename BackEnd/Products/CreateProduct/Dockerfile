@@ -9,7 +9,7 @@ COPY . .
 
 # Descarga dependencias y compila
 RUN go mod tidy
-RUN go build -o create-service cmd/create/main.go
+RUN go build -o create-service main.go
 
 # Expone el puerto del servicio
 EXPOSE 8081
