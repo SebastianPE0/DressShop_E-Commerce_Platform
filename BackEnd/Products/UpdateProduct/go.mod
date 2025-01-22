@@ -1,6 +1,6 @@
 module github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Products/UpdateProduct
 
-go 1.23.4
+go 1.20
 
 require (
 	github.com/joho/godotenv v1.5.1
