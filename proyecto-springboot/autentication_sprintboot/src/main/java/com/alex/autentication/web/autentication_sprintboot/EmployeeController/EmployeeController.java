@@ -2,11 +2,14 @@ package com.alex.autentication.web.autentication_sprintboot.EmployeeController;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 //import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.alex.autentication.web.autentication_sprintboot.Dto.EmployeeDTO;
+import com.alex.autentication.web.autentication_sprintboot.Dto.LoginDTO;
 import com.alex.autentication.web.autentication_sprintboot.Service.EmployeeService;
+import com.alex.autentication.web.autentication_sprintboot.response.LoginResponse;
 
 
 @RestController
@@ -24,13 +27,13 @@ public class EmployeeController {
         return id;
     }
     
-    /*(@PostMapping(path = "/login")
+    @PostMapping(path = "/login")
     public ResponseEntity<?> loginEmployee(@RequestBody LoginDTO loginDTO) {
         //TODO: process POST request
-        LoginMesage loginMesage = employeeService.loginEployee(loginDTO);
+        LoginResponse loginResponse = employeeService.loginEmployee(loginDTO);
         
-        return ResponseEntity.ok(loginMesage);
-    }*/
+        return ResponseEntity.ok(loginResponse);
+    }
     
 
 
