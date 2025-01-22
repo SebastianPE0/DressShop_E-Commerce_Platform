@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/SebastianPE0/DressShop_E-commerce-Platform/models"
-	"github.com/SebastianPE0/DressShop_E-commerce-Platform/secretm"
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/Lambda/models"
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/Lambda/secretm"
 	_ "github.com/go-sql-driver/mysql"
 )
 
