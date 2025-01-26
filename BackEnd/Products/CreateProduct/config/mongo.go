@@ -12,7 +12,7 @@ import (
 
 var client *mongo.Client
 
-// ConnectMongoDB initializes the connection to MongoDB and returns the client.
+// ConnectMongoDB initializes the connection to MongoDB.
 func ConnectMongoDB() *mongo.Client {
 	if client != nil {
 		return client
