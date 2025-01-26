@@ -1,8 +1,8 @@
 package routes
 
 import (
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Products/CreateProduct/controllers"
 	"github.com/gin-gonic/gin"
-	"github.com/tuusuario/DressShop_E-commerce-Platform/BackEnd/Products/CreateProduct/controllers"
 )
 
 func SetupRoutes() *gin.Engine {

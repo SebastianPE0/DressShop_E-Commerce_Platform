@@ -3,8 +3,8 @@ package services
 import (
 	"fmt"
 
-	"github.com/tuusuario/DressShop_E-commerce-Platform/BackEnd/Products/CreateProduct/repositories"
-	"github.com/tuusuario/DressShop_E-commerce-Platform/BackEnd/Products/Shared/models"
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Products/CreateProduct/repositories"
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Products/Shared/models"
 )
 
 func CreateProductService(product models.Product) error {

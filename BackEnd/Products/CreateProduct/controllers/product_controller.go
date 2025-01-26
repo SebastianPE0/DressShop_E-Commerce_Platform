@@ -3,9 +3,9 @@ package controllers
 import (
 	"net/http"
 
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Products/CreateProduct/services"
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Products/Shared/models"
 	"github.com/gin-gonic/gin"
-	"github.com/tuusuario/DressShop_E-commerce-Platform/BackEnd/Products/CreateProduct/services"
-	"github.com/tuusuario/DressShop_E-commerce-Platform/BackEnd/Products/Shared/models"
 )
 
 func CreateProduct(c *gin.Context) {

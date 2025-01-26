@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/tuusuario/DressShop_E-commerce-Platform/BackEnd/Products/Shared/config"
-	"github.com/tuusuario/DressShop_E-commerce-Platform/BackEnd/Products/Shared/models"
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Products/Shared/config"
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Products/Shared/models"
 )
 
 func InsertProduct(product models.Product) error {
