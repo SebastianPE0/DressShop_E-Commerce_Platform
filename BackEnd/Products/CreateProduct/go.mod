@@ -1,4 +1,4 @@
-module github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Products/CreateProduct
+module github.com/SebastianPE0/DressShop_E-Commerce-Platform/BackEnd/Products/CreateProduct
 
 go 1.20
 
@@ -9,7 +9,6 @@ require (
 
 require (
 	github.com/gin-gonic/gin v1.10.0
-    github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Products/Shared v0.0.0
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/klauspost/compress v1.16.7 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
