@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/tuusuario/DressShop_E-commerce-Platform/BackEnd/Products/CreateProduct/routes"
-	"github.com/tuusuario/DressShop_E-commerce-Platform/BackEnd/Products/Shared/config"
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Products/CreateProduct/routes"
+	"github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Products/Shared/config"
 )
 
 func main() {
