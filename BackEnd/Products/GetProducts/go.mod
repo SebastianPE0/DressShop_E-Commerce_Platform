@@ -1,4 +1,4 @@
-module github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Products/GetProducts
+module github.com/SebastianPE0/DressShop_E-commerce_Platform/BackEnd/Products/GetProducts
 
 go 1.20
 

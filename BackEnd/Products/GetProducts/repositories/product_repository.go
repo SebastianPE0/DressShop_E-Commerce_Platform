@@ -1,12 +1,13 @@
 package repositories
 
+/*
 import (
 	"context"
 	"errors"
 
 	"time"
 
-	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/DeleteProduct/config"
+	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/GetProducts/config"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -34,3 +35,4 @@ func DeleteByID(id string) error {
 
 	return nil
 }
+*/

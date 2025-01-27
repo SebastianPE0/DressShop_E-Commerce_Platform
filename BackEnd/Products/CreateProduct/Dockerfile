@@ -18,4 +18,5 @@ RUN go build -o create-product-service main.go
 EXPOSE 8082
 
 # Command to run the service
+
 CMD ["./create-product-service"]
