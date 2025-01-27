@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/SebastianPE0/DressShop_E-Commerce-Platform/BackEnd/Products/DeleteProduct/controllers"
+	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/DeleteProduct/controllers"
 	"github.com/gin-gonic/gin"
 )
 

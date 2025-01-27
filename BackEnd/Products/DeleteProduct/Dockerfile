@@ -9,6 +9,6 @@ COPY . .
 
 RUN go build -o delete-product-service main.go
 
-EXPOSE 8083
+EXPOSE 8084
 
 CMD ["./delete-product-service"]

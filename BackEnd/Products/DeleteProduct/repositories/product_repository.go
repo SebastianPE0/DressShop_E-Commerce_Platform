@@ -3,21 +3,24 @@ package repositories
 import (
 	"context"
 	"errors"
+
 	"time"
 
-	"github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Products/DeleteProduct/config"
+	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/DeleteProduct/config"
+	//"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/DeleteProduct/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func DeleteByID(id string) error {
-	collection := config.GetCollection("products")
+	collection := config.GetMongoCollection("products")
 
 	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return errors.New("invalid product ID format")
 	}
 
+	// Context with time limit for the operation
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 

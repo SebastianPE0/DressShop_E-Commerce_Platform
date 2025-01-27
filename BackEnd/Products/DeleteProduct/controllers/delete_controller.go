@@ -3,7 +3,8 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/SebastianPE0/DressShop_E-Commerce-Platform/BackEnd/Products/DeleteProduct/services"
+	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/DeleteProduct/services"
+
 	"github.com/gin-gonic/gin"
 )
 

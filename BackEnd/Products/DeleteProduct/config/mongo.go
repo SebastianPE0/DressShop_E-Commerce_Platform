@@ -10,27 +10,36 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var DB *mongo.Client
+var client *mongo.Client
 
-func ConnectMongoDB() {
+// ConnectMongoDB initializes the connection to MongoDB.
+func ConnectMongoDB() *mongo.Client {
+	if client != nil {
+		return client
+	}
+
 	mongoURI := os.Getenv("MONGO_URI")
-	client, err := mongo.NewClient(options.Client().ApplyURI(mongoURI))
+	if mongoURI == "" {
+		log.Fatal("MONGO_URI is not set in environment variables")
+	}
+
+	var err error
+	client, err = mongo.Connect(context.TODO(), options.Client().ApplyURI(mongoURI))
 	if err != nil {
-		log.Fatalf("Error creating MongoDB client: %v", err)
+		log.Fatalf("Failed to connect to MongoDB: %v", err)
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-
-	err = client.Connect(ctx)
-	if err != nil {
-		log.Fatalf("Error connecting to MongoDB: %v", err)
+	if err := client.Ping(ctx, nil); err != nil {
+		log.Fatalf("MongoDB connection test failed: %v", err)
 	}
 
 	log.Println("Connected to MongoDB successfully")
-	DB = client
+	return client
 }
 
-func GetCollection(collectionName string) *mongo.Collection {
-	return DB.Database(os.Getenv("DB_NAME")).Collection(collectionName)
+// GetMongoCollection returns a specific MongoDB collection.
+func GetMongoCollection(collectionName string) *mongo.Collection {
+	return client.Database("ecommerce").Collection(collectionName)
 }

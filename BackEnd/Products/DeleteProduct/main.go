@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/SebastianPE0/DressShop_E-Commerce-Platform/BackEnd/Products/DeleteProduct/config"
-	"github.com/SebastianPE0/DressShop_E-Commerce-Platform/BackEnd/Products/DeleteProduct/routes"
+	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/DeleteProduct/config"
+	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/DeleteProduct/routes"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -23,7 +23,7 @@ func main() {
 	router := gin.Default()
 	routes.SetupRoutes(router)
 
-	port := ":8083"
+	port := ":8084"
 	log.Printf("DeleteProduct server running on port %s", port)
 	router.Run(port)
 }
