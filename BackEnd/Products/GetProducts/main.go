@@ -5,25 +5,19 @@ import (
 
 	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/GetProducts/config"
 	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/GetProducts/routes"
-	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 func main() {
-	// upload enviroment variables
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	// Load environment variables and connect to MongoDB
+	config.LoadEnv()
+	client := config.ConnectMongoDB()
+	defer client.Disconnect(nil)
 
-	// Conect to MongoDB
-	config.ConnectMongoDB()
+	// Configure routes
+	router := routes.SetupRoutes(client)
 
-	// server configuration
-	router := gin.Default()
-	routes.SetupRoutes(router)
-
-	port := ":8083"
-	log.Printf("GetProducts server running on port %s", port)
-	router.Run(port)
+	// Start server
+	port := config.GetPort()
+	log.Printf("GetProducts server running on the port %s", port)
+	router.Run(":" + port)
 }
