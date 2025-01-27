@@ -1,4 +1,4 @@
-module github.com/SebastianPE0/DressShop_E-commerce-Platform/BackEnd/Products/UpdateProduct
+module github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/UpdateProduct
 
 go 1.20
 
