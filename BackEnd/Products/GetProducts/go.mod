@@ -2,10 +2,7 @@ module github.com/SebastianPE0/DressShop_E-commerce_Platform/BackEnd/Products/Ge
 
 go 1.20
 
-require (
-	github.com/joho/godotenv v1.5.1
-	go.mongodb.org/mongo-driver v1.17.2
-)
+require go.mongodb.org/mongo-driver v1.17.2
 
 require (
 	github.com/golang/snappy v0.0.4 // indirect

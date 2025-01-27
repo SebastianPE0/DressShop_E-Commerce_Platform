@@ -1,6 +1,5 @@
 package main
 
-/*
 import (
 	"log"
 
@@ -11,21 +10,20 @@ import (
 )
 
 func main() {
-	// Cargar variables de entorno
+	// upload enviroment variables
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
 
-	// Conectar a MongoDB
+	// Conect to MongoDB
 	config.ConnectMongoDB()
 
-	// Configuración del servidor
+	// server configuration
 	router := gin.Default()
 	routes.SetupRoutes(router)
 
 	port := ":8083"
-	log.Printf("DeleteProduct server running on port %s", port)
+	log.Printf("GetProducts server running on port %s", port)
 	router.Run(port)
 }
-*/

@@ -1,38 +1,36 @@
 package repositories
 
-/*
 import (
 	"context"
-	"errors"
 
 	"time"
 
 	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/GetProducts/config"
+	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/GetProducts/models"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func DeleteByID(id string) error {
+func GetAllProducts() ([]models.Product, error) {
 	collection := config.GetMongoCollection("products")
-
-	objectID, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return errors.New("invalid product ID format")
-	}
 
 	// Context with time limit for the operation
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	result, err := collection.DeleteOne(ctx, bson.M{"_id": objectID})
+	cursor, err := collection.Find(ctx, bson.M{})
 	if err != nil {
-		return err
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var products []models.Product
+	for cursor.Next(ctx) {
+		var product models.Product
+		if err := cursor.Decode(&product); err != nil {
+			continue
+		}
+		products = append(products, product)
 	}
 
-	if result.DeletedCount == 0 {
-		return errors.New("product not found")
-	}
-
-	return nil
+	return products, nil
 }
-*/
