@@ -8,7 +8,7 @@ import (
 	"github.com/SebastianPE0/DressShop_E-Commerce-Platform/BackEnd/Products/CreateProduct/models"
 )
 
-func InsertProduct(product models.Product) error {
+func InsertProduct(product *models.Product) error { // <-- Cambia a puntero (*models.Product)
 	collection := config.GetMongoCollection("products")
 
 	// Context with time limit for the operation
