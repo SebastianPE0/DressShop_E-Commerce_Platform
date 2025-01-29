@@ -1,14 +1,13 @@
 const mongoose = require('mongoose');
-const config = require('./env'); // Importar configuración centralizada
+const config = require('./env');
 
 const connectDB = async () => {
   try {
-    console.log('Connecting to MongoDB at:', config.mongoURI); // Para depuración
+    console.log(`Connecting to MongoDB at ${config.mongoURI}`);
     await mongoose.connect(config.mongoURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-
     console.log('MongoDB connected successfully');
   } catch (error) {
     console.error('MongoDB connection error:', error);
