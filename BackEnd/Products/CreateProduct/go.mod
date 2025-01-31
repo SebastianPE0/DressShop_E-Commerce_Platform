@@ -1,6 +1,5 @@
 module github.com/SebastianPE0/DressShop_E-Commerce-Platform/BackEnd/Products/CreateProduct
 
-
 go 1.20
 
 require (

@@ -7,18 +7,28 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// LoadEnv loads environment variables from the .env file.
+// LoadEnv carga las variables de entorno desde un archivo .env
 func LoadEnv() {
-	if err := godotenv.Load(); err != nil {
-		log.Println("Could not load .env file, using system environment variables")
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Warning: No .env file found, using system environment variables.")
 	}
 }
 
-// GetPort retrieves the application port from environment variables.
+// GetMongoURI obtiene la URI de MongoDB desde las variables de entorno
+func GetMongoURI() string {
+	mongoURI := os.Getenv("MONGO_URI")
+	if mongoURI == "" {
+		mongoURI = "mongodb://localhost:27017/products_db"
+	}
+	return mongoURI
+}
+
+// GetPort obtiene el puerto desde las variables de entorno
 func GetPort() string {
 	port := os.Getenv("APP_PORT")
 	if port == "" {
-		port = "8080" // Default port
+		port = "8082"
 	}
 	return port
 }
