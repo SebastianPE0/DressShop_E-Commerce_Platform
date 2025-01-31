@@ -5,7 +5,7 @@ FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
 
 # Copia el archivo JAR del microservicio al contenedor
-COPY target/autentication_sprintboot-0.0.1-SNAPSHOT.jar app.jar
+COPY target/delete_employee-0.0.1-SNAPSHOT.jar app.jar
 
 # Expone el puerto en el que corre la aplicación (ajústalo según tu configuración)
 EXPOSE 8093
