@@ -40,3 +40,13 @@
 .read-the-docs {
   color: #888;
 }
+.container {
+  width: 80%;
+  margin: 0 auto; /* Centra el contenido horizontalmente */
+  padding: 20px;
+  text-align: left; /* Asegura que el texto esté alineado a la izquierda */
+  position: absolute;
+  top: 10px; /* Ajusta la posición al inicio de la pantalla */
+  left: 50%;
+  transform: translateX(-50%);
+}
