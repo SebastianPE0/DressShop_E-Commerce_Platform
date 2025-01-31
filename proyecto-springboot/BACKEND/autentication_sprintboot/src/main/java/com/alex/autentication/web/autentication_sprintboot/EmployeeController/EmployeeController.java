@@ -13,7 +13,7 @@ import com.alex.autentication.web.autentication_sprintboot.response.LoginRespons
 
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 @RequestMapping("api/v1/employee")
 
 public class EmployeeController {
@@ -44,7 +44,11 @@ public class EmployeeController {
         
         return ResponseEntity.ok(loginResponse);
     }
-    
+       // Endpoint para manejar solicitudes OPTIONS (Evita errores CORS)
+       @RequestMapping(method = RequestMethod.OPTIONS)
+       public ResponseEntity<?> handleOptions() {
+           return ResponseEntity.ok().build();
+       }
 
 
 

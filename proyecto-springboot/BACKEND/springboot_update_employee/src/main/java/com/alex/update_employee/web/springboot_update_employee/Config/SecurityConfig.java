@@ -12,18 +12,20 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-  @Bean
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .cors(cors -> cors.disable()) // Permite CORS
             .csrf(csrf -> csrf.disable()) // Deshabilita CSRF
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.PUT, "/api/v1/employee/**").authenticated() // Protege PUT
-                .anyRequest().permitAll() // Permite el resto sin autenticación
+                .anyRequest().permitAll() // Permitir todas las solicitudes sin autenticación (para pruebas)
             )
             .httpBasic(); // Habilita autenticación básica
 
         return http.build();
     }
+
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

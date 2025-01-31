@@ -2,6 +2,7 @@ package com.alex.update_employee.web.springboot_update_employee.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import com.alex.update_employee.web.springboot_update_employee.Service.IEmployee
 
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173") 
 @RequestMapping("/api/v1/employees")
 public class EmployeeControllerUpdate {
     @Autowired
