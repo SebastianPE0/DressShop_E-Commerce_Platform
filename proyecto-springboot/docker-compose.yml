@@ -4,7 +4,7 @@ services:
   # Microservicio de Crear Empleados
   employee-create:
     build:
-      context: ./BACKEND/employee-create
+      context: ./BACKEND/autentication_sprintboot
     ports:
       - "8090:8090"
     environment:
@@ -19,7 +19,7 @@ services:
   # Microservicio de Leer Empleados
   employee-read:
     build:
-      context: ./BACKEND/employee-read
+      context: ./BACKEND/read_employee_web
     ports:
       - "8094:8094"
     environment:
@@ -34,7 +34,7 @@ services:
   # Microservicio de Actualizar Empleados
   employee-update:
     build:
-      context: ./BACKEND/employee-update
+      context: ./BACKEND/springboot_update_employee
     ports:
       - "8092:8092"
     environment:
@@ -49,7 +49,7 @@ services:
   # Microservicio de Eliminar Empleados
   employee-delete:
     build:
-      context: ./BACKEND/employee-delete
+      context: ./BACKEND/delete_employee
     ports:
       - "8093:8093"
     environment:
@@ -67,7 +67,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: alexander2198
-      MYSQL_DATABASE: employees_db
+      MYSQL_DATABASE: dboffice
     ports:
       - "3306:3306"
     networks:
