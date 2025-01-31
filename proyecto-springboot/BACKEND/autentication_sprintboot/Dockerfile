@@ -4,6 +4,7 @@ FROM eclipse-temurin:21-jdk-alpine
 # Establece el directorio de trabajo en el contenedor
 WORKDIR /app
 
+COPY .env .env
 # Copia el archivo JAR del microservicio al contenedor
 COPY target/autentication_sprintboot-0.0.1-SNAPSHOT.jar app.jar
 

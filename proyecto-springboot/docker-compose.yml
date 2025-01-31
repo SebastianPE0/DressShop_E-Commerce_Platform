@@ -5,14 +5,13 @@ services:
   employee-create:
     build:
       context: ./BACKEND/autentication_sprintboot
+    env_file:
+      - ./BACKEND/autentication_sprintboot/.env
     ports:
       - "8090:8090"
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/dboffice
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=alexander2198
     depends_on:
-      - mysql-db
+      mysql-db:
+        condition: service_healthy  # Esperar hasta que MySQL esté listo
     networks:
       - app-network
 
@@ -20,14 +19,13 @@ services:
   employee-read:
     build:
       context: ./BACKEND/read_employee_web
+    env_file:
+      - ./BACKEND/autentication_sprintboot/.env
     ports:
       - "8094:8094"
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/dboffice
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=alexander2198
     depends_on:
-      - mysql-db
+      mysql-db:
+        condition: service_healthy
     networks:
       - app-network
 
@@ -35,14 +33,13 @@ services:
   employee-update:
     build:
       context: ./BACKEND/springboot_update_employee
+    env_file:
+      - ./BACKEND/autentication_sprintboot/.env
     ports:
       - "8092:8092"
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/dboffice
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=alexander2198
     depends_on:
-      - mysql-db
+      mysql-db:
+        condition: service_healthy
     networks:
       - app-network
 
@@ -50,18 +47,17 @@ services:
   employee-delete:
     build:
       context: ./BACKEND/delete_employee
+    env_file:
+      - ./BACKEND/autentication_sprintboot/.env  
     ports:
       - "8093:8093"
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/dboffice
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=alexander2198
     depends_on:
-      - mysql-db
+      mysql-db:
+        condition: service_healthy
     networks:
       - app-network
 
-  # Base de Datos MySQL
+  # Base de Datos MySQL con healthcheck
   mysql-db:
     image: mysql:8.0
     restart: always
@@ -69,7 +65,12 @@ services:
       MYSQL_ROOT_PASSWORD: alexander2198
       MYSQL_DATABASE: dboffice
     ports:
-      - "3306:3306"
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - app-network
 
