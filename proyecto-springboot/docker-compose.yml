@@ -9,9 +9,6 @@ services:
       - ./BACKEND/autentication_sprintboot/.env
     ports:
       - "8090:8090"
-    depends_on:
-      mysql-db:
-        condition: service_healthy  # Esperar hasta que MySQL esté listo
     networks:
       - app-network
 
@@ -23,9 +20,6 @@ services:
       - ./BACKEND/autentication_sprintboot/.env
     ports:
       - "8094:8094"
-    depends_on:
-      mysql-db:
-        condition: service_healthy
     networks:
       - app-network
 
@@ -37,9 +31,6 @@ services:
       - ./BACKEND/autentication_sprintboot/.env
     ports:
       - "8092:8092"
-    depends_on:
-      mysql-db:
-        condition: service_healthy
     networks:
       - app-network
 
@@ -51,26 +42,6 @@ services:
       - ./BACKEND/autentication_sprintboot/.env  
     ports:
       - "8093:8093"
-    depends_on:
-      mysql-db:
-        condition: service_healthy
-    networks:
-      - app-network
-
-  # Base de Datos MySQL con healthcheck
-  mysql-db:
-    image: mysql:8.0
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: alexander2198
-      MYSQL_DATABASE: dboffice
-    ports:
-      - "3307:3306"
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     networks:
       - app-network
 
