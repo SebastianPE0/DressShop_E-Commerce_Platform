@@ -75,3 +75,4 @@ jobs:
             docker run -d --name ${{ matrix.service }}-service --network host \
               -e MONGO_URI="${{ secrets.MONGO_URI }}" \
               sebastianperez02/${{ matrix.service }}:latest
+

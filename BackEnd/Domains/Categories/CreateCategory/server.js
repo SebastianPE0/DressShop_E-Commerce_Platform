@@ -5,7 +5,7 @@ const config = require('./src/config/env'); // Importar configuración centraliz
 // Connect to DB
 connectDB();
 
-// Start server (TEST YML3)
+// Start server (TEST YML4)
 app.listen(config.appPort, () => {
   console.log(`CreateCategory service running on port ${config.appPort}`);
 });
