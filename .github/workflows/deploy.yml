@@ -15,9 +15,9 @@ jobs:
     strategy:
       matrix:
         service: 
-          - { name: "category-create", path: "CreateCategory" }
-          - { name: "category-get-all", path: "GetAllCategories" }
-          - { name: "category-get-by-id", path: "GetCategoryById" }
+          - { name: "create-category", path: "CreateCategory", image: "sebastianperez02/create-category" }
+          - { name: "get-all-categories", path: "GetAllCategories", image: "sebastianperez02/get-all-categories" }
+          - { name: "get-byid-category", path: "GetCategoryById", image: "sebastianperez02/get-byid-category" }
 
     steps:
       - name: Checkout code
@@ -32,29 +32,26 @@ jobs:
       - name: Build Docker image for ${{ matrix.service.name }}
         run: |
           cd BackEnd/Domains/Categories/${{ matrix.service.path }}
-          docker build -t sebastianperez02/${{ matrix.service.name }} .
+          docker build -t ${{ matrix.service.image }} .
 
       - name: Push Docker image to DockerHub
-        run: docker push sebastianperez02/${{ matrix.service.name }}:latest
+        run: docker push ${{ matrix.service.image }}:latest
 
   deploy-to-ec2:
     needs: build-and-push
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: 
-          - { name: "category-create", secret: "HOST_DNS_CREATECATEGORY_QA" }
-          - { name: "category-get-all", secret: "HOST_DNS_GETALLCATEGORIES_QA" }
-          - { name: "category-get-by-id", secret: "HOST_DNS_GETBYIDCATEGORY_QA" }
+        deployment:
+          - { name: "create-category", host: "HOST_DNS_CREATECATEGORY_QA", image: "sebastianperez02/create-category" }
+          - { name: "get-all-categories", host: "HOST_DNS_GETALLCATEGORIES_QA", image: "sebastianperez02/get-all-categories" }
+          - { name: "get-byid-category", host: "HOST_DNS_GETBYIDCATEGORY_QA", image: "sebastianperez02/get-byid-category" }
 
     steps:
-      - name: Set host variable
-        run: echo "HOST_DNS=${{ secrets[matrix.service.secret] }}" >> $GITHUB_ENV
-
-      - name: Deploy ${{ matrix.service.name }} to EC2
+      - name: Deploy to ${{ matrix.deployment.name }} EC2 instance
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ env.HOST_DNS }}
+          host: ${{ secrets[ matrix.deployment.host ] }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
@@ -65,9 +62,9 @@ jobs:
             sudo usermod -aG docker $USER
             sudo chmod 666 /var/run/docker.sock
 
-            docker pull sebastianperez02/${{ matrix.service.name }}:latest
-            docker stop ${{ matrix.service.name }} || true
-            docker rm ${{ matrix.service.name }} || true
-            docker run -d --name ${{ matrix.service.name }} --network host \
+            docker pull ${{ matrix.deployment.image }}:latest
+            docker stop ${{ matrix.deployment.name }} || true
+            docker rm ${{ matrix.deployment.name }} || true
+            docker run -d --name ${{ matrix.deployment.name }} --network host \
               -e MONGO_URI="${{ secrets.MONGO_URI }}" \
-              sebastianperez02/${{ matrix.service.name }}:latest
+              ${{ matrix.deployment.image }}:latest
