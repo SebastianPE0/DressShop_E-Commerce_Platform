@@ -61,7 +61,7 @@ jobs:
       - name: Build and push get-byid-category
         uses: docker/build-push-action@v4
         with:
-          context: ./BackEnd/Domains/Categories/GetCategoryByID
+          context: ./BackEnd/Domains/Categories/GetCategoryById
           file: ./BackEnd/Domains/Categories/GetCategoryByID/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/get-byid-category:latest
@@ -106,7 +106,7 @@ jobs:
     needs: build-and-push-getbyid
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to GetByIDCategory QA
+      - name: Deploy to GetByIdCategory QA
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_DNS_GETBYIDCATEGORY_QA }}
