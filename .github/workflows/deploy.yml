@@ -3,7 +3,7 @@ name: CI/CD Pipeline for Category Services
 on:
   push:
     branches:
-      - Feature_CategoryDomain_GetAllCategories
+      - Test
     paths:
       - 'BackEnd/Domains/Categories/CreateCategory/**'
       - 'BackEnd/Domains/Categories/GetAllCategories/**'
@@ -14,57 +14,44 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: 
-          - { name: "create-category", path: "CreateCategory", image: "sebastianperez02/create-category" }
-          - { name: "get-all-categories", path: "GetAllCategories", image: "sebastianperez02/get-all-categories" }
-          - { name: "get-byid-category", path: "GetCategoryById", image: "sebastianperez02/get-byid-category" }
+        service:
+          - { name: "create-category", path: "CreateCategory" }
+          - { name: "get-all-categories", path: "GetAllCategories" }
+          - { name: "get-byid-category", path: "GetCategoryById" }
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Log in to DockerHub
-        uses: docker/login-action@v2
+      - name: Build and push on Docker image
+        uses: docker/build-push-action@v4
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-      - name: Build Docker image for ${{ matrix.service.name }}
-        run: |
-          cd BackEnd/Domains/Categories/${{ matrix.service.path }}
-          docker build -t ${{ matrix.service.image }} .
-
-      - name: Push Docker image to DockerHub
-        run: docker push ${{ matrix.service.image }}:latest
+          context: ./BackEnd/Domains/Categories/${{ matrix.service.path }}
+          file: ./BackEnd/Domains/Categories/${{ matrix.service.path }}/Dockerfile
+          push: true
+          tags: sebastianperez02/${{ matrix.service.name }}:latest
 
   deploy-to-ec2:
     needs: build-and-push
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        deployment:
-          - { name: "create-category", host: "HOST_DNS_CREATECATEGORY_QA", image: "sebastianperez02/create-category" }
-          - { name: "get-all-categories", host: "HOST_DNS_GETALLCATEGORIES_QA", image: "sebastianperez02/get-all-categories" }
-          - { name: "get-byid-category", host: "HOST_DNS_GETBYIDCATEGORY_QA", image: "sebastianperez02/get-byid-category" }
+        service:
+          - { name: "create-category", dns: "HOST_DNS_CREATECATEGORY_QA" }
+          - { name: "get-all-categories", dns: "HOST_DNS_GETALLCATEGORIES_QA" }
+          - { name: "get-byid-category", dns: "HOST_DNS_GETBYIDCATEGORY_QA" }
 
     steps:
-      - name: Deploy to ${{ matrix.deployment.name }} EC2 instance
+      - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets[ matrix.deployment.host ] }}
-          username: ${{ secrets.USERNAME }}
+          host: ${{ secrets[matrix.service.dns] }}
+          username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            sudo apt update -y
-            sudo apt install -y docker.io
-            sudo systemctl start docker
-            sudo systemctl enable docker
-            sudo usermod -aG docker $USER
-            sudo chmod 666 /var/run/docker.sock
-
-            docker pull ${{ matrix.deployment.image }}:latest
-            docker stop ${{ matrix.deployment.name }} || true
-            docker rm ${{ matrix.deployment.name }} || true
-            docker run -d --name ${{ matrix.deployment.name }} --network host \
-              -e MONGO_URI="${{ secrets.MONGO_URI }}" \
-              ${{ matrix.deployment.image }}:latest
+            sudo docker stop ${{ matrix.service.name }} || echo "No existing process found"
+            sudo docker rm ${{ matrix.service.name }} || echo "No existing process found"
+            sudo docker pull sebastianperez02/${{ matrix.service.name }}:latest
+            sudo docker run -d -p 80:80 --name ${{ matrix.service.name }} \
+              -e MONGO_URI=${{ secrets.MONGO_URI }} \
+              sebastianperez02/${{ matrix.service.name }}:latest
