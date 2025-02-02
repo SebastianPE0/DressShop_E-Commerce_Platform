@@ -3,7 +3,7 @@ name: CI/CD Pipeline for Category Services
 on:
   push:
     branches:
-      - Test
+      - Feature_CategoryDomain_GetAllCategories
     paths:
       - 'BackEnd/Domains/Categories/CreateCategory/**'
       - 'BackEnd/Domains/Categories/GetAllCategories/**'
@@ -55,3 +55,4 @@ jobs:
             sudo docker run -d -p 80:80 --name ${{ matrix.service.name }} \
               -e MONGO_URI=${{ secrets.MONGO_URI }} \
               sebastianperez02/${{ matrix.service.name }}:latest
+
