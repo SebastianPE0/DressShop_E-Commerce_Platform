@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service:
+        service: 
           - createcategory
           - getallcategories
           - getbyidcategory
@@ -29,10 +29,10 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build Docker image for ${{ matrix.service }}
-        run: docker build -t sebastianperez02/categories-${{ matrix.service }} -f BackEnd/Domains/Categories/${{ matrix.service }}/Dockerfile .
+        run: docker build -t sebastianperez02/${{ matrix.service }} -f BackEnd/Domains/Categories/${{ matrix.service }}/Dockerfile .
 
       - name: Push Docker image to DockerHub
-        run: docker push sebastianperez02/categories-${{ matrix.service }}:latest
+        run: docker push sebastianperez02/${{ matrix.service }}:latest
 
   deploy-to-ec2:
     needs: build-and-push
@@ -40,18 +40,21 @@ jobs:
     strategy:
       matrix:
         service: [createcategory, getallcategories, getbyidcategory]
-        include:
-          - service: createcategory
-            host: ${{ secrets.HOST_DNS_CREATECATEGORY_QA }}
-          - service: getallcategories
-            host: ${{ secrets.HOST_DNS_GETALLCATEGORIES_QA }}
-          - service: getbyidcategory
-            host: ${{ secrets.HOST_DNS_GETBYIDCATEGORY_QA }}
     steps:
+      - name: Set environment variables for ${{ matrix.service }}
+        run: |
+          if [[ "${{ matrix.service }}" == "createcategory" ]]; then
+            echo "HOST_DNS=${{ secrets.HOST_DNS_CREATECATEGORY_QA }}" >> $GITHUB_ENV
+          elif [[ "${{ matrix.service }}" == "getallcategories" ]]; then
+            echo "HOST_DNS=${{ secrets.HOST_DNS_GETALLCATEGORIES_QA }}" >> $GITHUB_ENV
+          elif [[ "${{ matrix.service }}" == "getbyidcategory" ]]; then
+            echo "HOST_DNS=${{ secrets.HOST_DNS_GETBYIDCATEGORY_QA }}" >> $GITHUB_ENV
+          fi
+
       - name: Deploy to EC2 for ${{ matrix.service }}
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ matrix.host }}
+          host: ${{ env.HOST_DNS }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
@@ -62,10 +65,10 @@ jobs:
             sudo usermod -aG docker $USER
             sudo chmod 666 /var/run/docker.sock
 
-            docker pull sebastianperez02/categories-${{ matrix.service }}:latest
+            docker pull sebastianperez02/${{ matrix.service }}:latest
             docker stop ${{ matrix.service }}-service || true
             docker rm ${{ matrix.service }}-service || true
 
             docker run -d --name ${{ matrix.service }}-service --network host \
               -e MONGO_URI="${{ secrets.MONGO_URI }}" \
-              sebastianperez02/categories-${{ matrix.service }}:latest
+              sebastianperez02/${{ matrix.service }}:latest
