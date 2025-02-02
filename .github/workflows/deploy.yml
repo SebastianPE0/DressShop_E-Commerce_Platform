@@ -44,18 +44,21 @@ jobs:
           - CreateCategory
           - GetAllCategories
           - GetCategoryById
-        include:
-          - service: CreateCategory
-            host: ${{ secrets.HOST_DNS_CREATECATEGORY_QA }}
-          - service: GetAllCategories
-            host: ${{ secrets.HOST_DNS_GETALLCATEGORIES_QA }}
-          - service: GetCategoryById
-            host: ${{ secrets.HOST_DNS_GETBYIDCATEGORY_QA }}
     steps:
+      - name: Set Host Variable
+        run: |
+          if [[ "${{ matrix.service }}" == "CreateCategory" ]]; then
+            echo "HOST=${{ secrets.HOST_DNS_CREATECATEGORY_QA }}" >> $GITHUB_ENV
+          elif [[ "${{ matrix.service }}" == "GetAllCategories" ]]; then
+            echo "HOST=${{ secrets.HOST_DNS_GETALLCATEGORIES_QA }}" >> $GITHUB_ENV
+          elif [[ "${{ matrix.service }}" == "GetCategoryById" ]]; then
+            echo "HOST=${{ secrets.HOST_DNS_GETBYIDCATEGORY_QA }}" >> $GITHUB_ENV
+          fi
+
       - name: Deploy ${{ matrix.service }} to EC2
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ matrix.host }}
+          host: ${{ env.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
