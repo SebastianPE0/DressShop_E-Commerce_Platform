@@ -6,48 +6,116 @@ on:
       - Feature_CategoryDomain_GetAllCategories
 
 jobs:
-  build-and-push:
+  build-and-push-create:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service:
-          - { name: "create-category", path: "CreateCategory" }
-          - { name: "get-all-categories", path: "GetAllCategories" }
-          - { name: "get-byid-category", path: "GetCategoryById" }
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Build and push Docker image
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push create-category
         uses: docker/build-push-action@v4
         with:
-          context: ./BackEnd/Domains/Categories/${{ matrix.service.path }}
-          file: ./BackEnd/Domains/Categories/${{ matrix.service.path }}/Dockerfile
+          context: ./BackEnd/Domains/Categories/CreateCategory
+          file: ./BackEnd/Domains/Categories/CreateCategory/Dockerfile
           push: true
-          tags: sebastianperez02/${{ matrix.service.name }}:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/create-category:latest
 
-  deploy-to-ec2:
-    needs: build-and-push
+  build-and-push-getall:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service:
-          - { name: "create-category", dns: "HOST_DNS_CREATECATEGORY_QA" }
-          - { name: "get-all-categories", dns: "HOST_DNS_GETALLCATEGORIES_QA" }
-          - { name: "get-byid-category", dns: "HOST_DNS_GETBYIDCATEGORY_QA" }
-
     steps:
-      - name: Deploy to EC2
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push get-all-categories
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd/Domains/Categories/GetAllCategories
+          file: ./BackEnd/Domains/Categories/GetAllCategories/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/get-all-categories:latest
+
+  build-and-push-getbyid:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push get-byid-category
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd/Domains/Categories/GetCategoryByID
+          file: ./BackEnd/Domains/Categories/GetCategoryByID/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/get-byid-category:latest
+
+  deploy-create:
+    needs: build-and-push-create
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to CreateCategory QA
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets[matrix.service.dns] }}
-          username: ${{ secrets.EC2_USER }}
+          host: ${{ secrets.HOST_DNS_CREATECATEGORY_QA }}
+          username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            sudo docker stop ${{ matrix.service.name }} || echo "No existing process found"
-            sudo docker rm ${{ matrix.service.name }} || echo "No existing process found"
-            sudo docker pull sebastianperez02/${{ matrix.service.name }}:latest
-            sudo docker run -d -p 80:80 --name ${{ matrix.service.name }} \
-              -e MONGO_URI=${{ secrets.MONGO_URI }} \
-              sebastianperez02/${{ matrix.service.name }}:latest
+            sudo docker stop create-category || true
+            sudo docker rm create-category || true
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/create-category:latest
+            sudo docker run -d --name create-category --network host \
+              -e MONGO_URI="${{ secrets.MONGO_URI }}" \
+              ${{ secrets.DOCKERHUB_USERNAME }}/create-category:latest
+
+  deploy-getall:
+    needs: build-and-push-getall
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GetAllCategories QA
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS_GETALLCATEGORIES_QA }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker stop get-all-categories || true
+            sudo docker rm get-all-categories || true
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/get-all-categories:latest
+            sudo docker run -d --name get-all-categories --network host \
+              -e MONGO_URI="${{ secrets.MONGO_URI }}" \
+              ${{ secrets.DOCKERHUB_USERNAME }}/get-all-categories:latest
+
+  deploy-getbyid:
+    needs: build-and-push-getbyid
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GetByIDCategory QA
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS_GETBYIDCATEGORY_QA }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker stop get-byid-category || true
+            sudo docker rm get-byid-category || true
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/get-byid-category:latest
+            sudo docker run -d --name get-byid-category --network host \
+              -e MONGO_URI="${{ secrets.MONGO_URI }}" \
+              ${{ secrets.DOCKERHUB_USERNAME }}/get-byid-category:latest
