@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - Feature_CategoryDomain_GetAllCategories
-    paths:
-      - 'BackEnd/Domains/Categories/CreateCategory/**'
-      - 'BackEnd/Domains/Categories/GetAllCategories/**'
-      - 'BackEnd/Domains/Categories/GetCategoryById/**'
 
 jobs:
   build-and-push:
@@ -23,7 +19,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Build and push on Docker image
+      - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: ./BackEnd/Domains/Categories/${{ matrix.service.path }}
@@ -55,4 +51,3 @@ jobs:
             sudo docker run -d -p 80:80 --name ${{ matrix.service.name }} \
               -e MONGO_URI=${{ secrets.MONGO_URI }} \
               sebastianperez02/${{ matrix.service.name }}:latest
-
