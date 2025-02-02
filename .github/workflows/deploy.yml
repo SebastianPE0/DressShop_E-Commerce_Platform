@@ -62,7 +62,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./BackEnd/Domains/Categories/GetCategoryById
-          file: ./BackEnd/Domains/Categories/GetCategoryByID/Dockerfile
+          file: ./BackEnd/Domains/Categories/GetCategoryById/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/get-byid-category:latest
 
