@@ -1,6 +1,6 @@
 const app = require('./app');
-const connectDB = require('./config/db');
-const config = require('./config/env'); // Importar configuración centralizada
+const connectDB = require('./src/config/db');
+const config = require('./src/config/env'); // Importar configuración centralizada
 
 // Conectar a la base de datos
 connectDB();
