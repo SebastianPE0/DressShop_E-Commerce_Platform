@@ -1,0 +1,5 @@
+aws:
+  cognito:
+    user-pool-id: us-east-1_JudMXeuR1
+    client-id: 92oh9nmejo0d5a5ga51il8u3o
+    client-secret: g0g299qp14srmdk21p18bhv43068b4idildtgtdo8a3q9bk4k5m
