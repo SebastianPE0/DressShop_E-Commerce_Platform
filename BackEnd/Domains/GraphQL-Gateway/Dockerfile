@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expone el puerto en el que correrá GraphQL Gateway
-EXPOSE 8080
+EXPOSE 80
 
 # Comando para iniciar el servicio
 CMD ["node", "src/server.js"]
