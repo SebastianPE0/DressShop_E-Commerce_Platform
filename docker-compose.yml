@@ -1,4 +1,4 @@
-version: "3.9"
+version: '3.8'
 
 services:
   # Microservicio para crear productos
@@ -42,6 +42,74 @@ services:
       - APP_PORT=80
     ports:
       - "80:80"
+=======
+  # Microservicio de Autenticación (AWS Cognito)
+  auth-service:
+    build:
+      context: ./BackEnd/Domains/Employees/LoginEmployee
+    env_file:
+      - ./BackEnd/Domains/Employees/LoginEmployee/.env
+    ports:
+      - "8091:8091"
+    networks:
+      - app-network
+
+  # Microservicio de Crear Empleados
+  employee-create:
+    build:
+      context: ./BackEnd/Domains/Employees/CreateEmployee
+    env_file:
+      - ./BackEnd/Domains/Employees/CreateEmployee/.env
+    ports:
+      - "8090:8090"
+    networks:
+      - app-network
+
+  # Microservicio de Leer Empleados
+  employee-read:
+    build:
+      context: ./BackEnd/Domains/Employees/GetAllEmployee
+    env_file:
+      - ./BackEnd/Domains/Employees/GetAllEmployee/.env
+    ports:
+      - "8094:8094"
+    networks:
+      - app-network
+
+  # Microservicio de Actualizar Empleados
+  employee-update:
+    build:
+      context: ./BackEnd/Domains/Employees/UpdateEmployee
+    env_file:
+      - ./BackEnd/Domains/Employees/UpdateEmployee/.env
+    ports:
+      - "8092:8092"
+    networks:
+      - app-network
+
+  # Microservicio de Eliminar Empleados
+  employee-delete:
+    build:
+      context: ./BackEnd/Domains/Employees/DeleteEmployee
+    env_file:
+      - ./BackEnd/Domains/Employees/DeleteEmployee/.env  
+    ports:
+      - "8093:8093"
+    networks:
+      - app-network
+
+  # Frontend React
+  frontend:
+    build:
+      context: ./FRONTEND/employee-app
+    ports:
+      - "5173:80"
+    depends_on:
+      - auth-service
+      - employee-create
+      - employee-read
+      - employee-update
+      - employee-delete
     networks:
       - app-network
 
