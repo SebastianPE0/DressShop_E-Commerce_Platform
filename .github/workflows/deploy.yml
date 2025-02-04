@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for Category Services
+name: CI/CD Pipeline for Category and Product Services
 
 on:
   push:
@@ -66,6 +66,48 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/get-byid-category:latest
 
+  build-and-push-graphql:
+    runs-on: ubuntu-latest
+    needs: build-and-push-getbyid
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push GraphQL Gateway
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd/Domains/GraphQL-Gateway
+          file: ./BackEnd/Domains/GraphQL-Gateway/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/graphql-gateway:latest
+
+  build-and-push-create-product:
+    runs-on: ubuntu-latest
+    needs: build-and-push-graphql
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push create-product
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd/Domains/Products/CreateProduct
+          file: ./BackEnd/Domains/Products/CreateProduct/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/create-product:latest
+
   deploy-create:
     needs: build-and-push-create
     runs-on: ubuntu-latest
@@ -84,38 +126,39 @@ jobs:
               -e MONGO_URI="${{ secrets.MONGO_URI }}" \
               ${{ secrets.DOCKERHUB_USERNAME }}/create-category:latest
 
-  deploy-getall:
-    needs: build-and-push-getall
+  deploy-graphql:
+    needs: build-and-push-graphql
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to GetAllCategories QA
+      - name: Deploy GraphQL Gateway
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST_DNS_GETALLCATEGORIES_QA }}
+          host: ${{ secrets.HOST_DNS_GRAPHQL_QA }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            sudo docker stop get-all-categories || true
-            sudo docker rm get-all-categories || true
-            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/get-all-categories:latest
-            sudo docker run -d --name get-all-categories --network host \
-              -e MONGO_URI="${{ secrets.MONGO_URI }}" \
-              ${{ secrets.DOCKERHUB_USERNAME }}/get-all-categories:latest
+            sudo docker stop graphql-gateway || true
+            sudo docker rm graphql-gateway || true
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/graphql-gateway:latest
+            sudo docker run -d --name graphql-gateway --network host \
+              -e CATEGORY_SERVICE_URL="http://${{ secrets.HOST_DNS_GETBYIDCATEGORY_QA }}/category" \
+              ${{ secrets.DOCKERHUB_USERNAME }}/graphql-gateway:latest
 
-  deploy-getbyid:
-    needs: build-and-push-getbyid
+  deploy-create-product:
+    needs: build-and-push-create-product
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to GetByIdCategory QA
+      - name: Deploy Create Product QA
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST_DNS_GETBYIDCATEGORY_QA }}
+          host: ${{ secrets.HOST_DNS_CREATEPRODUCT_QA }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            sudo docker stop get-byid-category || true
-            sudo docker rm get-byid-category || true
-            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/get-byid-category:latest
-            sudo docker run -d --name get-byid-category --network host \
-              -e MONGO_URI="${{ secrets.MONGO_URI }}" \
-              ${{ secrets.DOCKERHUB_USERNAME }}/get-byid-category:latest
+            sudo docker stop create-product || true
+            sudo docker rm create-product || true
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/create-product:latest
+            sudo docker run -d --name create-product --network host \
+              -e MONGO_URI="${{ secrets.MONGO_URI_PRODUCT }}" \
+              -e GRAPHQL_URL="http://${{ secrets.HOST_DNS_GRAPHQL_QA }}/graphql" \
+              ${{ secrets.DOCKERHUB_USERNAME }}/create-product:latest
