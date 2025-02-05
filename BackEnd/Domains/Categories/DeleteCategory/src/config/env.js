@@ -1,8 +1,9 @@
-require('dotenv').config(); // Upload enviroment variables
+require("dotenv").config();
 
 const config = {
-  mongoURI: process.env.MONGO_URI ,
-  appPort: process.env.APP_PORT || 80,
+  port: process.env.APP_PORT || 80,
+  mongoUri: process.env.MONGO_URI,
+  graphqlUrl: process.env.GRAPHQL_URL
 };
 
 module.exports = config;
