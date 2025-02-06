@@ -11,13 +11,8 @@ const resolvers = {
         console.log(`Requesting category from: ${CATEGORY_SERVICE_URL}/category/${id}`);
         const response = await axios.get(`${CATEGORY_SERVICE_URL}/category/${id}`);
 
-        const category = response.data;
-        console.log(`Response from category service:`, category);
-
-        return {
-          id: category._id,  // Convertimos _id a id
-          name: category.name
-        };
+        console.log(`Response from category service:`, response.data);
+        return response.data;
       } catch (error) {
         console.error("Error fetching category by ID:", error.response ? error.response.data : error.message);
         throw new Error("Failed to fetch category.");
