@@ -61,7 +61,8 @@ func ValidateCategory(categoryID string) (bool, error) {
 	}
 
 	// Log de la respuesta recibida
-	fmt.Println("📩 Respuesta recibida de GraphQL:", string(body))
+	fmt.Println("📩 Respuesta completa de GraphQL:")
+	fmt.Println(string(body))
 
 	// Deserializar la respuesta JSON
 	var result CategoryResponse
