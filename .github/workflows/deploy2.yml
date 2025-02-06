@@ -12,6 +12,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up JDK 21  # Asegura que sea la misma versión usada en el proyecto
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build JAR with Maven
+        run: |
+          cd BackEnd/Domains/Employees/CreateEmployee
+          mvn clean package -DskipTests
+
       - name: Log in to DockerHub
         uses: docker/login-action@v2
         with:
@@ -25,12 +36,22 @@ jobs:
           file: ./BackEnd/Domains/Employees/CreateEmployee/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME2 }}/create-employee:v1
+
   build-and-push-deleteEmployee:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Set up JDK 21  # Asegura que sea la misma versión usada en el proyecto
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
 
+      - name: Build JAR with Maven
+        run: |
+          cd BackEnd/Domains/Employees/CreateEmployee
+          mvn clean package -DskipTests  
       - name: Log in to DockerHub
         uses: docker/login-action@v2
         with:
@@ -50,6 +71,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up JDK 21  # Asegura que sea la misma versión usada en el proyecto
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build JAR with Maven
+        run: |
+          cd BackEnd/Domains/Employees/CreateEmployee
+          mvn clean package -DskipTests
       - name: Log in to DockerHub
         uses: docker/login-action@v2
         with:
@@ -69,6 +100,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up JDK 21  # Asegura que sea la misma versión usada en el proyecto
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build JAR with Maven
+        run: |
+          cd BackEnd/Domains/Employees/CreateEmployee
+          mvn clean package -DskipTests
       - name: Log in to DockerHub
         uses: docker/login-action@v2
         with:
@@ -88,6 +129,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up JDK 21  # Asegura que sea la misma versión usada en el proyecto
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build JAR with Maven
+        run: |
+          cd BackEnd/Domains/Employees/CreateEmployee
+          mvn clean package -DskipTests
       - name: Log in to DockerHub
         uses: docker/login-action@v2
         with:
