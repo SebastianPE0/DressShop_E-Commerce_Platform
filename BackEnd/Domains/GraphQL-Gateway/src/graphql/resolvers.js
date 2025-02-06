@@ -16,12 +16,17 @@ const resolvers = {
     },
     getProductsByCategory: async (_, { categoryId }) => {
       try {
+        console.log(`Requesting products from: ${PRODUCT_SERVICE_URL}/products/by-category?category_id=${categoryId}`);
+        
         const response = await axios.get(`${PRODUCT_SERVICE_URL}/products/by-category?category_id=${categoryId}`);
+        console.log("Response from product service:", response.data);
+        
         return response.data;
       } catch (error) {
+        console.error("Error fetching products by category:", error.response ? error.response.data : error.message);
         throw new Error(error.response ? error.response.data : error.message);
       }
-    },
+    }
   },
 };
 
