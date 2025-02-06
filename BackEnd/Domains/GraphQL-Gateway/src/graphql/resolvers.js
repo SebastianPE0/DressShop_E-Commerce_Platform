@@ -8,8 +8,8 @@ const resolvers = {
   Query: {
     getCategoryById: async (_, { id }) => {
       try {
-        console.log(`Requesting category from: ${CATEGORY_SERVICE_URL}/category/${id}`);
-        const response = await axios.get(`${CATEGORY_SERVICE_URL}/category/${id}`);
+        console.log(`Requesting category from: ${CATEGORY_SERVICE_URL}/${id}`);
+        const response = await axios.get(`${CATEGORY_SERVICE_URL}/${id}`);
 
         const category = response.data;
         console.log(`Response from category service:`, category);
