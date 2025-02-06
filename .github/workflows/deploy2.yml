@@ -50,7 +50,7 @@ jobs:
 
       - name: Build JAR with Maven
         run: |
-          cd BackEnd/Domains/Employees/CreateEmployee
+          cd BackEnd/Domains/Employees/DeleteEmployee
           mvn clean package -DskipTests  
       - name: Log in to DockerHub
         uses: docker/login-action@v2
@@ -79,7 +79,7 @@ jobs:
 
       - name: Build JAR with Maven
         run: |
-          cd BackEnd/Domains/Employees/CreateEmployee
+          cd BackEnd/Domains/Employees/GetAllEmployee
           mvn clean package -DskipTests
       - name: Log in to DockerHub
         uses: docker/login-action@v2
@@ -108,7 +108,7 @@ jobs:
 
       - name: Build JAR with Maven
         run: |
-          cd BackEnd/Domains/Employees/CreateEmployee
+          cd BackEnd/Domains/Employees/LoginEmployee
           mvn clean package -DskipTests
       - name: Log in to DockerHub
         uses: docker/login-action@v2
@@ -137,7 +137,7 @@ jobs:
 
       - name: Build JAR with Maven
         run: |
-          cd BackEnd/Domains/Employees/CreateEmployee
+          cd BackEnd/Domains/Employees/UpdateEmployee
           mvn clean package -DskipTests
       - name: Log in to DockerHub
         uses: docker/login-action@v2
@@ -160,7 +160,7 @@ jobs:
       - name: Deploy to createEmployee QA
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST_DNS_CREATEEMPLOYEE_QA2 }}
+          host: ${{ secrets.HOST_DNS_CREATEEMPLOYEE_QA }}
           username: ${{ secrets.USERNAME2 }}
           key: ${{ secrets.EC2_SSH_KEY2 }}
           script: |
@@ -168,9 +168,9 @@ jobs:
             sudo docker rm create-employee || true
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/create-employee:v1
             sudo docker run -d --name create-employee --network host \
-              -e DB_URL="${{ secrets.DB_URL2 }}" \
-             -e DB_USERNAME="${{ secrets.DB_USERNAME2 }}" \
-             -e DB_PASSWORD="${{ secrets.DB_PASSWORD2 }}" \
+              -e DB_URL="${{ secrets.DB_URL }}" \
+             -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
+             -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
               ${{ secrets.DOCKERHUB_USERNAME2 }}/create-employee:v1 
   deploy-deleteEmployee:
     needs: build-and-push-deleteEmployee
@@ -187,9 +187,9 @@ jobs:
             sudo docker rm delete-employee || true
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/delete-employee:v1
             sudo docker run -d --name delete-employee --network host \
-              -e DB_URL="${{ secrets.DB_URL2 }}" \
-             -e DB_USERNAME="${{ secrets.DB_USERNAME2 }}" \
-             -e DB_PASSWORD="${{ secrets.DB_PASSWORD2 }}" \
+              -e DB_URL="${{ secrets.DB_URL }}" \
+             -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
+             -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
               ${{ secrets.DOCKERHUB_USERNAME2 }}/delete-employee:v1                   
   deploy-getallEmployee:
     needs: build-and-push-getallEmployee
@@ -198,7 +198,7 @@ jobs:
       - name: Deploy to getallEmployee QA
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST_DNS_GETALLEMPLOYEE_QA2 }}
+          host: ${{ secrets.HOST_DNS_GETALLEMPLOYEE_QA }}
           username: ${{ secrets.USERNAME2 }}
           key: ${{ secrets.EC2_SSH_KEY2 }}
           script: |
@@ -206,9 +206,9 @@ jobs:
             sudo docker rm getall-employee-employee || true
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/getall-employee-employee:v1
             sudo docker run -d --name getall-employee-employee --network host \
-              -e DB_URL="${{ secrets.DB_URL2 }}" \
-             -e DB_USERNAME="${{ secrets.DB_USERNAME2 }}" \
-             -e DB_PASSWORD="${{ secrets.DB_PASSWORD2 }}" \
+              -e DB_URL="${{ secrets.DB_URL }}" \
+             -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
+             -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
               ${{ secrets.DOCKERHUB_USERNAME2 }}/getall-employee-employee:v1   
   deploy-loginEmployee:
     needs: build-and-push-loginEmployee
@@ -217,7 +217,7 @@ jobs:
       - name: Deploy to loginEmployee QA
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST_DNS_LOGINEMPLOYEE_QA2 }}
+          host: ${{ secrets.HOST_DNS_LOGINEMPLOYEE_QA }}
           username: ${{ secrets.USERNAME2 }}
           key: ${{ secrets.EC2_SSH_KEY2 }}
           script: |
@@ -225,9 +225,9 @@ jobs:
             sudo docker rm login-employee || true
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/login-employee:v1
             sudo docker run -d --name login-employee --network host \
-              -e DB_URL="${{ secrets.DB_URL2 }}" \
-             -e DB_USERNAME="${{ secrets.DB_USERNAME2 }}" \
-             -e DB_PASSWORD="${{ secrets.DB_PASSWORD2 }}" \
+              -e DB_URL="${{ secrets.DB_URL }}" \
+             -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
+             -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
               ${{ secrets.DOCKERHUB_USERNAME2 }}/login-employee:v1 
   deploy-updateEmployee:
     needs: build-and-push-updateEmployee
@@ -236,7 +236,7 @@ jobs:
       - name: Deploy to updateEmployee QA
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST_DNS_UPDATEEMPLOYEE_QA2 }}
+          host: ${{ secrets.HOST_DNS_UPDATEEMPLOYEE_QA }}
           username: ${{ secrets.USERNAME2 }}
           key: ${{ secrets.EC2_SSH_KEY2 }}
           script: |
@@ -244,9 +244,9 @@ jobs:
             sudo docker rm update-employee || true
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/update-employee:v1
             sudo docker run -d --name update-employee --network host \
-              -e DB_URL="${{ secrets.DB_URL2 }}" \
-             -e DB_USERNAME="${{ secrets.DB_USERNAME2 }}" \
-             -e DB_PASSWORD="${{ secrets.DB_PASSWORD2 }}" \
+              -e DB_URL="${{ secrets.DB_URL }}" \
+             -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
+             -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
               ${{ secrets.DOCKERHUB_USERNAME2 }}/update-employee:v1                   
                                       
 
