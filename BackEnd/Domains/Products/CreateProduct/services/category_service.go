@@ -4,35 +4,48 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 )
 
-// GraphQLQuery estructura para enviar la consulta
+// GraphQLQuery representa la estructura para enviar la consulta GraphQL
 type GraphQLQuery struct {
 	Query string `json:"query"`
 }
 
-// CategoryResponse estructura para la respuesta de GraphQL
+// Category representa la estructura de una categoría
+type Category struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+// CategoryResponse representa la respuesta de GraphQL
 type CategoryResponse struct {
 	Data struct {
-		Category struct {
-			ID   string `json:"id"`
-			Name string `json:"name"`
-		} `json:"category"`
+		GetCategoryById *Category `json:"getCategoryById"`
 	} `json:"data"`
 }
 
 // ValidateCategory consulta GraphQL para verificar si una categoría existe
 func ValidateCategory(categoryID string) (bool, error) {
 	graphqlURL := os.Getenv("GRAPHQL_URL")
+	if graphqlURL == "" {
+		return false, fmt.Errorf("GRAPHQL_URL no está configurada en las variables de entorno")
+	}
 
-	query := fmt.Sprintf(`{"query":"query { getCategoryById(id: \"%s\") { id name } }"}`, categoryID)
+	// Construcción correcta del query con `getCategoryById`
+	query := GraphQLQuery{
+		Query: fmt.Sprintf(`query { getCategoryById(id: \"%s\") { id name } }`, categoryID),
+	}
 
-	req, err := http.NewRequest("POST", graphqlURL, bytes.NewBuffer([]byte(query)))
+	queryJSON, err := json.Marshal(query)
 	if err != nil {
-		return false, err
+		return false, fmt.Errorf("error al serializar el query GraphQL: %v", err)
+	}
+
+	req, err := http.NewRequest("POST", graphqlURL, bytes.NewBuffer(queryJSON))
+	if err != nil {
+		return false, fmt.Errorf("error al crear la solicitud HTTP: %v", err)
 	}
 
 	req.Header.Set("Content-Type", "application/json")
@@ -40,23 +53,22 @@ func ValidateCategory(categoryID string) (bool, error) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return false, err
+		return false, fmt.Errorf("error al hacer la solicitud a GraphQL: %v", err)
 	}
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return false, err
+	if resp.StatusCode != http.StatusOK {
+		return false, fmt.Errorf("error en la respuesta de GraphQL: código de estado %d", resp.StatusCode)
 	}
 
 	var result CategoryResponse
-	err = json.Unmarshal(body, &result)
+	err = json.NewDecoder(resp.Body).Decode(&result)
 	if err != nil {
-		return false, err
+		return false, fmt.Errorf("error al decodificar la respuesta JSON: %v", err)
 	}
 
-	// Si `result.Data.Category.ID` existe, la categoría es válida
-	if result.Data.Category.ID != "" {
+	// Validar correctamente si la categoría existe
+	if result.Data.GetCategoryById != nil && result.Data.GetCategoryById.ID != "" {
 		return true, nil
 	}
 
