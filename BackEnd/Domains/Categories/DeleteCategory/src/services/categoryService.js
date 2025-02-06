@@ -19,14 +19,15 @@ const checkProductsInCategory = async (categoryId) => {
 
     try {
         const response = await axios.post(GRAPHQL_SERVICE_URL, query);
-        const products = response.data.data.getProductsByCategory;
-        
+        const products = response.data.data.getProductsByCategory || []; // Si es null, asigna un array vacío
+
         return products.length > 0; // Devuelve `true` si hay productos en la categoría
     } catch (error) {
         console.error("Error al consultar GraphQL-Gateway:", error.response?.data || error.message);
         throw new Error("No se pudo verificar si la categoría tiene productos asociados.");
     }
 };
+
 
 // Elimina una categoría si no tiene productos asociados
 const deleteCategory = async (categoryId) => {
