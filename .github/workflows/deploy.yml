@@ -3,7 +3,7 @@ name: CI/CD Pipeline for Microservices
 on:
   push:
     branches:
-      - Feature_CategoryDomain_GetAllCategories
+      - Feature_BackEnd_CategoryDomain_AddMicroservice_DeleteCategory
 
 jobs:
 
