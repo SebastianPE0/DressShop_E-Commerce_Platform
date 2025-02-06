@@ -68,16 +68,20 @@ func ValidateCategory(categoryID string) (bool, error) {
 	var result CategoryResponse
 	err = json.Unmarshal(body, &result)
 	if err != nil {
-		fmt.Println(" Error al deserializar la respuesta JSON:", err)
+		fmt.Println("❌ Error deserializando JSON de GraphQL:", err)
+		fmt.Println("📩 Respuesta cruda de GraphQL:", string(body)) // Imprime la respuesta completa
 		return false, err
 	}
 
-	// Verificar si la categoría existe
+	// Verifica si `Category` está presente en la respuesta
 	if result.Data.GetCategoryById.ID != "" {
-		fmt.Println(" Categoría encontrada:", result.Data.GetCategoryById.Name)
+		fmt.Println("✅ Categoría encontrada en GraphQL:", result.Data.GetCategoryById)
 		return true, nil
+	} else {
+		fmt.Println("⚠️ No se encontró la categoría en la respuesta de GraphQL.")
+		fmt.Println("📩 Respuesta de GraphQL:", string(body)) // Imprime la respuesta cruda
 	}
 
-	fmt.Println(" Categoría NO encontrada:", categoryID)
 	return false, nil
+
 }
