@@ -8,10 +8,13 @@ const resolvers = {
   Query: {
     getCategoryById: async (_, { id }) => {
       try {
+        console.log(`Requesting category from: ${CATEGORY_SERVICE_URL}/${id}`);
         const response = await axios.get(`${CATEGORY_SERVICE_URL}/${id}`);
+        console.log(`Response from category service:`, response.data);
         return response.data;
       } catch (error) {
-        throw new Error(error.response ? error.response.data : error.message);
+        console.error("Error fetching category by ID:", error.response ? error.response.data : error.message);
+        throw new Error("Failed to fetch category.");
       }
     },
     getProductsByCategory: async (_, { categoryId }) => {
