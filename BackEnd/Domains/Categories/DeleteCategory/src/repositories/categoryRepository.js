@@ -1,14 +1,13 @@
-const Category = require("../models/Category");
+const Category = require('../models/categoryModel');
 
-const findCategoryById = async (id) => {
-    return await Category.findById(id);
+const deleteCategory = async (categoryId) => {
+    const category = await Category.findById(categoryId);
+    
+    if (!category) {
+        throw new Error("La categoría no existe.");
+    }
+
+    return await Category.findByIdAndDelete(categoryId);
 };
 
-const deleteCategory = async (id) => {
-    return await Category.findByIdAndDelete(id);
-};
-
-module.exports = {
-    findCategoryById,
-    deleteCategory,
-};
+module.exports = { deleteCategory };

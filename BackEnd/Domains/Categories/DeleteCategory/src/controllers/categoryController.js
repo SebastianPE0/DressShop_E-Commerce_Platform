@@ -1,14 +1,14 @@
-const categoryService = require("../services/categoryService");
+const categoryService = require('../services/categoryService');
 
-exports.deleteCategory = async (req, res) => {
+// Controlador para eliminar una categoría
+const deleteCategoryHandler = async (req, res) => {
     try {
         const { id } = req.params;
-
-        await categoryService.deleteCategory(id);
-
-        res.status(200).json({ message: "Category deleted successfully" });
+        const result = await categoryService.deleteCategory(id);
+        res.status(200).json(result);
     } catch (error) {
-        console.error("Error deleting category:", error);
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ error: error.message });
     }
 };
+
+module.exports = { deleteCategoryHandler };
