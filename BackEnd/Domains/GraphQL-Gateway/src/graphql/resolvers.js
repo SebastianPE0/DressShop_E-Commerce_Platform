@@ -8,7 +8,7 @@ const resolvers = {
   Query: {
     getCategoryById: async (_, { id }) => {
       try {
-        const response = await axios.get(`${CATEGORY_SERVICE_URL}/category/${id}`);
+        const response = await axios.get(`${CATEGORY_SERVICE_URL}/${id}`);
         return response.data;
       } catch (error) {
         throw new Error(error.response ? error.response.data : error.message);
