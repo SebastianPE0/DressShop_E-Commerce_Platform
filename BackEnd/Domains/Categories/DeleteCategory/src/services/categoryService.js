@@ -1,5 +1,5 @@
 const axios = require('axios');
-const Category = require('../models/categoryModel');
+const Category = require('../models/category');
 
 // Obtener la URL del GraphQL-Gateway desde el entorno
 const GRAPHQL_SERVICE_URL = process.env.GRAPHQL_SERVICE_URL || "ec2-18-204-19-80.compute-1.amazonaws.com/graphql";
