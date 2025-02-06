@@ -1,30 +1,26 @@
 const axios = require('axios');
-const config = require('../config/env');
+require('dotenv').config(); // Importamos dotenv para cargar las variables de entorno
 
-const getCategoryById = async (id) => {
-  try {
-    console.log(`Fetching category from: ${config.categoryServiceURL}/${id}`); // Debug
-    const response = await axios.get(`${config.categoryServiceURL}/${id}`);
-
-    // Mapeo de `_id` a `id` para GraphQL
-    if (response.data) {
-      return {
-        id: response.data._id, // Mapea el campo _id a id
-        name: response.data.name,
-      };
-    }
-
-    return null; // Si no encuentra la categoría
-  } catch (error) {
-    console.error('Error fetching category:', error.message);
-    return null;
-  }
-};
+const CATEGORY_SERVICE_URL = process.env.CATEGORY_SERVICE_URL ;
+const PRODUCT_SERVICE_URL = process.env.PRODUCT_SERVICE_URL ;
 
 const resolvers = {
   Query: {
-    category: async (_, { id }) => {
-      return await getCategoryById(id);
+    getCategoryById: async (_, { id }) => {
+      try {
+        const response = await axios.get(`${CATEGORY_SERVICE_URL}/category/${id}`);
+        return response.data;
+      } catch (error) {
+        throw new Error(error.response ? error.response.data : error.message);
+      }
+    },
+    getProductsByCategory: async (_, { categoryId }) => {
+      try {
+        const response = await axios.get(`${PRODUCT_SERVICE_URL}/products/by-category?category_id=${categoryId}`);
+        return response.data;
+      } catch (error) {
+        throw new Error(error.response ? error.response.data : error.message);
+      }
     },
   },
 };
