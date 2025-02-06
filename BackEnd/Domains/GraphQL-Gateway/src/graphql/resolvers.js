@@ -11,12 +11,12 @@ const resolvers = {
         console.log(`Requesting category from: ${CATEGORY_SERVICE_URL}/${id}`);
         const response = await axios.get(`${CATEGORY_SERVICE_URL}/${id}`);
 
+        // Convertimos `_id` de MongoDB en `id`
         const category = response.data;
-        console.log(`Response from category service:`, category);
-
         return {
-          id: category._id,  // Convertimos _id a id
-          name: category.name
+          id: category._id,  // Aquí transformamos _id a id
+          name: category.name,
+          description: category.description
         };
       } catch (error) {
         console.error("Error fetching category by ID:", error.response ? error.response.data : error.message);
