@@ -165,15 +165,24 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd FrontEnd
-          npm install
-
+          if [ -d "FrontEnd/employee-app" ]; then
+            cd FrontEnd/employee-app
+            rm -rf node_modules package-lock.json # Limpieza previa
+            npm install
+          else
+            echo "Error: El directorio FrontEnd/employee-app no existe"
+            exit 1
+          fi
 
       - name: Build frontend
         run: |
-          cd FrontEnd
-          npm run build
-
+          if [ -d "FrontEnd/employee-app" ]; then
+            cd FrontEnd/employee-app
+            npm run build
+          else
+            echo "Error: El directorio FrontEnd/employee-app no existe"
+            exit 1
+          fi
 
       - name: Log in to DockerHub
         uses: docker/login-action@v2
@@ -184,10 +193,11 @@ jobs:
       - name: Build and push frontend
         uses: docker/build-push-action@v4
         with:
-          context: ./FrontEnd
-          file: ./FrontEnd/Dockerfile
+          context: ./FrontEnd/employee-app
+          file: ./FrontEnd/employee-app/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME2 }}/frontend:v1
+
   deploy-createEmployee:
     needs: build-and-push-createEmployee
     runs-on: ubuntu-latest
