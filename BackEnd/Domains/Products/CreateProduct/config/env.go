@@ -18,9 +18,9 @@ func LoadEnv() {
 // GetMongoURI obtiene la URI de MongoDB desde las variables de entorno
 func GetMongoURI() string {
 	mongoURI := os.Getenv("MONGO_URI")
-	if mongoURI == "" {
-		mongoURI = "mongodb://localhost:27017/products_db"
-	}
+	/*if mongoURI == "" {
+		mongoURI = ""
+	}*/
 	return mongoURI
 }
 
@@ -28,7 +28,7 @@ func GetMongoURI() string {
 func GetPort() string {
 	port := os.Getenv("APP_PORT")
 	if port == "" {
-		port = "8082"
+		port = "80"
 	}
 	return port
 }

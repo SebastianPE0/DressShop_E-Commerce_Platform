@@ -1,7 +1,11 @@
 package models
 
+import "go.mongodb.org/mongo-driver/bson/primitive"
+
 type Product struct {
-	ID    string  `json:"id,omitempty" bson:"_id,omitempty"`
-	Name  string  `json:"name" bson:"name"`
-	Price float64 `json:"price" bson:"price"`
+	ID         primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	Name       string             `bson:"name" json:"name"`
+	Price      float64            `bson:"price" json:"price"`
+	Stock      int                `bson:"stock" json:"stock"`
+	CategoryID string             `bson:"category_id" json:"category_id"`
 }

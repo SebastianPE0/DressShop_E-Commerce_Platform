@@ -1,0 +1,46 @@
+name: Deploy create-category
+
+on:
+    push:
+        branches:
+            - Feature_BackEnd_CategoryDomain_AddMicroservice_DeleteCategory
+        paths:
+            - 'BackEnd/Domains/Categories/CreateCategory/**'
+jobs:
+    # Build and Push create-category
+  build-and-push-create:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Build and push create-category
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd/Domains/Categories/CreateCategory
+          file: ./BackEnd/Domains/Categories/CreateCategory/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/create-category:latest
+
+    # Deploy create-category
+  deploy-create:
+    needs: build-and-push-create
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to CreateCategory QA
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS_CREATECATEGORY_QA }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker stop create-category || true
+            sudo docker rm create-category || true
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/create-category:latest
+            sudo docker run -d --name create-category --network host \
+              -e MONGO_URI="${{ secrets.MONGO_URI }}" \
+              ${{ secrets.DOCKERHUB_USERNAME }}/create-category:latest
