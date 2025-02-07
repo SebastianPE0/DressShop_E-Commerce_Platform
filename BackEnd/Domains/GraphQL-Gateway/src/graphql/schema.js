@@ -4,7 +4,6 @@ const typeDefs = gql`
   type Category {
     id: ID!
     name: String!
-    description: String!
   }
 
   type Product {

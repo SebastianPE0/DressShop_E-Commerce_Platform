@@ -18,9 +18,8 @@ type GraphQLQuery struct {
 type CategoryResponse struct {
 	Data struct {
 		Category struct {
-			ID          string `json:"id"`
-			Name        string `json:"name"`
-			Description string `json:"description"`
+			ID   string `json:"id"`
+			Name string `json:"name"`
 		} `json:"category"`
 	} `json:"data"`
 }
@@ -28,7 +27,7 @@ type CategoryResponse struct {
 // ValidateCategory consulta GraphQL para verificar si una categoría existe
 func ValidateCategory(categoryID string) (bool, error) {
 	graphqlURL := os.Getenv("GRAPHQL_URL")
-	query := fmt.Sprintf(`{"query":"query { category(id: \"%s\") { id name description} }"}`, categoryID)
+	query := fmt.Sprintf(`{"query":"query { category(id: \"%s\") { id name } }"}`, categoryID)
 
 	req, err := http.NewRequest("POST", graphqlURL, bytes.NewBuffer([]byte(query)))
 	if err != nil {
