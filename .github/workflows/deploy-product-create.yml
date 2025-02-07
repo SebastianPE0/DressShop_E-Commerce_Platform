@@ -1,0 +1,47 @@
+name: Deploy create-product
+
+on:
+    push:
+        branches:
+            - Feature_BackEnd_CategoryDomain_AddMicroservice_DeleteCategory
+        paths:
+            - 'BackEnd/Domains/Products/CreateProduct/**'
+jobs:
+    # Build and Push create-product
+  build-and-push-createproduct:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Build and push create-product
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd/Domains/Products/CreateProduct
+          file: ./BackEnd/Domains/Products/CreateProduct/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/create-product:latest
+
+    # Deploy create-product
+  deploy-createproduct:
+    needs: build-and-push-createproduct
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to CreateProduct QA
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS_CREATEPRODUCT_QA }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker stop create-product || true
+            sudo docker rm create-product || true
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/create-product:latest
+            sudo docker run -d --name create-product --network host \
+              -e MONGO_URI="${{ secrets.MONGO_URI_PRODUCT }}" \
+              -e GRAPHQL_URL="http://${{ secrets.HOST_DNS_GRAPHQL_QA }}/graphql" \
+              ${{ secrets.DOCKERHUB_USERNAME }}/create-product:latest

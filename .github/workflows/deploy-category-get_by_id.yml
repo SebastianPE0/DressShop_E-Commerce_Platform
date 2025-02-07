@@ -1,0 +1,48 @@
+name: Deploy get_ByID-category
+
+on:
+    push:
+        branches:
+            - Feature_BackEnd_CategoryDomain_AddMicroservice_DeleteCategory
+        paths:
+            - 'BackEnd/Domains/Categories/GetCategoryById/**'
+jobs:
+    # Build and Push get-byid-category
+  build-and-push-getbyid:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push get-byid-category
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd/Domains/Categories/GetCategoryById
+          file: ./BackEnd/Domains/Categories/GetCategoryById/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/get-byid-category:latest
+
+    # Deploy get-byid-category
+  deploy-getbyid:
+    needs: build-and-push-getbyid
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GetByIdCategory QA
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS_GETBYIDCATEGORY_QA }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker stop get-byid-category || true
+            sudo docker rm get-byid-category || true
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/get-byid-category:latest
+            sudo docker run -d --name get-byid-category --network host \
+              -e MONGO_URI="${{ secrets.MONGO_URI }}" \
+              ${{ secrets.DOCKERHUB_USERNAME }}/get-byid-category:latest

@@ -1,0 +1,47 @@
+name: Deploy graphQL-deploy
+
+on:
+    push:
+        branches:
+            - Feature_BackEnd_CategoryDomain_AddMicroservice_DeleteCategory
+        paths:
+            - 'BackEnd/Domains/GraphQL-Gateway/**'
+jobs:
+    # Build and Push graphql-gateway
+  build-and-push-graphql:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Build and push graphql-gateway
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd/Domains/GraphQL-Gateway
+          file: ./BackEnd/Domains/GraphQL-Gateway/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/graphql-gateway:latest
+
+    # Deploy graphql-gateway (Depende de GetProductsByCategory)
+  deploy-graphql:
+    needs: build-and-push-graphql
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GraphQL QA
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS_GRAPHQL_QA }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker stop graphql-gateway || true
+            sudo docker rm graphql-gateway || true
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/graphql-gateway:latest
+            sudo docker run -d --name graphql-gateway --network host \
+              -e CATEGORY_SERVICE_URL="http://${{ secrets.HOST_DNS_GETBYIDCATEGORY_QA }}/category" \
+              -e PRODUCT_SERVICE_URL="http://${{ secrets.HOST_DNS_GETPRODUCTSBYCATEGORY_QA }}/products/by-category" \
+              ${{ secrets.DOCKERHUB_USERNAME }}/graphql-gateway:latest

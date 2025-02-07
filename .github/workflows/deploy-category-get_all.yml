@@ -1,0 +1,46 @@
+name: Deploy get_all-category
+
+on:
+    push:
+        branches:
+            - Feature_BackEnd_CategoryDomain_AddMicroservice_DeleteCategory
+        paths:
+            - 'BackEnd/Domains/Categories/GetAllCategories/**'
+jobs:
+    # Build and Push get-all-categories
+  build-and-push-getall:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Build and push get-all-categories
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd/Domains/Categories/GetAllCategories
+          file: ./BackEnd/Domains/Categories/GetAllCategories/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/get-all-categories:latest
+
+    # Deploy get-all-categories
+  deploy-getall:
+    needs: build-and-push-getall
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GetAllCategories QA
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS_GETALLCATEGORIES_QA }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker stop get-all-categories || true
+            sudo docker rm get-all-categories || true
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/get-all-categories:latest
+            sudo docker run -d --name get-all-categories --network host \
+              -e MONGO_URI="${{ secrets.MONGO_URI }}" \
+              ${{ secrets.DOCKERHUB_USERNAME }}/get-all-categories:latest
