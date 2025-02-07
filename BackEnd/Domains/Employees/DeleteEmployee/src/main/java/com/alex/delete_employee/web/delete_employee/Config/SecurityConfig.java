@@ -22,6 +22,7 @@ public class SecurityConfig {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Permitir CORS correctamente
             .csrf(csrf -> csrf.disable()) // Deshabilitar CSRF
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.DELETE, "/api/v1/employees/delete/**").authenticated() // Protege DELETE
                 .anyRequest().permitAll()

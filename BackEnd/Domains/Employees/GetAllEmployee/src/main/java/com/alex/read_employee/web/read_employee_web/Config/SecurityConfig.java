@@ -22,6 +22,7 @@ public class SecurityConfig {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Permite CORS correctamente
             .csrf(csrf -> csrf.disable()) // Deshabilita CSRF
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.GET, "/api/v1/employee/**").permitAll() // Permitir obtener empleados sin autenticación
                 .anyRequest().authenticated()

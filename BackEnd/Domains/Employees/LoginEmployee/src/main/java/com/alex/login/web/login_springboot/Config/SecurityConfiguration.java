@@ -27,6 +27,7 @@ public class SecurityConfiguration {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Habilita CORS
             .csrf(csrf -> csrf.disable()) // Desactiva CSRF
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/signup", "/auth/login").permitAll() // Permitir login y signup sin autenticación
                 .anyRequest().authenticated() // Proteger todas las demás rutas
