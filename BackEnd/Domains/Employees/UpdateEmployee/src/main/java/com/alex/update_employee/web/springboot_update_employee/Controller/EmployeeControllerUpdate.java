@@ -17,7 +17,7 @@ import com.alex.update_employee.web.springboot_update_employee.Service.IEmployee
 @CrossOrigin(origins = {
     "http://localhost:5173",
     "http://localhost:5174",
-    "http://ec2-52-91-80-158.compute-1.amazonaws.com" // Agrega el frontend en AWS
+    "http://ec2-35-170-186-75.compute-1.amazonaws.com" // Agrega el frontend en AWS
 })
 @RequestMapping("/api/v1/employees")
 public class EmployeeControllerUpdate {

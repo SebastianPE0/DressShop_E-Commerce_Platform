@@ -15,7 +15,7 @@ import com.alex.autentication.web.autentication_sprintboot.response.LoginRespons
 @RestController
 @CrossOrigin(origins = {
     "http://localhost:5173",
-    "http://ec2-44-208-167-243.compute-1.amazonaws.com"
+    "http://ec2-3-95-21-39.compute-1.amazonaws.com"
 })
 
 @RequestMapping("api/v1/employee")

@@ -18,7 +18,7 @@ public class CorsConfig {
                         .allowedOrigins(
                             "http://localhost:5173",
                             "http://localhost:5174",
-                            "http://ec2-52-91-80-158.compute-1.amazonaws.com" // Agrega el DNS del frontend en AWS
+                            "http://ec2-35-170-186-75.compute-1.amazonaws.com" // Agrega el DNS del frontend en AWS
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")

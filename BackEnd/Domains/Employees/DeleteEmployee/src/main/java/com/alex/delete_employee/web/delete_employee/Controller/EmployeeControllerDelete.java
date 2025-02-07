@@ -13,7 +13,7 @@ import com.alex.delete_employee.web.delete_employee.Service.IEmployeeService;
 @RestController
 @CrossOrigin(origins = {
     "http://localhost:5173",
-    "http://ec2-54-152-49-137.compute-1.amazonaws.com"
+    "http://ec2-54-159-232-247.compute-1.amazonaws.com"
 })
 @RequestMapping("/api/v1/employees")
 public class EmployeeControllerDelete {
