@@ -10,33 +10,28 @@ const API_AUTH = `http://3.88.137.194:8091/auth`;
 
 // Obtener empleados (READ)
 export const getEmployees = async () => {
-
   try {
-    const token = localStorage.getItem("token");
-    const response = await axios.get(API_READ, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.get(API_READ, authHeader());
     return response.data;
   } catch (error) {
-    console.error("Error obteniendo empleados", error);
+    console.error("Error obteniendo empleados", error.response ? error.response.data : error.message);
     throw error;
   }
 };
-const authHeader = () => ({
-  headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-});
-// Crear un nuevo empleado (CREATE)
+const authHeader = () => {
+  const token = localStorage.getItem("token");
+  if (!token) throw new Error("No hay token disponible. Inicia sesión.");
+  return {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
+
 export const createEmployee = async (employee) => {
   try {
-    const token = localStorage.getItem("token");
-    const response = await axios.post(API_CREATE, employee, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Enviar el token JWT
-      },
-    });
+    const response = await axios.post(API_CREATE, employee, authHeader());
     return response.data;
   } catch (error) {
     console.error("Error creando empleado", error.response ? error.response.data : error.message);
@@ -44,8 +39,7 @@ export const createEmployee = async (employee) => {
   }
 };
  
- 
-  
+   
 
 // Obtener un empleado por ID
 export const getEmployeeById = async (id) => {
@@ -58,23 +52,20 @@ export const getEmployeeById = async (id) => {
   }
 };
 
-// Actualizar un empleado (UPDATE)
 export const updateEmployee = async (id, employee) => {
   try {
-    const response = await axios.put(`${API_UPDATE}/${id}`, employee,authHeader());
+    const response = await axios.put(`${API_UPDATE}/${id}`, employee, authHeader());
     return response.data;
   } catch (error) {
-    console.error("Error actualizando empleado", error);
+    console.error("Error actualizando empleado", error.response ? error.response.data : error.message);
     throw error;
   }
 };
-
-// Eliminar un empleado (DELETE)
 export const deleteEmployee = async (id) => {
   try {
-    await axios.delete(`${API_DELETE}/${id}`,authHeader());
+    await axios.delete(`${API_DELETE}/${id}`, authHeader());
   } catch (error) {
-    console.error("Error eliminando empleado", error);
+    console.error("Error eliminando empleado", error.response ? error.response.data : error.message);
     throw error;
   }
 };

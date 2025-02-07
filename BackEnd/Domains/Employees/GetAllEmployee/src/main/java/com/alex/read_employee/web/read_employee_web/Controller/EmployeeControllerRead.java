@@ -14,6 +14,10 @@ import com.alex.read_employee.web.read_employee_web.Entity.Employee;
 import com.alex.read_employee.web.read_employee_web.Service.IEmployeeService;
 
 @RestController
+@CrossOrigin(origins = {
+    "http://localhost:5173",
+    "http://ec2-44-208-167-243.compute-1.amazonaws.com"
+})
 @RequestMapping("/api/v1/employee")
 public class EmployeeControllerRead {
         

@@ -15,7 +15,10 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // Aplica CORS a todas las rutas
-                        .allowedOrigins("http://localhost:5173") // Cambia al puerto de tu frontend
+                        .allowedOrigins(
+                            "http://localhost:5173",
+                            "http://ec2-54-152-49-137.compute-1.amazonaws.com" // Permite el frontend en AWS
+                        )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
