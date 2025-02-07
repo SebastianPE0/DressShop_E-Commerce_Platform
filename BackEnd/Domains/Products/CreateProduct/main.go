@@ -9,6 +9,7 @@ import (
 
 func main() {
 	// Load environment variables and connect to MongoDB
+	//TEST YML
 	config.LoadEnv()
 	client := config.ConnectMongoDB()
 	defer client.Disconnect(nil)

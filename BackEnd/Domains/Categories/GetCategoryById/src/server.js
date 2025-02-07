@@ -4,7 +4,7 @@ const config = require('./config/env');
 
 
 connectDB();
-//TEST YML 9
+//TEST YML
 app.listen(config.appPort, () => {
   console.log(`GetCategoryById service running on port ${config.appPort}`);
 });
