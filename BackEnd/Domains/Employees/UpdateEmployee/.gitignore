@@ -1,10 +1,15 @@
 HELP.md
+
+# Ignorar todo el directorio target, excepto los archivos .jar
 target/
+!target/*.jar
+
+# Mantener Maven Wrapper en el repositorio
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### STS ###
+### STS (Spring Tool Suite) ###
 .apt_generated
 .classpath
 .factorypath
