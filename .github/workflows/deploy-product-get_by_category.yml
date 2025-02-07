@@ -5,7 +5,7 @@ on:
         branches:
             - Feature_BackEnd_CategoryDomain_AddMicroservice_DeleteCategory
         paths:
-            - 'BackEnd/Domains/Products/CreateProduct/**'
+            - 'BackEnd/Domains/Products/GetProductsByCategory/**'
 jobs:
     # Build and Push get-products-by-category
   build-and-push-get-products:
