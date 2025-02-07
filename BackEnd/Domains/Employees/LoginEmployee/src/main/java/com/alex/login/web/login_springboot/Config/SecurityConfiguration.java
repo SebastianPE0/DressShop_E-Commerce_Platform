@@ -12,6 +12,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.security.config.http.SessionCreationPolicy;
+
+
 
 import java.util.List;
 
@@ -24,6 +27,7 @@ public class SecurityConfiguration {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Habilitar CORS
             .csrf(csrf -> csrf.disable()) // Desactivar CSRF para evitar problemas con solicitudes AJAX
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Configurar sesión sin estado
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/signup", "/auth/login").permitAll() // Permitir login y signup sin autenticación
                 .anyRequest().authenticated() // Proteger todas las demás rutas
@@ -37,7 +41,10 @@ public class SecurityConfiguration {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("http://localhost:5173")); // Permitir solicitudes desde el frontend
+        config.setAllowedOrigins(List.of(
+    "   http://localhost:5173",
+        "http://ec2-44-208-167-243.compute-1.amazonaws.com"
+        ));
         config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 

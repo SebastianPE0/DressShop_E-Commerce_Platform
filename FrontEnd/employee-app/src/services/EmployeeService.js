@@ -86,20 +86,40 @@ export const signUp = async (email, password) => {
 export const login = async (email, password) => {
   try {
     const response = await axios.post(`${API_AUTH}/login`, 
-      { email, password },
+      { email, password },  // Enviar los datos en JSON
       {
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded", // Asegurar formato correcto
+          "Content-Type": "application/json", // Enviar datos en formato JSON
         }
       }
     );
 
-    const token = response.data;
+    // Extraer el token del backend correctamente
+    if (!response.data || !response.data.token) {
+      throw new Error("Token no recibido en la respuesta del servidor.");
+    }
+
+    const token = response.data.token;
+
+    // Almacenar el token en localStorage
     localStorage.setItem("token", token);
+    
     return token;
   } catch (error) {
     console.error("Error iniciando sesión", error.response ? error.response.data : error.message);
-    throw error;
+    
+    // Si el backend responde con 401, lanzar un error específico
+    if (error.response) {
+      if (error.response.status === 401) {
+        throw new Error("Credenciales incorrectas. Verifica tu correo y contraseña.");
+      } else if (error.response.status === 400) {
+        throw new Error("Solicitud incorrecta. Revisa los datos enviados.");
+      } else if (error.response.status === 500) {
+        throw new Error("Error interno en el servidor. Intenta más tarde.");
+      }
+    }
+
+    throw new Error("Error de conexión. Verifica tu red e intenta de nuevo.");
   }
 };
 
