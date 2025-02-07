@@ -250,6 +250,7 @@ jobs:
             sudo docker run -d --name get-byid-category --network host \
               -e MONGO_URI="${{ secrets.MONGO_URI }}" \
               ${{ secrets.DOCKERHUB_USERNAME }}/get-byid-category:latest
+
   
   # Deploy update-category 
   deploy-update-category:
@@ -340,4 +341,6 @@ jobs:
 
   
 
-  
+
+
+

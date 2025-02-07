@@ -1,12 +1,12 @@
 # Usa una imagen base con OpenJDK 21
+# Usar una imagen ligera de OpenJDK
 FROM eclipse-temurin:21-jdk-alpine
 
 # Establece el directorio de trabajo en el contenedor
 WORKDIR /app
 
-COPY .env .env
-# Copia el archivo JAR del microservicio al contenedor
-COPY target/autentication_sprintboot-0.0.1-SNAPSHOT.jar app.jar
+# Copia solo el archivo JAR (asegura que el JAR ya esté generado antes de construir la imagen)
+COPY target/*.jar app.jar
 
 # Expone el puerto en el que corre la aplicación (ajústalo según tu configuración)
 EXPOSE 8090
