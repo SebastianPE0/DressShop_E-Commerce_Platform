@@ -4,17 +4,18 @@ require('dotenv').config();
 
 const CATEGORY_SERVICE_URL = process.env.CATEGORY_SERVICE_URL;
 const PRODUCT_SERVICE_URL = process.env.PRODUCT_SERVICE_URL;
-
+//TEST
 const getCategoryById = async (id) => {
   try {
-    console.log(`Fetching category from: ${config.CATEGORY_SERVICE_URL}/${id}`); // Debug
-    const response = await axios.get(`${config.CATEGORY_SERVICE_URL}/${id}`);
+    console.log(`Fetching category from: ${CATEGORY_SERVICE_URL}/${id}`); // Debug
+    const response = await axios.get(`${CATEGORY_SERVICE_URL}/${id}`);
 
     // Mapeo de `_id` a `id` para GraphQL
     if (response.data) {
       return {
         id: response.data._id, // Mapea el campo _id a id
         name: response.data.name,
+        description: response.data.description,
       };
     }
 
