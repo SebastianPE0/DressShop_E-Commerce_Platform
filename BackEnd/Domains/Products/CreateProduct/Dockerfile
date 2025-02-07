@@ -15,7 +15,7 @@ COPY . .
 RUN go build -o create-product-service main.go
 
 # Expose service port
-EXPOSE 8082
+EXPOSE 80
 
 # Command to run the service
 

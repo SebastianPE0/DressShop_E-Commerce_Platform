@@ -1,8 +1,18 @@
-const server = require('./app');
-const config = require('dotenv').config();
+const express = require('express');
+const { ApolloServer } = require('apollo-server-express');
+const typeDefs = require('./graphql/schema');
+const resolvers = require('./graphql/resolvers');
 
-const PORT = process.env.APP_PORT || 8080;
+async function startServer() {
+  const app = express();
+  const server = new ApolloServer({ typeDefs, resolvers });
 
-server.listen(PORT).then(({ url }) => {
-  console.log(`🚀 GraphQL Gateway running at ${url}`);
-});
+  await server.start();
+  server.applyMiddleware({ app });
+
+  app.listen(80, () => {
+    console.log(`Server ready at ${server.graphqlPath}`);
+  });
+}
+
+startServer();
