@@ -5,3 +5,4 @@ const getCategories = async () => {
 };
 
 module.exports = { getCategories };
+//TEST
