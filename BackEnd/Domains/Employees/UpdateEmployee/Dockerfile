@@ -3,9 +3,7 @@ FROM eclipse-temurin:21-jdk-alpine
 
 # Establece el directorio de trabajo en el contenedor
 WORKDIR /app
-COPY .env .env
-# Copia el archivo JAR del microservicio al contenedor
-COPY target/springboot_update_employee-0.0.1-SNAPSHOT.jar app.jar
+COPY target/*.jar app.jar
 
 # Expone el puerto en el que corre la aplicación (ajústalo según tu configuración)
 EXPOSE 8092
