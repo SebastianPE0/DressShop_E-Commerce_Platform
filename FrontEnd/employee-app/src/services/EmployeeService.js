@@ -30,10 +30,16 @@ const authHeader = () => ({
 // Crear un nuevo empleado (CREATE)
 export const createEmployee = async (employee) => {
   try {
-    const response = await axios.post(API_CREATE, employee, authHeader());
+    const token = localStorage.getItem("token");
+    const response = await axios.post(API_CREATE, employee, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Enviar el token JWT
+      },
+    });
     return response.data;
   } catch (error) {
-    console.error("Error creando empleado", error);
+    console.error("Error creando empleado", error.response ? error.response.data : error.message);
     throw error;
   }
 };
