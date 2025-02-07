@@ -26,6 +26,8 @@ type CategoryResponse struct {
 
 // ValidateCategory consulta GraphQL para verificar si una categoría existe
 func ValidateCategory(categoryID string) (bool, error) {
+	fmt.Println("🔍 Intentando conectar con GraphQL en:")
+	fmt.Println("HOLAAAAAAAAAAAAAAAAAAAAAAAa")
 	graphqlURL := os.Getenv("GRAPHQL_URL")
 
 	fmt.Println("🔍 Intentando conectar con GraphQL en:", graphqlURL)

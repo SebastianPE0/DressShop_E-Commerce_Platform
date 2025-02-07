@@ -21,7 +21,8 @@ func CreateProduct(c *gin.Context) {
 	// Validar que la categoría exista usando GraphQL
 	isValid, err := services.ValidateCategory(product.CategoryID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error connecting to category service"})
+
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "AYUDAAAAAAAA Error connecting to category service"})
 		return
 	}
 
