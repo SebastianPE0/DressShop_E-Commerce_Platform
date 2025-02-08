@@ -13,7 +13,7 @@ COPY . .
 RUN go build -o update-product-service main.go
 
 # Exponer el puerto
-EXPOSE 8085
+EXPOSE 80
 
 # Ejecutar el servicio
 CMD ["./update-product-service"]
