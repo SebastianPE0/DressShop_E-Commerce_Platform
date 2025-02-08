@@ -43,7 +43,7 @@ public class SecurityConfiguration {
         config.setAllowCredentials(true);
         config.setAllowedOrigins(List.of(
             "http://localhost:5173", // Para desarrollo local
-            "http://ec2-54-87-131-95.compute-1.amazonaws.com" // Dominio del frontend en AWS
+            "http://ec2-54-211-104-82.compute-1.amazonaws.com" // Dominio del frontend en AWS
         ));
         config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));

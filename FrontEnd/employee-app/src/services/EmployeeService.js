@@ -3,9 +3,9 @@ import axios from "axios";
 // URLs de los microservicios
 const API_BASE_URL = "http://localhost"; // Cambia esto si usas un API Gateway
 const API_CREATE = `http://3.84.236.96:8090/api/v1/employee/add`;
-const API_READ = `http://34.238.121.154:8094/api/v1/employee`;
-const API_UPDATE = `http://35.170.186.75:8092/api/v1/employees`;
-const API_DELETE = `http://54.159.232.247:8093/api/v1/employees/delete`;
+const API_READ = `http://34.203.252.19:8094/api/v1/employee`;
+const API_UPDATE = `http://3.91.61.225:8092/api/v1/employees`;
+const API_DELETE = `http://34.227.171.49:8093/api/v1/employees/delete`;
 const API_AUTH = `http://54.87.131.95:8091/auth`;
 
 // Obtener empleados (READ)
