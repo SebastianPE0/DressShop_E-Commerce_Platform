@@ -63,17 +63,21 @@ export const updateEmployee = async (id, employee) => {
 };
 export const deleteEmployee = async (id) => {
   try {
-    const token = localStorage.getItem("token");  
+    const token = localStorage.getItem("token");
     if (!token) throw new Error("No hay token disponible. Inicia sesión.");
 
     await axios.delete(`${API_DELETE}/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     });
   } catch (error) {
-    console.error("Error eliminando empleado", error.response ? error.response.data : error.message);
+    console.error("Error eliminando empleado:", error.response ? error.response.data : error.message);
     throw error;
   }
 };
+
 // **Registro de Usuario (Signup)**
 export const signUp = async (email, password) => {
   try {
