@@ -1,4 +1,4 @@
-name: Deploy delete-category
+name: Deploy delete-product
 
 on:
     push:
