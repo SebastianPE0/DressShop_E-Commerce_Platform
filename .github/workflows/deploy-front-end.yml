@@ -68,7 +68,7 @@ jobs:
             uses: appleboy/ssh-action@master
             with:
                 host: ${{ secrets.HOST_DNS_FRONTEND_QA }}
-                username: ${{ secrets.USERNAME }}
+                username: ${{ secrets.USERNAME2 }}
                 key: ${{ secrets.EC2_SSH_KEY }}
                 script: |
                     sudo docker stop frontend || true
