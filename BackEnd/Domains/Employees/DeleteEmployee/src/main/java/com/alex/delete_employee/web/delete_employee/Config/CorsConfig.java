@@ -17,7 +17,7 @@ public class CorsConfig {
                 registry.addMapping("/**") // Aplica CORS a todas las rutas
                         .allowedOrigins(
                             "http://localhost:5173",
-                            "http://ec2-54-159-232-247.compute-1.amazonaws.com" // Permite el frontend en AWS
+                            "http://ec2-54-211-104-82.compute-1.amazonaws.com" // Permite el frontend en AWS
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
