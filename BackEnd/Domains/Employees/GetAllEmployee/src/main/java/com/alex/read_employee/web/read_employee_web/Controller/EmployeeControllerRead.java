@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,10 @@ import com.alex.read_employee.web.read_employee_web.Entity.Employee;
 import com.alex.read_employee.web.read_employee_web.Service.IEmployeeService;
 
 @RestController
+@CrossOrigin(origins = {
+    "http://localhost:5173",
+    "http://ec2-34-238-121-154.compute-1.amazonaws.com"
+})
 @RequestMapping("/api/v1/employee")
 public class EmployeeControllerRead {
         

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 @CrossOrigin(origins = {
     "http://localhost:5173",
-    "http://ec2-44-208-167-243.compute-1.amazonaws.com"
+    "http://ec2-54-87-131-95.compute-1.amazonaws.com"
 })
 public class AuthController {
     private final CognitoService cognitoService;

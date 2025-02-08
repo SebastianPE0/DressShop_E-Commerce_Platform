@@ -25,9 +25,9 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Habilitar CORS
-            .csrf(csrf -> csrf.disable()) // Desactivar CSRF para evitar problemas con solicitudes AJAX
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Configurar sesión sin estado
+            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Habilita CORS
+            .csrf(csrf -> csrf.disable()) // Desactiva CSRF
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/signup", "/auth/login").permitAll() // Permitir login y signup sin autenticación
                 .anyRequest().authenticated() // Proteger todas las demás rutas
@@ -42,8 +42,8 @@ public class SecurityConfiguration {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.setAllowedOrigins(List.of(
-    "   http://localhost:5173",
-        "http://ec2-44-208-167-243.compute-1.amazonaws.com"
+            "http://localhost:5173", // Para desarrollo local
+            "http://ec2-54-87-131-95.compute-1.amazonaws.com" // Dominio del frontend en AWS
         ));
         config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
