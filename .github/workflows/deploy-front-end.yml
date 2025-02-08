@@ -59,7 +59,7 @@ jobs:
                     REACT_APP_BACKEND_URL_DELETE_CATEGORY=${{ secrets.HOST_DNS_DELETECATEGORY_QA }}
                     REACT_APP_BACKEND_URL_UPDATE_CATEGORY=${{ secrets.HOST_DNS_UPDATECATEGORY_QA }}
                     
-
+    # DEPLOY FRONTEND            
     deploy-frontend:
         needs: build-and-push-frontend
         runs-on: ubuntu-latest
@@ -88,14 +88,22 @@ jobs:
                 username: ${{ secrets.USERNAME3 }}
                 key: ${{ secrets.EC2_SSH_KEY }}
                 script: |
-                    sudo docker stop frontend || true
-                    sudo docker rm frontend || true
-                    sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
-                    sudo docker run -d --name frontend --network host \
-                      -e REACT_APP_BACKEND_URL_READ_CATEGORY=${{ secrets.HOST_DNS_GETALLCATEGORIES_QA }} \
-                      -e REACT_APP_BACKEND_URL_CREATE_CATEGORY=${{ secrets.HOST_DNS_CREATECATEGORY_QA }} \
-                      -e REACT_APP_BACKEND_URL_DELETE_CATEGORY=${{ secrets.HOST_DNS_DELETECATEGORY_QA }} \
-                      -e REACT_APP_BACKEND_URL_UPDATE_CATEGORY=${{ secrets.HOST_DNS_UPDATECATEGORY_QA }} \
-                      ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
+                    # Detener cualquier servicio en el puerto 80 (como Nginx)
+                    sudo systemctl stop nginx || true
 
-    
+                    # Eliminar contenedores en ejecución en el puerto 80
+                    docker stop frontend || true
+                    docker rm frontend || true
+
+                    # Verificar si algún otro proceso está usando el puerto 80 y eliminarlo
+                    sudo fuser -k 80/tcp || true
+
+                    # Descargar la imagen y ejecutar el contenedor
+                    docker pull ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
+                    docker run -d --name frontend -p 80:80 \
+                    -e REACT_APP_BACKEND_URL_READ_CATEGORY=${{ secrets.HOST_DNS_GETALLCATEGORIES_QA }} \
+                    -e REACT_APP_BACKEND_URL_CREATE_CATEGORY=${{ secrets.HOST_DNS_CREATECATEGORY_QA }} \
+                    -e REACT_APP_BACKEND_URL_DELETE_CATEGORY=${{ secrets.HOST_DNS_DELETECATEGORY_QA }} \
+                    -e REACT_APP_BACKEND_URL_UPDATE_CATEGORY=${{ secrets.HOST_DNS_UPDATECATEGORY_QA }} \
+                    ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
+                    
