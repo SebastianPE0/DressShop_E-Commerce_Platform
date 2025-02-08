@@ -1,27 +1,30 @@
-# Usamos la imagen de Node.js para construir la aplicación
+# Construcción del frontend
 FROM node:20 AS build
 
-# Establecemos el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# Copiamos los archivos del proyecto
+# Copiar archivos del proyecto
 COPY package.json package-lock.json ./
 RUN npm install
 
-# Copiamos el resto de los archivos
 COPY . .
 
-# Construimos la aplicación
+# Pasar variables de entorno al build
+ARG REACT_APP_BACKEND_URL_CREATE_CATEGORY
+ARG REACT_APP_BACKEND_URL_READ_CATEGORY
+ARG REACT_APP_BACKEND_URL_DELETE_CATEGORY
+ARG REACT_APP_BACKEND_URL_UPDATE_CATEGORY
+ENV REACT_APP_BACKEND_URL_CREATE_CATEGORY=$REACT_APP_BACKEND_URL_CREATE_CATEGORY
+ENV REACT_APP_BACKEND_URL_READ_CATEGORY=$REACT_APP_BACKEND_URL_READ_CATEGORY
+ENV REACT_APP_BACKEND_URL_DELETE_CATEGORY=$REACT_APP_BACKEND_URL_DELETE_CATEGORY
+ENV REACT_APP_BACKEND_URL_UPDATE_CATEGORY=$REACT_APP_BACKEND_URL_UPDATE_CATEGORY
+
 RUN npm run build
 
 # ---- Producción ----
 FROM nginx:alpine
 
-# Copiamos los archivos de la carpeta build generada por Vite al servidor web Nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Exponemos el puerto 80 para el contenedor
 EXPOSE 80
-
-# Iniciamos el servidor Nginx
 CMD ["nginx", "-g", "daemon off;"]
