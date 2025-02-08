@@ -13,7 +13,7 @@ COPY . .
 RUN go build -o get-products-service main.go
 
 # Exponer el puerto
-EXPOSE 8083
+EXPOSE 80
 
 # Ejecutar el servicio
 CMD ["./get-products-service"]
