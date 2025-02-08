@@ -25,7 +25,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // Deshabilitar CSRF
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.DELETE, "/api/v1/employees/delete/**").authenticated() // Protege DELETE
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/employees/delete/**").permitAll() // Protege DELETE
                 .anyRequest().permitAll()
             );
 
