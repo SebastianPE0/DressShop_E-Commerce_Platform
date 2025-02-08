@@ -63,7 +63,12 @@ export const updateEmployee = async (id, employee) => {
 };
 export const deleteEmployee = async (id) => {
   try {
-    await axios.delete(`${API_DELETE}/${id}`, authHeader());
+    const token = localStorage.getItem("token");  
+    if (!token) throw new Error("No hay token disponible. Inicia sesión.");
+
+    await axios.delete(`${API_DELETE}/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
   } catch (error) {
     console.error("Error eliminando empleado", error.response ? error.response.data : error.message);
     throw error;
