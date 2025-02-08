@@ -15,6 +15,7 @@ import EditCategory from "./components/Category/EditCategory";
 
 function App() {
     //TEST
+
     
     /*const [isAuthenticated, setIsAuthenticated] = useState(false);
     
