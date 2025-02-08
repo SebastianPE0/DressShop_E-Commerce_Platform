@@ -23,7 +23,7 @@ func main() {
 	router := gin.Default()
 	routes.SetupRoutes(router)
 
-	port := ":8084"
+	port := ":80"
 	log.Printf("DeleteProduct server running on port %s", port)
 	router.Run(port)
 }
