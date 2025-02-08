@@ -7,7 +7,7 @@ const categoryRoutes = require("./src/routes/categoryRoutes");
 const app = express();
 //METODO AÑADIDO
 app.use(cors({
-    origin: "http://ec2-54-242-43-40.compute-1.amazonaws.com", // Permitir solo el frontend en EC2
+    origin: "http://ec2-3-80-74-169.compute-1.amazonaws.com", // Permitir solo el frontend en EC2
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
