@@ -13,10 +13,29 @@ const typeDefs = gql`
     stock: Int!
     category_id: String!
   }
+  
+  type CartItem {
+    id: ID!
+    product_id: ID!
+    quantity: Int!
+  }
+
+  type Cart {
+    id: ID!
+    user_id: ID!
+    items: [CartItem]!
+  }
 
   type Query {
     getCategoryById(id: ID!): Category
     getProductsByCategory(categoryId: ID!): [Product]  # Nueva consulta
+    getCartByUser(user_id: ID!): Cart
+  }
+    
+  type Mutation {
+    addToCart(user_id: ID!, product_id: ID!, quantity: Int!): Cart
+    removeFromCart(user_id: ID!, product_id: ID!): Cart
+    clearCart(user_id: ID!): Cart
   }
 `;
 
