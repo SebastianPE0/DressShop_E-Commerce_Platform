@@ -44,6 +44,6 @@ jobs:
             sudo docker stop add-cart || true
             sudo docker rm add-cart || true
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/add-cart:v1
-            sudo docker run -d --name add-cart --network host \
+            sudo docker run -d --name add-cart -p 8001:8001 \
               -e MONGO_URI="${{ secrets.MONGO_URI }}" \
               ${{ secrets.DOCKERHUB_USERNAME }}/add-cart:v1
