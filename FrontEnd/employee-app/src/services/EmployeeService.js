@@ -2,44 +2,44 @@ import axios from "axios";
 
 // URLs de los microservicios
 const API_BASE_URL = "http://localhost"; // Cambia esto si usas un API Gateway
-const API_CREATE = `http://44.202.90.215:8090/api/v1/employee/add`;
-const API_READ = `http://44.203.130.249:8094/api/v1/employee`;
-const API_UPDATE = `http://54.91.89.233:8092/api/v1/employees`;
-const API_DELETE = `http://3.86.201.108:8093/api/v1/employees/delete`;
-const API_AUTH = `http://3.84.83.248:8091/auth`;
+const API_CREATE = `http://3.84.236.96:8090/api/v1/employee/add`;
+const API_READ = `http://34.203.252.19:8094/api/v1/employee`;
+const API_UPDATE = `http://3.91.61.225:8092/api/v1/employees`;
+const API_DELETE = `http://34.227.171.49:8093/api/v1/employees/delete`;
+const API_AUTH = `http://54.87.131.95:8091/auth`;
 
 // Obtener empleados (READ)
 export const getEmployees = async () => {
-
   try {
-    const token = localStorage.getItem("token");
-    const response = await axios.get(API_READ, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.get(API_READ, authHeader());
     return response.data;
   } catch (error) {
-    console.error("Error obteniendo empleados", error);
+    console.error("Error obteniendo empleados", error.response ? error.response.data : error.message);
     throw error;
   }
 };
-const authHeader = () => ({
-  headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-});
-// Crear un nuevo empleado (CREATE)
+const authHeader = () => {
+  const token = localStorage.getItem("token");
+  if (!token) throw new Error("No hay token disponible. Inicia sesión.");
+  return {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
+//hello
 export const createEmployee = async (employee) => {
   try {
     const response = await axios.post(API_CREATE, employee, authHeader());
     return response.data;
   } catch (error) {
-    console.error("Error creando empleado", error);
+    console.error("Error creando empleado", error.response ? error.response.data : error.message);
     throw error;
   }
 };
  
- 
-  
+   
 
 // Obtener un empleado por ID
 export const getEmployeeById = async (id) => {
@@ -52,26 +52,32 @@ export const getEmployeeById = async (id) => {
   }
 };
 
-// Actualizar un empleado (UPDATE)
 export const updateEmployee = async (id, employee) => {
   try {
-    const response = await axios.put(`${API_UPDATE}/${id}`, employee,authHeader());
+    const response = await axios.put(`${API_UPDATE}/${id}`, employee, authHeader());
     return response.data;
   } catch (error) {
-    console.error("Error actualizando empleado", error);
+    console.error("Error actualizando empleado", error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+export const deleteEmployee = async (id) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("No hay token disponible. Inicia sesión.");
+
+    await axios.delete(`${API_DELETE}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    console.error("Error eliminando empleado:", error.response ? error.response.data : error.message);
     throw error;
   }
 };
 
-// Eliminar un empleado (DELETE)
-export const deleteEmployee = async (id) => {
-  try {
-    await axios.delete(`${API_DELETE}/${id}`,authHeader());
-  } catch (error) {
-    console.error("Error eliminando empleado", error);
-    throw error;
-  }
-};
 // **Registro de Usuario (Signup)**
 export const signUp = async (email, password) => {
   try {
@@ -86,20 +92,40 @@ export const signUp = async (email, password) => {
 export const login = async (email, password) => {
   try {
     const response = await axios.post(`${API_AUTH}/login`, 
-      { email, password },
+      { email, password },  // Enviar los datos en JSON
       {
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded", // Asegurar formato correcto
+          "Content-Type": "application/json", // Enviar datos en formato JSON
         }
       }
     );
 
-    const token = response.data;
+    // Extraer el token del backend correctamente
+    if (!response.data || !response.data.token) {
+      throw new Error("Token no recibido en la respuesta del servidor.");
+    }
+
+    const token = response.data.token;
+
+    // Almacenar el token en localStorage
     localStorage.setItem("token", token);
+    
     return token;
   } catch (error) {
     console.error("Error iniciando sesión", error.response ? error.response.data : error.message);
-    throw error;
+    
+    // Si el backend responde con 401, lanzar un error específico
+    if (error.response) {
+      if (error.response.status === 401) {
+        throw new Error("Credenciales incorrectas. Verifica tu correo y contraseña.");
+      } else if (error.response.status === 400) {
+        throw new Error("Solicitud incorrecta. Revisa los datos enviados.");
+      } else if (error.response.status === 500) {
+        throw new Error("Error interno en el servidor. Intenta más tarde.");
+      }
+    }
+
+    throw new Error("Error de conexión. Verifica tu red e intenta de nuevo.");
   }
 };
 
