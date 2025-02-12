@@ -15,7 +15,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    getCategoryById(id: ID!): Category
+    category(id: ID!): Category
     getProductsByCategory(categoryId: ID!): [Product]  # Nueva consulta
   }
 `;
