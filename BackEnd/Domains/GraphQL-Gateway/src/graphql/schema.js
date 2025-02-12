@@ -14,20 +14,25 @@ const typeDefs = gql`
     category_id: String!
   }
 
+
   type Cart {
     cart_id: ID!
     products: [Product!]!
     created_at: String!
+
   }
 
   type Query {
+
     category(id: ID!): Category
     getProductsByCategory(categoryId: ID!): [Product]
     getProductById(productId: ID!): Product 
+
   }
 
   type Mutation {
     addProductToCart(cart_id: ID!, product_id: ID!, quantity: Int!): Cart  
+
   }
 `;
 

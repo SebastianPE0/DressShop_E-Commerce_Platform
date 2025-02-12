@@ -47,4 +47,5 @@ jobs:
               -e GET_PRODUCT_BY_ID_SERVICE_URL="http://${{ secrets.HOST_DNS_GETPRODUCTBYID_QA }}/products" \ 
               -e ADD_PRODUCT_TO_CART_SERVICE_URL="http://${{ secrets.HOST_DNS_ADDTOCART_QA }}/cart/add" \
               -e GRAPHQL_GATEWAY_URL="http://${{ secrets.HOST_DNS_GRAPHQL_QA }}/graphql" 
+
               ${{ secrets.DOCKERHUB_USERNAME }}/graphql-gateway:latest

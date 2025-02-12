@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const CATEGORY_SERVICE_URL = process.env.CATEGORY_SERVICE_URL;
 const PRODUCT_SERVICE_URL = process.env.PRODUCT_SERVICE_URL;
-const GET_PRODUCT_BY_ID_SERVICE_URL = process.env.GET_PRODUCT_BY_ID_SERVICE_URL;  // ✅ NUEVO ENDPOINT
+const GET_PRODUCT_BY_ID_SERVICE_URL = process.env.GET_PRODUCT_BY_ID_SERVICE_URL;  
 const ADD_PRODUCT_TO_CART_SERVICE_URL = process.env.ADD_PRODUCT_TO_CART_SERVICE_URL;
 
 const getCategoryById = async (id) => {
@@ -65,7 +65,7 @@ const resolvers = {
         throw new Error("Error al obtener productos por categoría.");
       }
     },
-    getProductById: async (_, { productId }) => await getProductById(productId) 
+    getProductById: async (_, { productId }) => await getProductById(productId)  
   },
   Mutation: {
     addProductToCart
