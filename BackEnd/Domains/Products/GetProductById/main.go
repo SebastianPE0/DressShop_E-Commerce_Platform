@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	// Cargar variables de entorno
+
 	config.LoadEnv()
 
 	// Conectar a MongoDB
