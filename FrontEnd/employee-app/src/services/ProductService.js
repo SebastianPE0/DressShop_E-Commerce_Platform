@@ -57,5 +57,28 @@ export const updateProduct = async (id, product) => {
         const response = await axios.put(`${API_UPDATE}/${id}`, product, authHeader());
         return response.data;
     } catch (error) {
-        console.error("Error actualizando producto", error.response ? error.response.
-2
+        console.error("Error actualizando producto", error.response ? error.response.data : error.message);
+        throw error;
+    }
+};
+
+// Eliminar un producto (DELETE)
+export const deleteProduct = async (id) => {
+    try {
+        await axios.delete(`${API_DELETE}/${id}`, authHeader());
+    } catch (error) {
+        console.error("Error eliminando producto", error.response ? error.response.data : error.message);
+        throw error;
+    }
+};
+
+// **Exportar todas las funciones como un objeto ProductService**
+const ProductService = {
+    getProducts,
+    getProductById,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+};
+
+export default ProductService;
