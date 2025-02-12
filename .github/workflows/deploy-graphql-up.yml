@@ -45,4 +45,5 @@ jobs:
               -e CATEGORY_SERVICE_URL="http://${{ secrets.HOST_DNS_GETBYIDCATEGORY_QA }}/category" \
               -e PRODUCT_SERVICE_URL="http://${{ secrets.HOST_DNS_GETPRODUCTSBYCATEGORY_QA }}/products/by-category" \
               -e PRODUCT_BY_ID_SERVICE_URL="http://${{ secrets.HOST_DNS_GETPRODUCTSBYID_QA }}/products" \
+              -e CART_SERVICE_URL="http://${{ secrets.HOST_DNS_CARTSERVICE_QA }}:8001/graphql" \
               ${{ secrets.DOCKERHUB_USERNAME }}/graphql-gateway:latest

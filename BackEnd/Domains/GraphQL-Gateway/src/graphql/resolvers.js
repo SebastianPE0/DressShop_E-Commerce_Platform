@@ -46,6 +46,7 @@ const getProductById = async (id) => {
     return null;
   }
 };
+
 const resolvers = {
   Query: {
     category: async (_, { id }) => {
@@ -68,34 +69,21 @@ const resolvers = {
         throw new Error(error.response ? error.response.data : error.message);
       }
     },
-    getCartByUser: async (_, { user_id }) => {
+    getCartById: async (_, { cart_id }) => {
       try {
         const response = await axios.post(`${CART_SERVICE_URL}/graphql`, {
-          query: `query { getCartByUser(user_id: "${user_id}") { id items { product_id quantity } } }`
+          query: `query { getCartById(cart_id: "${cart_id}") { id items { product_id quantity name price } } }`
         });
 
-        let cart = response.data.data.getCartByUser;
-
-        // Obtener detalles de los productos en el carrito
-        for (let item of cart.items) {
-          const productDetails = await getProductById(item.product_id);
-          if (productDetails) {
-            item.name = productDetails.name;
-            item.price = productDetails.price;
-          } else {
-            console.warn(`⚠️ Producto ${item.product_id} no encontrado`);
-          }
-        }
-
-        return cart;
+        return response.data.data.getCartById;
       } catch (error) {
         throw new Error("Failed to fetch cart.");
       }
     }
   },
   Mutation: {
-    // Agregar producto al carrito (validando stock)
-    addToCart: async (_, { user_id, product_id, quantity }) => {
+    // Agregar producto al carrito sin necesidad de user_id
+    addToCart: async (_, { cart_id, product_id, quantity }) => {
       try {
         // Verificar que el producto existe y tiene stock disponible
         const product = await getProductById(product_id);
@@ -108,7 +96,7 @@ const resolvers = {
 
         // Agregar al carrito en el servicio de Carrito
         const response = await axios.post(`${CART_SERVICE_URL}/graphql`, {
-          query: `mutation { addToCart(user_id: "${user_id}", product_id: "${product_id}", quantity: ${quantity}) { id items { product_id quantity } } }`
+          query: `mutation { addToCart(cart_id: "${cart_id}", product_id: "${product_id}", quantity: ${quantity}) { id items { product_id quantity name price } } }`
         });
 
         return response.data.data.addToCart;
@@ -118,10 +106,10 @@ const resolvers = {
     },
 
     // Eliminar un producto del carrito
-    removeFromCart: async (_, { user_id, product_id }) => {
+    removeFromCart: async (_, { cart_id, product_id }) => {
       try {
         const response = await axios.post(`${CART_SERVICE_URL}/graphql`, {
-          query: `mutation { removeFromCart(user_id: "${user_id}", product_id: "${product_id}") { id items { product_id quantity } } }`
+          query: `mutation { removeFromCart(cart_id: "${cart_id}", product_id: "${product_id}") { id items { product_id quantity name price } } }`
         });
 
         return response.data.data.removeFromCart;
@@ -131,10 +119,10 @@ const resolvers = {
     },
 
     // Vaciar el carrito
-    clearCart: async (_, { user_id }) => {
+    clearCart: async (_, { cart_id }) => {
       try {
         const response = await axios.post(`${CART_SERVICE_URL}/graphql`, {
-          query: `mutation { clearCart(user_id: "${user_id}") { id items { product_id quantity } } }`
+          query: `mutation { clearCart(cart_id: "${cart_id}") { id items { product_id quantity name price } } }`
         });
 
         return response.data.data.clearCart;
@@ -144,5 +132,6 @@ const resolvers = {
     }
   }
 };
+
 
 module.exports = resolvers;
