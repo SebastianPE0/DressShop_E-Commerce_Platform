@@ -19,19 +19,21 @@ const typeDefs = gql`
     id: ID!
     product_id: ID!
     quantity: Int!
+    name: String  # Nuevo: Para mostrar el nombre del producto en el carrito
+    price: Float  # Nuevo: Para mostrar el precio del producto en el carrito
   }
 
-  type Cart {
+ type Cart {
     id: ID!
-    user_id: ID!
+    user_id: String!  # Cambiado a String para mayor flexibilidad
     items: [CartItem]!
   }
 
 
   type Query {
-    category(id: ID!): Category
-    getProductsByCategory(categoryId: ID!): [Product]  # Nueva consulta
-    getCartByUser(user_id: ID!): Cart
+    getProductById(id: ID!): Product  # Nuevo: Obtener detalles de un producto por ID
+    getProductsByCategory(categoryId: ID!): [Product] 
+    getCartByUser(user_id: String!): Cart
   }
     
   type Mutation {
