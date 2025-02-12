@@ -1,4 +1,4 @@
-/*const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const jwksClient = require("jwks-rsa");
 
 const client = jwksClient({
@@ -34,4 +34,3 @@ const authMiddleware = (req, res, next) => {
 };
 
 module.exports = authMiddleware;
-*/
