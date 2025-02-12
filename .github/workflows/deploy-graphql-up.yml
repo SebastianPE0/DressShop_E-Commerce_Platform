@@ -3,7 +3,7 @@ name: Deploy graphQL-deploy
 on:
     push:
         branches:
-            - Feature_BackEnd_CategoryDomain_AddMicroservice_DeleteCategory
+            - Fix_Merge_Repository
         paths:
             - 'BackEnd/Domains/GraphQL-Gateway/**'
 jobs:
@@ -44,4 +44,7 @@ jobs:
             sudo docker run -d --name graphql-gateway --network host \
               -e CATEGORY_SERVICE_URL="http://${{ secrets.HOST_DNS_GETBYIDCATEGORY_QA }}/category" \
               -e PRODUCT_SERVICE_URL="http://${{ secrets.HOST_DNS_GETPRODUCTSBYCATEGORY_QA }}/products/by-category" \
+              -e GET_PRODUCT_BY_ID_SERVICE_URL="http://${{ secrets.HOST_DNS_GETPRODUCTBYID_QA }}/products" \ 
+              -e ADD_PRODUCT_TO_CART_SERVICE_URL="http://${{ secrets.HOST_DNS_ADDTOCART_QA }}/cart/add" \
+              -e GRAPHQL_GATEWAY_URL="http://${{ secrets.HOST_DNS_GRAPHQL_QA }}/graphql" 
               ${{ secrets.DOCKERHUB_USERNAME }}/graphql-gateway:latest
