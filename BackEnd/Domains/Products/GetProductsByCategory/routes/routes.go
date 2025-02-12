@@ -1,11 +1,10 @@
 package routes
 
 import (
-	"net/http"
-
 	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/GetProductsByCategory/controllers"
+	"github.com/gin-gonic/gin"
 )
 
-func RegisterRoutes(mux *http.ServeMux, controller *controllers.ProductController) {
-	mux.HandleFunc("/products/by-category", controller.GetProductsByCategory)
+func RegisterRoutes(router *gin.Engine, controller *controllers.ProductController) {
+	router.GET("/products/by-category", controller.GetProductsByCategory)
 }

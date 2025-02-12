@@ -41,5 +41,5 @@ func ConnectMongoDB() *mongo.Client {
 
 // GetMongoCollection returns a specific MongoDB collection.
 func GetMongoCollection(collectionName string) *mongo.Collection {
-	return client.Database("ecommerce").Collection(collectionName)
+	return client.Database("product_db").Collection(collectionName)
 }

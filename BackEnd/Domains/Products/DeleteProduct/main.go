@@ -6,24 +6,23 @@ import (
 	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/DeleteProduct/config"
 	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/DeleteProduct/routes"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 func main() {
-	// Cargar variables de entorno
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	config.LoadEnv()
 
-	// Conectar a MongoDB
-	config.ConnectMongoDB()
+	client := config.ConnectMongoDB()
+	defer client.Disconnect(nil)
 
-	// Configuración del servidor
-	router := gin.Default()
-	routes.SetupRoutes(router)
+	r := gin.Default()
 
-	port := ":8084"
+	r.Use(config.AuthMiddleware())
+
+	routes.SetupRoutes(r)
+
+	port := config.GetPort()
 	log.Printf("DeleteProduct server running on port %s", port)
-	router.Run(port)
+
+	r.Run(":" + port)
+
 }

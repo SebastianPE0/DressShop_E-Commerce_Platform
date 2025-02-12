@@ -1,0 +1,46 @@
+name: Deploy delete-product
+
+on:
+    push:
+        branches:
+            - Feature_BackEnd_CategoryDomain_AddMicroservice_DeleteCategory
+        paths:
+            - 'BackEnd/Domains/Products/DeleteProduct/**'
+jobs:
+    # Build and Push delete-product
+  build-and-push-delete:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Build and push delete-product
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd/Domains/Products/DeleteProduct
+          file: ./BackEnd/Domains/Products/DeleteProduct/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/delete-product:latest
+
+    # Deploy delete-product 
+  deploy-delete-product:
+    needs: build-and-push-delete
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to DeleteProduct QA
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS_DELETEPRODUCT_QA }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker stop delete-product || true
+            sudo docker rm delete-product || true
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/delete-product:latest
+            sudo docker run -d --name delete-product --network host \
+              -e MONGO_URI="${{ secrets.MONGO_URI_PRODUCT }}" \
+              ${{ secrets.DOCKERHUB_USERNAME }}/delete-product:latest

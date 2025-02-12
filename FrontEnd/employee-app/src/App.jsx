@@ -24,6 +24,9 @@ function App() {
                 <Route path="/" element={isAuthenticated ? <EmployeeList /> : <Navigate to="/login" />} />
                 <Route path="/add" element={isAuthenticated ? <AddEmployee /> : <Navigate to="/login" />} />
                 <Route path="/edit/:id" element={isAuthenticated ? <EditEmployee /> : <Navigate to="/login" />} />
+                <Route path="/categories" element={isAuthenticated ?  <CategoryList /> : <Navigate to="/login" />} />
+                <Route path="/add-category" element={isAuthenticated ?   <AddCategory />  : <Navigate to="/login" />} />
+                <Route path="/edit-category/:id" element={isAuthenticated ?  <EditCategory /> : <Navigate to="/login" />} />
             </Routes>
         </Router>
     );

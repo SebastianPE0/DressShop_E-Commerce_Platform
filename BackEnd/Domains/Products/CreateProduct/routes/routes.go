@@ -5,11 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRoutes() *gin.Engine {
-	router := gin.Default()
-
-	// Microservice route
+func SetupRoutes(router *gin.Engine) {
 	router.POST("/create", controllers.CreateProduct)
-
-	return router
 }

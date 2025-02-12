@@ -14,6 +14,7 @@ const typeDefs = gql`
     category_id: String!
   }
   
+
   type CartItem {
     id: ID!
     product_id: ID!
@@ -26,8 +27,9 @@ const typeDefs = gql`
     items: [CartItem]!
   }
 
+
   type Query {
-    getCategoryById(id: ID!): Category
+    category(id: ID!): Category
     getProductsByCategory(categoryId: ID!): [Product]  # Nueva consulta
     getCartByUser(user_id: ID!): Cart
   }

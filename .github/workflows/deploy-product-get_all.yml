@@ -1,0 +1,46 @@
+name: Deploy get_all-product
+
+on:
+    push:
+        branches:
+            - Feature_BackEnd_CategoryDomain_AddMicroservice_DeleteCategory
+        paths:
+            - 'BackEnd/Domains/Products/GetProducts/**'
+jobs:
+    # Build and Push get-all-products
+  build-and-push-getall:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Build and push get-all-products
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd/Domains/Products/GetProducts
+          file: ./BackEnd/Domains/Products/GetProducts/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/get-all-products:latest
+
+    # Deploy get-all-products
+  deploy-getall:
+    needs: build-and-push-getall
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GetAllProducts QA
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS_GETALLPRODUCTS_QA }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker stop get-all-products || true
+            sudo docker rm get-all-products || true
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/get-all-products:latest
+            sudo docker run -d --name get-all-products --network host \
+              -e MONGO_URI="${{ secrets.MONGO_URI_PRODUCT }}" \
+              ${{ secrets.DOCKERHUB_USERNAME }}/get-all-products:latest

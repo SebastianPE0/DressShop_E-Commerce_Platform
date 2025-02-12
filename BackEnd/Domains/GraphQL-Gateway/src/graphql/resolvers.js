@@ -1,28 +1,39 @@
 const axios = require('axios');
+const config = require('../config/env');
 require('dotenv').config();
 
 const CATEGORY_SERVICE_URL = process.env.CATEGORY_SERVICE_URL;
 const PRODUCT_SERVICE_URL = process.env.PRODUCT_SERVICE_URL;
+
+const getCategoryById = async (id) => {
+  try {
+    console.log(`Fetching category from: ${CATEGORY_SERVICE_URL}/${id}`); // Debug
+    const response = await axios.get(`${CATEGORY_SERVICE_URL}/${id}`);
+
+    
+    if (response.data) {
+      return {
+        id: response.data._id, 
+        name: response.data.name,
+        description: response.data.description,
+      };
+    }
+
+    return null; 
+  } catch (error) {
+    console.error('Error fetching category:', error.message);
+    return null;
+  }
+};
+
+
 const CART_SERVICE_URL = process.env.CART_SERVICE_URL; 
+
 
 const resolvers = {
   Query: {
-    getCategoryById: async (_, { id }) => {
-      try {
-        console.log(`Requesting category from: ${CATEGORY_SERVICE_URL}/${id}`);
-        const response = await axios.get(`${CATEGORY_SERVICE_URL}/${id}`);
-
-        // Convertimos `_id` de MongoDB en `id`
-        const category = response.data;
-        return {
-          id: category._id,  // Aquí transformamos _id a id
-          name: category.name,
-          description: category.description
-        };
-      } catch (error) {
-        console.error("Error fetching category by ID:", error.response ? error.response.data : error.message);
-        throw new Error("Failed to fetch category.");
-      }
+    category: async (_, { id }) => {
+      return await getCategoryById(id);
     },
     getProductsByCategory: async (_, { categoryId }) => {
       try {

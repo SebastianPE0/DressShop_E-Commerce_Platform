@@ -1,0 +1,46 @@
+name: Deploy update-product
+
+on:
+    push:
+        branches:
+            - Feature_BackEnd_CategoryDomain_AddMicroservice_DeleteCategory
+        paths:
+            - 'BackEnd/Domains/Products/UpdateProduct/**'
+jobs:
+    # Build and Push update-product
+  build-and-push-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Build and push update-product
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd/Domains/Products/UpdateProduct
+          file: ./BackEnd/Domains/Products/UpdateProduct/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/update-product:latest
+
+    # Deploy update-product 
+  deploy-update-product:
+    needs: build-and-push-update
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to UpdateProduct QA
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS_UPDATEPRODUCT_QA  }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker stop update-product || true
+            sudo docker rm update-product || true
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/update-product:latest
+            sudo docker run -d --name update-product --network host \
+              -e MONGO_URI="${{ secrets.MONGO_URI_PRODUCT }}" \
+              ${{ secrets.DOCKERHUB_USERNAME }}/update-product:latest
