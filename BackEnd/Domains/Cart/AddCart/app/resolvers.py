@@ -18,7 +18,7 @@ class Mutation:
 
         product_data = product_response.json()
 
-        # Verificar disponibilidad del stock
+        # Verificar disponibilidad del stocks
         if product_data["stock"] < quantity:
             raise ValueError("No hay suficiente stock disponible")
 
