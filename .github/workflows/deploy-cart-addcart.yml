@@ -27,7 +27,7 @@ jobs:
           context: ./BackEnd/Domains/Cart/AddCart
           file: ./BackEnd/Domains/Cart/AddCart/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME2 }}/addcart:v1
+          tags: ${{ secrets.DOCKERHUB_USERNAME2 }}/add-cart:v1
 
     # Deploy AddCart
   deploy-addcart:
@@ -43,9 +43,9 @@ jobs:
           script: |
             sudo docker stop add-cart || true
             sudo docker rm add-cart || true
-            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/addcart:v1
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/add-cart:v1
             sudo docker run -d --name add-cart -p 8001:8001 --restart unless-stopped \
               -e MONGO_URI="${{ secrets.MONGO_URI }}" \
               -e DB_NAME="cart_db" \
               -e CART_SERVICE_URL="http://${{ secrets.HOST_DNS_ADDCART_QA }}:8001/graphql" \  # ✅ Corrección aquí
-              ${{ secrets.DOCKERHUB_USERNAME2 }}/addcart:v1 
+              ${{ secrets.DOCKERHUB_USERNAME2 }}/add-cart:v1 
