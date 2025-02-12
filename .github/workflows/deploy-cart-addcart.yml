@@ -27,7 +27,7 @@ jobs:
           context: ./BackEnd/Domains/Cart/AddCart
           file: ./BackEnd/Domains/Cart/AddCart/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME2 }}/add-cart:v1
+          tags: ${{ secrets.DOCKERHUB_USERNAME2 }}/addcart:v1
 
     # Deploy AddCart
   deploy-addcart:
@@ -48,4 +48,4 @@ jobs:
               -e MONGO_URI="${{ secrets.MONGO_URI }}" \
               -e DB_NAME="cart_db" \
               -e CART_SERVICE_URL="http://${{ secrets.HOST_DNS_ADDCART_QA }}:8001/graphql" \  # ✅ Corrección aquí
-              ${{ secrets.DOCKERHUB_USERNAME2 }}/add-cart:v1 
+              ${{ secrets.DOCKERHUB_USERNAME2 }}/addcart:v1 
