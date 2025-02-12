@@ -41,16 +41,16 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # Verificar si el contenedor existe antes de detenerlo
+            # Detener y eliminar el contenedor anterior solo si existe
             if [ "$(sudo docker ps -q -f name=graphql-gateway)" ]; then
                 sudo docker stop graphql-gateway
                 sudo docker rm graphql-gateway
             fi
 
-            # Descargar la última imagen desde DockerHub
+            # Descargar la última imagen de Docker
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/graphql-gateway:latest
 
-            # Ejecutar el contenedor con las variables de entorno necesarias
+            # Ejecutar el contenedor correctamente
             sudo docker run -d --name graphql-gateway --network host \
               -e CATEGORY_SERVICE_URL="http://${{ secrets.HOST_DNS_GETBYIDCATEGORY_QA }}/category" \
               -e PRODUCT_SERVICE_URL="http://${{ secrets.HOST_DNS_GETPRODUCTSBYCATEGORY_QA }}/products/by-category" \
