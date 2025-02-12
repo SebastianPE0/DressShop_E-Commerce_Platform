@@ -1,0 +1,5 @@
+com\alex\acoount\web\springboot_account\SpringbootAccountApplication.class
+com\alex\acoount\web\springboot_account\Controller\CreateAccountController.class
+com\alex\acoount\web\springboot_account\Config\CorsConfig.class
+com\alex\acoount\web\springboot_account\Config\CorsConfig$1.class
+com\alex\acoount\web\springboot_account\Service\CognitoAccountService.class
