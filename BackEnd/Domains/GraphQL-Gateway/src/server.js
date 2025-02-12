@@ -35,7 +35,7 @@ async function startServer() {
   server.applyMiddleware({ app });
 
   // 📌 Configurar puerto dinámico
-  const PORT = process.env.PORT ;
+  const PORT = 80 ;
   app.listen(PORT, () => {
     console.log(`✅ GraphQL-Gateway ready at http://localhost:${PORT}${server.graphqlPath}`);
   });
