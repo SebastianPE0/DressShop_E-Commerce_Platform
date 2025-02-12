@@ -1,0 +1,46 @@
+name: Deploy get_ByID-product
+
+on:
+    push:
+        branches:
+            - Fix_Merge_Repository
+        paths:
+            - 'BackEnd/Domains/Products/GetProductById/**'
+jobs:
+    # Build and Push get-products-by-id
+  build-and-push-get-products:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Build and push get-products-by-category
+        uses: docker/build-push-action@v4
+        with:
+          context: ./BackEnd/Domains/Products/GetProductById
+          file: ./BackEnd/Domains/Products/GetProductById/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/get-products-by-id:latest
+
+    # Deploy get-products-by-id
+  deploy-get-products:
+    needs: build-and-push-get-products
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GetProductsById QA
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS_GETPRODUCTSBYID_QA }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker stop get-products-by-id || true
+            sudo docker rm get-products-by-id || true
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/get-products-by-id:latest
+            sudo docker run -d --name get-products-by-id --network host \
+              -e MONGO_URI="${{ secrets.MONGO_URI_PRODUCT }}" \
+              ${{ secrets.DOCKERHUB_USERNAME }}/get-products-by-id:latest
