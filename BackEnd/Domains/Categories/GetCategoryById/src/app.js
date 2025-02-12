@@ -6,7 +6,7 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const authMiddleware = require("./config/authMiddleware"); 
 
 const app = express();
-
+//TEST
 
 if (typeof authMiddleware !== "function") {
   console.error(" Error: authMiddleware no es una función válida.");
