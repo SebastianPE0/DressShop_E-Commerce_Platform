@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const config = {
-  mongoURI: process.env.MONGO_URI || 'mongodb://mongodb-categories:27017/categories_db',
+  mongoURI: process.env.MONGO_URI,
   appPort: process.env.APP_PORT || 80,
 };
 

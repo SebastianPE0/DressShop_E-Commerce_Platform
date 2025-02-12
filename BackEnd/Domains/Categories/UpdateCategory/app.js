@@ -1,18 +1,36 @@
 const express = require("express");
-const cors = require("cors"); // Importar CORS
-const categoryRoutes = require("./src/routes/categoryRoutes");
+const cors = require("cors");
+require("dotenv").config();
 require("./src/config/db"); 
+const categoryRoutes = require("./src/routes/categoryRoutes");
+const authMiddleware = require("./src/config/authMiddleware"); 
 
 const app = express();
 
-//METODO AÑADIDO
-app.use(cors({
-    origin: "http://ec2-3-80-74-169.compute-1.amazonaws.com", // Permitir solo el frontend en EC2
+
+if (typeof authMiddleware !== "function") {
+  console.error(" Error: authMiddleware no es una función válida.");
+  process.exit(1); 
+}
+
+
+app.use(
+  cors({
+    origin: "http://ec2-3-80-74-169.compute-1.amazonaws.com",
     methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-}));
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 
 app.use(express.json());
+app.use(authMiddleware); 
+
+
 app.use("/category", categoryRoutes);
+
+
+const PORT = process.env.PORT ;
+app.listen(PORT, () => console.log(` Server running on port ${PORT}`));
 
 module.exports = app;
