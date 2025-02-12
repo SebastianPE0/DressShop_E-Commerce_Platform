@@ -42,7 +42,7 @@ public class EmployeeDTO {
     public String getEmail() {
         return email;
     }
-
+    /*  prueba */
     public void setEmail(String email) {
         this.email = email;
     }
@@ -66,3 +66,4 @@ public class EmployeeDTO {
                     '}';
     }
 }
+ 

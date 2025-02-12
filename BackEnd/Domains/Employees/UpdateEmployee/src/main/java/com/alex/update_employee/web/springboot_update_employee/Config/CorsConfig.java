@@ -14,11 +14,15 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**") // Permitir CORS para todas las rutas
-                        .allowedOrigins("http://localhost:5174", "http://localhost:5173") // Permitir llamadas desde React
+                registry.addMapping("/**") // Aplica CORS a todas las rutas
+                        .allowedOrigins(
+                            "http://localhost:5173",
+                            "http://localhost:5174",
+                            "http://ec2-54-211-104-82.compute-1.amazonaws.com" // Agrega el DNS del frontend en AWS
+                        )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(true); // Permite credenciales (opcional)
+                        .allowCredentials(true); // Permitir credenciales (opcional)
             }
         };
     }

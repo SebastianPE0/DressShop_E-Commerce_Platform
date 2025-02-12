@@ -212,7 +212,7 @@ jobs:
             sudo docker stop create-employee || true
             sudo docker rm create-employee || true
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/create-employee:v1
-            sudo docker run -d --name create-employee --network host \
+            sudo docker run -d --name create-employee -p 8090:8090 \
               -e DB_URL="${{ secrets.DB_URL }}" \
              -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
              -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
@@ -231,7 +231,7 @@ jobs:
            sudo docker stop delete-employee || true
             sudo docker rm delete-employee || true
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/delete-employee:v1
-            sudo docker run -d --name delete-employee --network host \
+            sudo docker run -d --name delete-employee -p 8093:8093 \
               -e DB_URL="${{ secrets.DB_URL }}" \
              -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
              -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
@@ -250,7 +250,7 @@ jobs:
            sudo docker stop getallemployee-employee || true
             sudo docker rm getallemployee-employee || true
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/getallemployee-employee:v1
-            sudo docker run -d --name getallemployee-employee --network host \
+            sudo docker run -d --name getallemployee-employee -p 8094:8094 \
               -e DB_URL="${{ secrets.DB_URL }}" \
              -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
              -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
@@ -269,7 +269,7 @@ jobs:
             sudo docker stop login-employee || true
             sudo docker rm login-employee || true
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/login-employee:v1
-            sudo docker run -d --name login-employee --network host \
+            sudo docker run -d --name login-employee -p 8091:8091 \
               -e DB_URL="${{ secrets.DB_URL }}" \
              -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
              -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
@@ -288,7 +288,7 @@ jobs:
             sudo docker stop update-employee || true
             sudo docker rm update-employee || true
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/update-employee:v1
-            sudo docker run -d --name update-employee --network host \
+            sudo docker run -d --name update-employee -p 8092:8092 \
               -e DB_URL="${{ secrets.DB_URL }}" \
              -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
              -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
