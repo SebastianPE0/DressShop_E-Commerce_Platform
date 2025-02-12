@@ -13,7 +13,7 @@ const typeDefs = gql`
     stock: Int!
     category_id: String!
   }
-
+  
   type Query {
     category(id: ID!): Category
     getProductsByCategory(categoryId: ID!): [Product]  # Nueva consulta
