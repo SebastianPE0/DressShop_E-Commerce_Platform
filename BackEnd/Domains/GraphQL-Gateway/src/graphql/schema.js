@@ -1,23 +1,17 @@
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
-  type Category {
-    id: ID!
-    name: String!
-  }
+    type Category {
+        id: ID!             # Usamos 'id', no '_id'
+        name: String!
+        description: String
+        createdAt: String
+        updatedAt: String
+    }
 
-  type Product {
-    id: ID!
-    name: String!
-    price: Float!
-    stock: Int!
-    category_id: String!
-  }
-
-  type Query {
-    category(id: ID!): Category
-    getProductsByCategory(categoryId: ID!): [Product]  # Nueva consulta
-  }
+    type Query {
+        getCategoryById(id: ID!): Category
+    }
 `;
 
 module.exports = typeDefs;
