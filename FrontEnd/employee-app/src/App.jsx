@@ -2,18 +2,23 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import EmployeeList from "./components/ListEmployee";
 import EditEmployee from "./components/EditEmployee";
 import AddEmployee from "./components/AddEmployee";
-import Login from "./components/Login"; // Importamos el componente de Login
+import Login from "./components/Login"; // Importamimport CategoryList from "./components/CategoryList";
+import CategoryList from "./components/Category/ListCategory";
+import AddCategory from "./components/Category/AddCategory";
+import EditCategory from "./components/Category/EditCategory";
 import EmployeeService from "./services/EmployeeService";
+import CategoryService from "./services/CategoryService";
 import { useState, useEffect } from "react";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    // Verificar si el usuario tiene un token en localStorage al cargar la app
     useEffect(() => {
-        setIsAuthenticated(EmployeeService.isAuthenticated());
+        const employeeAuth = EmployeeService.isAuthenticated();
+        const categoryAuth = CategoryService.isAuthenticated();
+        
+        setIsAuthenticated(employeeAuth || categoryAuth);
     }, []);
-
     return (
         <Router>
             <Routes>

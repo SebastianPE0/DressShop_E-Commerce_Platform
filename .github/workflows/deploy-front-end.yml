@@ -1,109 +1,109 @@
-name: Deploy frontend
+name: Deploy Login
 
 on:
     push:
         branches:
-            - Feature_BackEnd_CategoryDomain_AddMicroservice_DeleteCategory
+            - Fix_Merge_Repository
         paths:
-            - 'FrontEnd/employee-app/**'
+            - 'BackEnd/Domains/Employees/LoginEmployee/**'
 jobs:
-    
-    build-and-push-frontend:
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout code
-            uses: actions/checkout@v3
+  # Job para construir y subir la imagen del frontend a DockerHub
+  build-and-push-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-          - name: Install Node.js
-            uses: actions/setup-node@v3
-            with:
-              node-version: '20'
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
 
-          - name: Install dependencies
-            run: |
-                if [ -d "FrontEnd/employee-app" ]; then
-                    cd FrontEnd/employee-app
-                    rm -rf node_modules package-lock.json # Limpieza previa
-                    npm install
-                else
-                    echo "Error: El directorio FrontEnd/employee-app no existe"
-                    exit 1
-                fi
+      - name: Install dependencies
+        run: |
+          if [ -d "FrontEnd/employee-app" ]; then
+            cd FrontEnd/employee-app
+            rm -rf node_modules package-lock.json # Limpieza previa
+            npm install
+          else
+            echo "Error: El directorio FrontEnd/employee-app no existe"
+            exit 1
+          fi
 
-          - name: Build frontend
-            run: |
-                if [ -d "FrontEnd/employee-app" ]; then
-                    cd FrontEnd/employee-app
-                    npm run build
-                else
-                    echo "Error: El directorio FrontEnd/employee-app no existe"
-                    exit 1
-                fi
+      - name: Build frontend
+        run: |
+          if [ -d "FrontEnd/employee-app" ]; then
+            cd FrontEnd/employee-app
+            npm run build
+          else
+            echo "Error: El directorio FrontEnd/employee-app no existe"
+            exit 1
+          fi
 
-          - name: Log in to DockerHub
-            uses: docker/login-action@v2
-            with:
-                username: ${{ secrets.DOCKERHUB_USERNAME }}
-                password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-          - name: Build and push frontend
-            uses: docker/build-push-action@v4
-            with:
-                context: ./FrontEnd/employee-app
-                file: ./FrontEnd/employee-app/Dockerfile
-                push: true
-                tags: ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
-                build-args: |
-                    REACT_APP_BACKEND_URL_READ_CATEGORY=${{ secrets.HOST_DNS_GETALLCATEGORIES_QA }}
-                    REACT_APP_BACKEND_URL_CREATE_CATEGORY=${{ secrets.HOST_DNS_CREATECATEGORY_QA }}
-                    REACT_APP_BACKEND_URL_DELETE_CATEGORY=${{ secrets.HOST_DNS_DELETECATEGORY_QA }}
-                    REACT_APP_BACKEND_URL_UPDATE_CATEGORY=${{ secrets.HOST_DNS_UPDATECATEGORY_QA }}
-                    
-    # DEPLOY FRONTEND            
-    deploy-frontend:
-        needs: build-and-push-frontend
-        runs-on: ubuntu-latest
-        steps:
-          - name: Install Docker if not present
-            uses: appleboy/ssh-action@master
-            with:
-                host: ${{ secrets.HOST_DNS_FRONTEND_QA }}
-                username: ${{ secrets.USERNAME3 }}
-                key: ${{ secrets.EC2_SSH_KEY }}
-                script: |
-                    if ! command -v docker &> /dev/null; then
-                        echo "Docker no encontrado. Instalando..."
-                        sudo apt update
-                        sudo apt install -y docker.io
-                        sudo systemctl enable docker
-                        sudo systemctl start docker
-                        echo "Docker instalado correctamente."
-                    else
-                        echo "Docker ya está instalado."
-                    fi
-          - name: Deploy Frontend to EC2
-            uses: appleboy/ssh-action@master
-            with:
-                host: ${{ secrets.HOST_DNS_FRONTEND_QA }}
-                username: ${{ secrets.USERNAME3 }}
-                key: ${{ secrets.EC2_SSH_KEY }}
-                script: |
-                    # Detener cualquier servicio en el puerto 80 (como Nginx)
-                    sudo systemctl stop nginx || true
+      - name: Build and push frontend to DockerHub
+        uses: docker/build-push-action@v4
+        with:
+          context: ./FrontEnd/employee-app
+          file: ./FrontEnd/employee-app/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
+          build-args: |
+            REACT_APP_BACKEND_URL_READ_CATEGORY=${{ secrets.HOST_DNS_GETALLCATEGORIES_QA }}
+            REACT_APP_BACKEND_URL_CREATE_CATEGORY=${{ secrets.HOST_DNS_CREATECATEGORY_QA }}
+            REACT_APP_BACKEND_URL_DELETE_CATEGORY=${{ secrets.HOST_DNS_DELETECATEGORY_QA }}
+            REACT_APP_BACKEND_URL_UPDATE_CATEGORY=${{ secrets.HOST_DNS_UPDATECATEGORY_QA }}
 
-                    # Eliminar contenedores en ejecución en el puerto 80
-                    docker stop frontend || true
-                    docker rm frontend || true
+  # Job para desplegar el frontend en AWS EC2
+  deploy-frontend:
+    needs: build-and-push-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Docker if not present
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS_FRONTEND_QA }}
+          username: ${{ secrets.USERNAME2 }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            if ! command -v docker &> /dev/null; then
+                echo "Docker no encontrado. Instalando..."
+                sudo apt update
+                sudo apt install -y docker.io
+                sudo systemctl enable docker
+                sudo systemctl start docker
+                echo "Docker instalado correctamente."
+            else
+                echo "Docker ya está instalado."
+            fi
 
-                    # Verificar si algún otro proceso está usando el puerto 80 y eliminarlo
-                    sudo fuser -k 80/tcp || true
+      - name: Deploy Frontend to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS_FRONTEND_QA }}
+          username: ${{ secrets.USERNAME3 }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # Detener cualquier servicio en el puerto 80 (como Nginx)
+            sudo systemctl stop nginx || true
 
-                    # Descargar la imagen y ejecutar el contenedor
-                    docker pull ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
-                    docker run -d --name frontend -p 80:80 \
-                    -e REACT_APP_BACKEND_URL_READ_CATEGORY=${{ secrets.HOST_DNS_GETALLCATEGORIES_QA }} \
-                    -e REACT_APP_BACKEND_URL_CREATE_CATEGORY=${{ secrets.HOST_DNS_CREATECATEGORY_QA }} \
-                    -e REACT_APP_BACKEND_URL_DELETE_CATEGORY=${{ secrets.HOST_DNS_DELETECATEGORY_QA }} \
-                    -e REACT_APP_BACKEND_URL_UPDATE_CATEGORY=${{ secrets.HOST_DNS_UPDATECATEGORY_QA }} \
-                    ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
-                    
+            # Eliminar contenedores en ejecución en el puerto 80
+            docker stop frontend || true
+            docker rm frontend || true
+
+            # Verificar si algún otro proceso está usando el puerto 80 y eliminarlo
+            sudo fuser -k 80/tcp || true
+
+            # Descargar la imagen y ejecutar el contenedor
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
+            docker run -d --name frontend -p 80:80 \
+            -e REACT_APP_BACKEND_URL_READ_CATEGORY=${{ secrets.HOST_DNS_GETALLCATEGORIES_QA }} \
+            -e REACT_APP_BACKEND_URL_CREATE_CATEGORY=${{ secrets.HOST_DNS_CREATECATEGORY_QA }} \
+            -e REACT_APP_BACKEND_URL_DELETE_CATEGORY=${{ secrets.HOST_DNS_DELETECATEGORY_QA }} \
+            -e REACT_APP_BACKEND_URL_UPDATE_CATEGORY=${{ secrets.HOST_DNS_UPDATECATEGORY_QA }} \
+            ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest   
