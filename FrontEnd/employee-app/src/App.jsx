@@ -14,31 +14,25 @@ function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        setIsAuthenticated(!!token);
+        const employeeAuth = EmployeeService.isAuthenticated();
+        const categoryAuth = CategoryService.isAuthenticated();
+        
+        setIsAuthenticated(employeeAuth || categoryAuth);
     }, []);
-
     return (
         <Router>
             <Routes>
-                {/* Ruta de Login: Solo muestra el login si el usuario NO está autenticado */}
-                <Route path="/login" element={isAuthenticated ? <Navigate to="/categories" /> : <Login onLogin={() => setIsAuthenticated(true)} />} />
-
-                {/* Redirigir "/" al login si no está autenticado */}
-                <Route path="/" element={isAuthenticated ? <Navigate to="/categories" /> : <Navigate to="/login" />} />
+                {/* Ruta de Login */}
+                <Route path="/login" element={<Login onLogin={() => setIsAuthenticated(true)} />} />
 
                 {/* Rutas protegidas: Si no está autenticado, lo redirige a Login */}
-                <Route path="/employees" element={isAuthenticated ? <EmployeeList /> : <Navigate to="/login" />} />
+                <Route path="/" element={isAuthenticated ? <CategoryList /> : <Navigate to="/login" />} />
+                 {/*<Route path="/" element={isAuthenticated ? <EmployeeList /> : <Navigate to="/login" />} /> */}
                 <Route path="/add" element={isAuthenticated ? <AddEmployee /> : <Navigate to="/login" />} />
                 <Route path="/edit/:id" element={isAuthenticated ? <EditEmployee /> : <Navigate to="/login" />} />
-
-                {/* Rutas protegidas de Categorías */}
-                <Route path="/categories" element={isAuthenticated ? <CategoryList /> : <Navigate to="/login" />} />
-                <Route path="/add-category" element={isAuthenticated ? <AddCategory /> : <Navigate to="/login" />} />
-                <Route path="/edit-category/:id" element={isAuthenticated ? <EditCategory /> : <Navigate to="/login" />} />
-
-                {/* Si no coincide con ninguna ruta, redirigir al login */}
-                <Route path="*" element={<Navigate to="/login" />} />
+                <Route path="/categories" element={isAuthenticated ?  <CategoryList /> : <Navigate to="/login" />} />
+                <Route path="/add-category" element={isAuthenticated ?   <AddCategory />  : <Navigate to="/login" />} />
+                <Route path="/edit-category/:id" element={isAuthenticated ?  <EditCategory /> : <Navigate to="/login" />} />
             </Routes>
         </Router>
     );
