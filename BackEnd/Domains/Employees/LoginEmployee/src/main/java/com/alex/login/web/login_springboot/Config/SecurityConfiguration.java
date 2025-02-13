@@ -32,7 +32,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/auth/signup", "/auth/login").permitAll() // Permitir login y signup sin autenticación
                 .anyRequest().authenticated() // Proteger todas las demás rutas
             )
-            .oauth2Login(); // Habilitar autenticación con OAuth2
+            .oauth2Login(); // Habilitar autenticación cons OAuth2
 
         return http.build();
     }

@@ -1,13 +1,15 @@
-name: Deploy Login
+name: Deploy LoginEmployee
 
 on:
-    push:
-        branches:
-            - Fix_Merge_Repository
-        paths:
-            - 'BackEnd/Domains/Employees/LoginEmployee/**'
+  push:
+    branches:
+      - Fix_Merge_Repository
+    paths:
+      - 'BackEnd/Domains/Employees/LoginEmployee/**'
 
-build-and-push-loginEmployee:
+jobs:
+  # Job para construir y subir la imagen del microservicio a DockerHub
+  build-and-push-loginEmployee:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -23,13 +25,14 @@ build-and-push-loginEmployee:
         run: |
           cd BackEnd/Domains/Employees/LoginEmployee
           mvn clean package -DskipTests
+
       - name: Log in to DockerHub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME2 }}
           password: ${{ secrets.DOCKERHUB_PASSWORD2 }}
 
-      - name: Build and push login-employee
+      - name: Build and push login-employee image to DockerHub
         uses: docker/build-push-action@v4
         with:
           context: ./BackEnd/Domains/Employees/LoginEmployee
@@ -37,7 +40,8 @@ build-and-push-loginEmployee:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME2 }}/login-employee:v1
 
-   deploy-loginEmployee:
+  # Job para desplegar el microservicio en AWS EC2
+  deploy-loginEmployee:
     needs: build-and-push-loginEmployee
     runs-on: ubuntu-latest
     steps:
@@ -48,11 +52,16 @@ build-and-push-loginEmployee:
           username: ${{ secrets.USERNAME2 }}
           key: ${{ secrets.EC2_SSH_KEY2 }}
           script: |
+            # Detener y eliminar el contenedor anterior si existe
             sudo docker stop login-employee || true
             sudo docker rm login-employee || true
+
+            # Descargar la última versión de la imagen desde DockerHub
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/login-employee:v1
+
+            # Ejecutar el contenedor con las variables de entorno
             sudo docker run -d --name login-employee -p 8091:8091 \
               -e DB_URL="${{ secrets.DB_URL }}" \
-             -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
-             -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
-              ${{ secrets.DOCKERHUB_USERNAME2 }}/login-employee:v1 
+              -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
+              -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+              ${{ secrets.DOCKERHUB_USERNAME2 }}/login-employee:v1
