@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import EmployeeService from "../services/EmployeeService";
 
 const Navbar = () => {
     const navigate = useNavigate();
