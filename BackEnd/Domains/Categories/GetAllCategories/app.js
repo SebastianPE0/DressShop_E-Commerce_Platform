@@ -13,10 +13,10 @@ if (typeof authMiddleware !== "function") {
   process.exit(1); 
 }
 
-
+//TEST
 app.use(
   cors({
-    origin: "http://ec2-3-80-74-169.compute-1.amazonaws.com",
+    origin: "http://54.205.137.190",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })

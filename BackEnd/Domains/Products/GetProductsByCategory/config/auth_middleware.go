@@ -17,7 +17,7 @@ const cognitoUserPoolID = "us-east-1_JudMXeuR1"
 
 var cognitoJWKsURL = fmt.Sprintf("https://cognito-idp.%s.amazonaws.com/%s/.well-known/jwks.json", cognitoRegion, cognitoUserPoolID)
 
-// Middleware de autenticación22
+// Middleware de autenticación
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")

@@ -6,5 +6,5 @@ class CartItem(BaseModel):
     quantity: int
 
 class Cart(BaseModel):
-    cart_id: str  # Cambiado de user_id aq cart_id
+    user_id: str
     items: List[CartItem]

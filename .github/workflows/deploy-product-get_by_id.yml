@@ -34,7 +34,7 @@ jobs:
       - name: Deploy to GetProductsById QA
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST_DNS_GETPRODUCTSBYID_QA }}
+          host: ${{ secrets.HOST_DNS_GETPRODUCTBYID_QA }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |

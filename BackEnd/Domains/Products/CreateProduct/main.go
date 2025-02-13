@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	//TEST
 	config.LoadEnv()
 
 	client := config.ConnectMongoDB()
