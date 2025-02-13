@@ -32,7 +32,7 @@ func main() {
 
 	r.Use(config.AuthMiddleware()) // Middleware de autenticación
 	routes.RegisterRoutes(r, productController)
-
+	//TEST
 	port := config.GetPort()
 	log.Printf("GetProductsByCategory service running on port %s", port)
 	r.Run(":" + port)

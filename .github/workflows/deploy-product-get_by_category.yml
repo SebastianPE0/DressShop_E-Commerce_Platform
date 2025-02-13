@@ -3,7 +3,7 @@ name: Deploy get_ByCategory-product
 on:
     push:
         branches:
-            - Feature_BackEnd_CategoryDomain_AddMicroservice_DeleteCategory
+            - Fix_Merge_Repository
         paths:
             - 'BackEnd/Domains/Products/GetProductsByCategory/**'
 jobs:
