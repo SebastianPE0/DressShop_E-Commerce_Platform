@@ -52,19 +52,19 @@ const getProductsByCategory = async (categoryId, token) => {
 const resolvers = {
   Query: {
     category: async (_, { id }, context) => {
-      const token = context.token;  // ✅ Obtener el token desde el contexto de GraphQL
-      if (!token) {
+      console.log("🔐 Token recibido:", context.token);  // ✅ Verificar si llega el token
+      if (!context.token) {
         throw new Error("Unauthorized: Token is required");
       }
-      return await getCategoryById(id, token);
+      return await getCategoryById(id, context.token);
     },
 
     getProductsByCategory: async (_, { categoryId }, context) => {
-      const token = context.token;  // ✅ Obtener el token desde el contexto de GraphQL
-      if (!token) {
+      console.log("🔐 Token recibido:", context.token);
+      if (!context.token) {
         throw new Error("Unauthorized: Token is required");
       }
-      return await getProductsByCategory(categoryId, token);
+      return await getProductsByCategory(categoryId, context.token);
     },
   },
 };
