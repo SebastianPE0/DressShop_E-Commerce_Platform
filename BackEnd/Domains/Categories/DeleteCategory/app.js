@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const categoryRoutes = require("./src/routes/categoryRoutes");
-//TEST
+//TEST2
 dotenv.config();
 
 const app = express();
