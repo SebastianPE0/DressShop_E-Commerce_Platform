@@ -6,6 +6,7 @@ require('./config/env');
 
 const app = express();
 
+// Configurar CORS
 app.use(
     cors({
         origin: "http://54.205.137.190",
