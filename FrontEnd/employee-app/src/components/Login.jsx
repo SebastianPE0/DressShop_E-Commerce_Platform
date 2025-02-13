@@ -43,11 +43,11 @@ const Login = ({ onLogin }) => {
                             required
                         />
                     </div>
-                    <button type="submit" className="login-button">Iniciar Sesión</button>
+                    <button className="login-button" type="submit">Iniciar Sesión</button>
+                    <p className="register-text">
+                        ¿No tienes una cuenta? <a href="#">Regístrate</a>
+                    </p>
                 </form>
-                <p className="register-text">
-                    ¿No tienes una cuenta? <a href="/register">Regístrate</a>
-                </p>
             </div>
         </div>
     );
