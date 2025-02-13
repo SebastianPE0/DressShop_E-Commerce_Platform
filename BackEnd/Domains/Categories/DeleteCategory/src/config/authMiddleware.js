@@ -15,6 +15,8 @@ function getKey(header, callback) {
   });
 }
 
+
+
 // Middleware de autenticación
 function authMiddleware(req, res, next) {
   const authHeader = req.headers["authorization"];

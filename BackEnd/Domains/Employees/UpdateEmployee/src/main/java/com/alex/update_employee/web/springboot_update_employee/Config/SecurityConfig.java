@@ -39,7 +39,7 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of(
             "http://localhost:5173",
             "http://localhost:5174",
-            "http://ec2-54-211-104-82.compute-1.amazonaws.com"
+            "http://3.214.134.68"
         ));
         config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));

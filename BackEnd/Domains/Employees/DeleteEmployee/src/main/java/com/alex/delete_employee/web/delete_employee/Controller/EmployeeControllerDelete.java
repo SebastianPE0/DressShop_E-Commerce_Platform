@@ -13,7 +13,7 @@ import com.alex.delete_employee.web.delete_employee.Service.IEmployeeService;
 @RestController
 @CrossOrigin(origins = {
     "http://localhost:5173",
-    "http://ec2-54-159-232-247.compute-1.amazonaws.com"
+    "http://3.214.134.68"
 })
 @RequestMapping("/api/v1/employees")
 public class EmployeeControllerDelete {
@@ -21,7 +21,7 @@ public class EmployeeControllerDelete {
     private IEmployeeService service;
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable String id) {
         try {
             service.deleteEmployee(id);
             return ResponseEntity.ok("Empleado eliminado correctamente.");

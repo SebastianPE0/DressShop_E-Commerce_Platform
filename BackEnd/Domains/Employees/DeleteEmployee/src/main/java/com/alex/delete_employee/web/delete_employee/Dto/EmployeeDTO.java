@@ -1,13 +1,13 @@
 package com.alex.delete_employee.web.delete_employee.Dto;
 
 public class EmployeeDTO {
-    private int employeeid;
+    private String employeeid;
     private String employeename;
     private String email;
     private String password;
 
     // Constructor con parámetros
-    public EmployeeDTO(int employeeid, String employeename, String email, String password) {
+    public EmployeeDTO(String employeeid, String employeename, String email, String password) {
         this.employeeid = employeeid;
         this.employeename = employeename;
         this.email = email;
@@ -19,11 +19,11 @@ public class EmployeeDTO {
     }
 
     // Getter y Setter para employeeid
-    public int getEmployeeid() {
+    public String getEmployeeid() {
         return employeeid;
     }
 
-    public void setEmployeeid(int employeeid) {
+    public void setEmployeeid(String employeeid) {
         this.employeeid = employeeid;
     }
 

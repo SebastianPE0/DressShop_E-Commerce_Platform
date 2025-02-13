@@ -13,7 +13,7 @@ public class EmployeeImpl  implements IEmployeeService{
     private EmployeeRepo employeeRepo;
 
     @Override
-    public void deleteEmployee(Long id) {
+    public void deleteEmployee(String id) {
         if (employeeRepo.existsById(id)) {
             employeeRepo.deleteById(id);
         } else {

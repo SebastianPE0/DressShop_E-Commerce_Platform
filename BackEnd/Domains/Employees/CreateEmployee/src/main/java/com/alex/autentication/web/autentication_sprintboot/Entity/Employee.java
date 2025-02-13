@@ -1,5 +1,5 @@
 package com.alex.autentication.web.autentication_sprintboot.Entity;
-
+import org.hibernate.annotations.GenericGenerator;
 import jakarta.persistence.*;
 
 
@@ -7,9 +7,10 @@ import jakarta.persistence.*;
 @Table(name = "employee")
 public class Employee {
     @Id
-    @Column(name = "employee_id", length = 45)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int employeeid;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "employee_id", updatable = false, nullable = false)
+    private String employeeid;
 
     @Column(name = "employee_name", length = 255)
     private String employeename;
@@ -21,7 +22,7 @@ public class Employee {
     private String password;
 
    
-    public Employee (int employeeid, String employeename, String email, String password) {
+    public Employee (String employeeid, String employeename, String email, String password) {
         this.employeeid = employeeid;
         this.employeename = employeename;
         this.email=email;
@@ -32,11 +33,11 @@ public class Employee {
 
     }
 
-    public int getEmployeeid() {
+    public String getEmployeeid() {
         return employeeid;
     }
 
-    public void setEmployeeid(int employeeid) {
+    public void setEmployeeid(String employeeid) {
         this.employeeid = employeeid;
     }
 
