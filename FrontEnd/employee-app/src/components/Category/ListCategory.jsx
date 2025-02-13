@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { getCategories, deleteCategory } from "../../services/CategoryService";
+import { getCategories } from "../../services/CategoryService";
+import DeleteCategory from "./DeleteCategory"; // Importar el componente de eliminación
 import { Link } from "react-router-dom";
-import "./CategoryList.css"; // Importar el archivo CSS
+import "./CategoryList.css"; 
 
 const CategoryList = () => {
-    const [categories, setCategories] = useState([]); // Inicializa como array vacío
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         loadCategories();
@@ -13,34 +14,16 @@ const CategoryList = () => {
     const loadCategories = async () => {
         try {
             const data = await getCategories();
-            console.log("Categorías cargadas:", data);
-    
-            // Extraer el array correcto dentro de `data.categories`
             setCategories(Array.isArray(data.categories) ? data.categories : []);
         } catch (error) {
             console.error("Error cargando categorías:", error);
         }
     };
 
-    const handleDelete = async (id) => {
-        if (window.confirm("¿Estás seguro de que deseas eliminar esta categoría?")) {
-            try {
-                await deleteCategory(id);
-                loadCategories(); // Recargar la lista después de eliminar
-            } catch (error) {
-                console.error("Error eliminando categoría:", error);
-            }
-        }
-    };
-
     return (
         <div className="category-container">
             <h2 className="category-title">Lista de Categorías</h2>
-
-            {/* Botón para agregar una nueva categoría */}
             <Link to="/add-category" className="add-category-button">Añadir Categoría</Link>
-
-            {/* Tabla para mostrar categorías */}
             <div className="category-table-container">
                 <table className="category-table">
                     <thead>
@@ -55,7 +38,7 @@ const CategoryList = () => {
                                 <tr key={category._id}>
                                     <td>{category.name}</td>
                                     <td>
-                                        <button className="delete-button" onClick={() => handleDelete(category._id)}>Eliminar</button>
+                                        <DeleteCategory id={category._id} onDelete={loadCategories} />
                                         <Link to={`/edit-category/${category._id}`} className="edit-button">Editar</Link>
                                     </td>
                                 </tr>

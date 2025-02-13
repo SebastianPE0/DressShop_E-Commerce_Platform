@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import CategoryService from "../../services/CategoryService";
 
 const DeleteCategory = ({ id, onDelete }) => {
@@ -7,8 +7,15 @@ const DeleteCategory = ({ id, onDelete }) => {
     if (!confirmDelete) return;
 
     try {
+      // 🔹 Verificar si la categoría tiene productos antes de eliminar
+      const products = await CategoryService.getProductsByCategory(id);
+      if (products.length > 0) {
+        alert("No se puede eliminar la categoría porque tiene productos asociados.");
+        return;
+      }
+
       await CategoryService.deleteCategory(id);
-      onDelete();
+      onDelete(); // Refrescar la lista después de eliminar
     } catch (error) {
       console.error("Error eliminando categoría:", error);
       alert("Error eliminando categoría. Intenta de nuevo.");
