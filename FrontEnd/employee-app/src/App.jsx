@@ -24,7 +24,7 @@ function App() {
         <Router>
             <Routes>
                 {/* La página inicial SIEMPRE debe ser Login si el usuario NO está autenticado */}
-                <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
+                <Route path="/" element={isAuthenticated ? <Navigate to="/login" /> : <Navigate to="/login" />} />
 
                 {/* Ruta del Login */}
                 <Route path="/login" element={<Login onLogin={() => setIsAuthenticated(true)} />} />
