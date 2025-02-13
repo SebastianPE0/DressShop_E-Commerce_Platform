@@ -1,20 +1,17 @@
-# Usa la imagen oficial de Node.js
+# Imagen base
 FROM node:18
 
-# Establece el directorio de trabajo dentro del contenedor
+# Configurar directorio de trabajo
 WORKDIR /app
 
-# Copia los archivos esenciales primero
+# Copiar archivos
 COPY package.json package-lock.json ./
-
-# Instala las dependencias
 RUN npm install
 
-# Copia el resto del código fuente
 COPY . .
 
-# Expone el puerto en el que correrá GraphQL Gateway
-EXPOSE 80
+# Exponer el puerto
+EXPOSE 4000
 
-# Comando para iniciar el servicio
-CMD ["node", "src/server.js"]
+# Comando de inicio
+CMD ["node", "server.js"]

@@ -8,14 +8,15 @@ import (
 	"github.com/SebastianPE0/DressShop_E-Commerce-Platform/BackEnd/Products/CreateProduct/models"
 )
 
-func InsertProduct(product *models.Product) error { // <-- Cambia a puntero (*models.Product)
-	collection := config.GetMongoCollection("products")
+// Guardar un nuevo producto en la base de datos
+func CreateProduct(product *models.Product) error { // <-- Nombre cambiado de InsertProduct a CreateProduct
+	collection := config.GetProductCollection() // <-- Eliminado el argumento "products"
 
-	// Context with time limit for the operation
+	// Contexto con límite de tiempo
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	// Insert the product into the database
+	// Insertar el producto en MongoDB
 	_, err := collection.InsertOne(ctx, product)
 	return err
 }

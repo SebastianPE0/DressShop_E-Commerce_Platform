@@ -1,28 +1,34 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/SebastianPE0/DressShop_E-Commerce-Platform/BackEnd/Products/CreateProduct/config"
 	"github.com/SebastianPE0/DressShop_E-Commerce-Platform/BackEnd/Products/CreateProduct/routes"
+
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	//TEST
 	config.LoadEnv()
-
-	client := config.ConnectMongoDB()
-	defer client.Disconnect(nil)
+	config.ConnectDB()
 
 	r := gin.Default()
+
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://54.205.137.190"},
+		AllowMethods:     []string{"GET", "POST"},
+		AllowHeaders:     []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+	}))
 
 	r.Use(config.AuthMiddleware())
 
 	routes.SetupRoutes(r)
 
-	port := config.GetPort()
-	log.Printf("CreateProduct server running on port %s", port)
-
-	r.Run(":" + port)
+	port := config.GetEnv("PORT")
+	fmt.Println("Servidor ejecutándose en puerto", port)
+	log.Fatal(r.Run(":" + port))
 }

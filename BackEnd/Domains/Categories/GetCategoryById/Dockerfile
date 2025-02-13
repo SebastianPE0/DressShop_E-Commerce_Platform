@@ -1,12 +1,17 @@
+# Imagen base
 FROM node:18
 
+# Configurar directorio de trabajo
 WORKDIR /app
 
+# Copiar archivos
 COPY package.json package-lock.json ./
 RUN npm install
 
 COPY . .
 
-EXPOSE 80
+# Exponer el puerto
+EXPOSE 3000
 
-CMD ["node", "src/server.js"]
+# Comando de inicio
+CMD ["node", "server.js"]

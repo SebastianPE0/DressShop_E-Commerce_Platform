@@ -1,22 +1,16 @@
-# Base Image
+# Imagen base
 FROM golang:1.20
 
-# Working directory
+# Configurar el directorio de trabajo
 WORKDIR /app
 
-# Copy dependencies
+# Copiar archivos
 COPY go.mod go.sum ./
 RUN go mod download
-
-# Copy the source code
 COPY . .
 
-# Compile the service
-RUN go build -o create-product-service main.go
+# Compilar el código
+RUN go build -o main .
 
-# Expose service port
-EXPOSE 80
-
-# Command to run the service
-
-CMD ["./create-product-service"]
+# Comando de inicio
+CMD ["./main"]

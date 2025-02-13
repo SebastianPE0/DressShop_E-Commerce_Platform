@@ -4,80 +4,89 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"log"
 	"net/http"
-	"os"
+
+	"github.com/SebastianPE0/DressShop_E-Commerce-Platform/BackEnd/Products/CreateProduct/config"
+	"github.com/gin-gonic/gin"
 )
 
-// GraphQLQuery estructura para enviar la consulta
+// Estructura de la consulta GraphQL
 type GraphQLQuery struct {
 	Query string `json:"query"`
 }
 
-// CategoryResponse estructura para la respuesta de GraphQL
-type CategoryResponse struct {
+// Estructura de la respuesta GraphQL
+type GraphQLResponse struct {
 	Data struct {
-		Category struct {
+		GetCategoryById *struct {
 			ID   string `json:"id"`
 			Name string `json:"name"`
-		} `json:"category"`
+		} `json:"getCategoryById"`
 	} `json:"data"`
 }
 
-// ValidateCategory consulta GraphQL para verificar si una categoría existe
-func ValidateCategory(categoryID string) (bool, error) {
-	graphqlURL := os.Getenv("GRAPHQL_URL")
-
-	// Verificar si GRAPHQL_URL está vacío
-	if graphqlURL == "" {
-		fmt.Println("❌ ERROR: GRAPHQL_URL no está configurado")
-		return false, fmt.Errorf("GRAPHQL_URL no está configurado")
+// Validar si la categoría existe en GraphQL
+func ValidateCategory(categoryID string, c *gin.Context) bool {
+	// Construimos la consulta sin escapado extra de comillas
+	query := GraphQLQuery{
+		Query: fmt.Sprintf(`{ getCategoryById(id: "%s") { id name } }`, categoryID), // <-- Comillas corregidas
 	}
 
-	// Construcción del query GraphQL
-	query := fmt.Sprintf(`{"query":"query { category(id: \"%s\") { id name } }"}`, categoryID)
-	fmt.Println("🔍 Enviando petición a GraphQL:", graphqlURL)
-	fmt.Println("📌 Query enviado:", query)
-
-	// Crear la petición HTTP
-	req, err := http.NewRequest("POST", graphqlURL, bytes.NewBuffer([]byte(query)))
+	queryBody, err := json.Marshal(query)
 	if err != nil {
-		fmt.Println("❌ ERROR creando la petición:", err)
-		return false, fmt.Errorf("Error creando la petición a GraphQL")
+		log.Println("❌ Error al convertir la consulta GraphQL a JSON:", err)
+		return false
 	}
 
+	log.Printf("🔍 Enviando consulta GraphQL a %s: %s\n", config.GetEnv("GRAPHQL_GATEWAY_URL"), string(queryBody))
+
+	// Obtener el token del header
+	token := c.GetHeader("Authorization")
+	if token == "" {
+		log.Println("❌ Error: No se envió el token a GraphQL-Gateway")
+		return false
+	}
+
+	// Crear la petición HTTP con el token en el header
+	req, err := http.NewRequest("POST", config.GetEnv("GRAPHQL_GATEWAY_URL"), bytes.NewBuffer(queryBody))
+	if err != nil {
+		log.Println("❌ Error al crear la solicitud HTTP:", err)
+		return false
+	}
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", token) // <-- Se agrega el token a la cabecera
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Println("❌ ERROR conectando con GraphQL:", err)
-		return false, fmt.Errorf("Error connecting to category service")
+		log.Println("❌ Error en consulta GraphQL:", err)
+		return false
 	}
 	defer resp.Body.Close()
 
-	// Leer la respuesta de GraphQL
-	body, err := ioutil.ReadAll(resp.Body)
+	// Leer la respuesta sin decodificar
+	respBody := new(bytes.Buffer)
+	_, _ = respBody.ReadFrom(resp.Body)
+
+	log.Printf("🔍 Respuesta sin procesar desde GraphQL-Gateway: %s\n", respBody.String())
+
+	// Decodificar respuesta de GraphQL
+	var result GraphQLResponse
+	err = json.Unmarshal(respBody.Bytes(), &result)
 	if err != nil {
-		fmt.Println("❌ ERROR leyendo la respuesta:", err)
-		return false, fmt.Errorf("Error leyendo la respuesta de GraphQL")
+		log.Println("❌ Error al decodificar respuesta GraphQL:", err)
+		return false
 	}
 
-	fmt.Println("✅ Respuesta de GraphQL:", string(body))
+	log.Printf("🔍 Respuesta decodificada de GraphQL en ValidateCategory: %+v\n", result)
 
-	var result CategoryResponse
-	err = json.Unmarshal(body, &result)
-	if err != nil {
-		fmt.Println("❌ ERROR parseando JSON:", err)
-		return false, fmt.Errorf("Error parseando la respuesta de GraphQL")
+	// Verificar si la categoría existe
+	if result.Data.GetCategoryById == nil {
+		log.Println("⚠️ Categoría no encontrada en GraphQL")
+		return false
 	}
 
-	// Si `result.Data.Category.ID` existe, la categoría es válida
-	if result.Data.Category.ID != "" {
-		fmt.Println("✅ Categoría encontrada:", result.Data.Category.ID)
-		return true, nil
-	}
-
-	fmt.Println("⚠️ Categoría no encontrada en GraphQL")
-	return false, nil
+	log.Println("✅ Categoría encontrada:", result.Data.GetCategoryById.ID, "-", result.Data.GetCategoryById.Name)
+	return true
 }

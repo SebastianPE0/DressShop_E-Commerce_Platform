@@ -1,16 +1,19 @@
 const axios = require('axios');
-require('dotenv').config();
+const env = require('../config/env');
 
-const CATEGORY_SERVICE_URL = process.env.CATEGORY_SERVICE_URL;
+async function getCategoryById(id) {
+    try {
+        console.log(`🔍 Enviando petición a GetCategoryById con ID: ${id}`);
 
-// Función para obtener una categoría por ID
-const getCategoryById = async (id) => {
-  try {
-    const response = await axios.get(`${CATEGORY_SERVICE_URL}/${id}`);
-    return response.data;
-  } catch (error) {
-    return null; // Si la categoría no existe, devolver null
-  }
-};
+        const response = await axios.get(`${env.CATEGORY_SERVICE_URL}/api/category/${id}`);
+
+        console.log("🔍 Respuesta de GetCategoryById:", response.data);
+
+        return response.data;
+    } catch (error) {
+        console.error("❌ Error en consulta a GetCategoryById:", error.response?.data || error.message);
+        return null;
+    }
+}
 
 module.exports = { getCategoryById };

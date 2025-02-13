@@ -1,10 +1,29 @@
-const app = require('./app');
+const express = require('express');
+const cors = require('cors');
 const connectDB = require('./config/db');
-const config = require('./config/env');
+const categoryRoutes = require('./routes/categoryRoutes');
+require('dotenv').config();
 
+const app = express();
 
+// Configurar CORS
+app.use(
+    cors({
+        origin: "http://54.205.137.190",
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+    })
+);
+
+app.use(express.json());
+
+// Conectar a la base de datos
 connectDB();
-//TEST YML
-app.listen(config.appPort, () => {
-  console.log(`GetCategoryById service running on port ${config.appPort}`);
+
+// Configurar rutas
+app.use('/api', categoryRoutes);
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`✅ GetCategoryById corriendo en puerto ${PORT}`);
 });

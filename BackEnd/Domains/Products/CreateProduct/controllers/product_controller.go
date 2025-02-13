@@ -1,45 +1,47 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/SebastianPE0/DressShop_E-Commerce-Platform/BackEnd/Products/CreateProduct/models"
+	"github.com/SebastianPE0/DressShop_E-Commerce-Platform/BackEnd/Products/CreateProduct/repositories"
 	"github.com/SebastianPE0/DressShop_E-Commerce-Platform/BackEnd/Products/CreateProduct/services"
+
 	"github.com/gin-gonic/gin"
 )
 
-// CreateProduct maneja la solicitud para crear un producto
+// Crear un nuevo producto
 func CreateProduct(c *gin.Context) {
 	var product models.Product
 
-	// Validar y decodificar el cuerpo de la solicitud
+	// Debug: Mostrar el body recibido
 	if err := c.ShouldBindJSON(&product); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid data format"})
+		log.Println("❌ Error al leer el JSON:", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Validar que la categoría exista usando GraphQL
-	isValid, err := services.ValidateCategory(product.CategoryID)
-	if err != nil {
+	log.Println("🔍 Producto recibido:", product)
 
-		c.JSON(http.StatusInternalServerError, gin.H{"error": " Error connecting to  service CAT"})
+	// Verificar si el campo categoryid se está enviando correctamente
+	if product.CategoryID == "" {
+		log.Println("⚠️ Error: categoryid está vacío")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "El campo categoryid es requerido"})
 		return
 	}
 
-	if !isValid {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid category ID"})
+	// Validar si la categoría existe en GraphQL
+	if !services.ValidateCategory(product.CategoryID, c) { // <-- Se pasa el contexto para enviar el token
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Categoría no encontrada"})
 		return
 	}
 
-	// Llamar al servicio para crear el producto
-	if err := services.CreateProduct(&product); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "The product could not be created"})
+	// Guardar producto en MongoDB
+	if err := repositories.CreateProduct(&product); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "No se pudo crear el producto"})
 		return
 	}
 
-	// Respuesta exitosa con los detalles del producto creado
-	c.JSON(http.StatusCreated, gin.H{
-		"message": "Product created successfully",
-		"product": product,
-	})
+	c.JSON(http.StatusCreated, gin.H{"message": "Producto creado exitosamente"})
 }
