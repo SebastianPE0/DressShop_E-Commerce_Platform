@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getCategories, deleteCategory } from "../../services/CategoryService";
 import { Link } from "react-router-dom";
+import "./CategoryList.css"; // Importar el archivo CSS
 
 const CategoryList = () => {
     const [categories, setCategories] = useState([]); // Inicializa como array vacío
@@ -20,7 +21,6 @@ const CategoryList = () => {
             console.error("Error cargando categorías:", error);
         }
     };
-    
 
     const handleDelete = async (id) => {
         if (window.confirm("¿Estás seguro de que deseas eliminar esta categoría?")) {
@@ -34,37 +34,40 @@ const CategoryList = () => {
     };
 
     return (
-        <div className="container">
-            <h2>Lista de Categorías</h2>
+        <div className="category-container">
+            <h2 className="category-title">Lista de Categorías</h2>
 
             {/* Botón para agregar una nueva categoría */}
-            <button style={{ marginBottom: "10px", padding: "10px", backgroundColor: "green", color: "white", borderRadius: "5px" }}>
-                <Link to="/add-category" style={{ textDecoration: "none", color: "white" }}>Añadir Categoría</Link>
-            </button>
+            <Link to="/add-category" className="add-category-button">Añadir Categoría</Link>
 
-            <ul>
-                {categories.length > 0 ? (
-                    categories.map(category => (
-                        <li key={category._id}>
-                            {category.name}
-                            
-                            {/* Botón de Eliminar */}
-                            <button onClick={() => handleDelete(category._id)} style={{ marginLeft: "10px", color: "red" }}>
-                                Eliminar
-                            </button>
-
-                            {/* Botón de Editar */}
-                            <button style={{ marginLeft: "10px", backgroundColor: "blue", color: "white", padding: "5px", borderRadius: "5px" }}>
-                                <Link to={`/edit-category/${category._id}`} style={{ textDecoration: "none", color: "white" }}>
-                                    Editar
-                                </Link>
-                            </button>
-                        </li>
-                    ))
-                ) : (
-                    <p>No hay categorías disponibles.</p>
-                )}
-            </ul>
+            {/* Tabla para mostrar categorías */}
+            <div className="category-table-container">
+                <table className="category-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {categories.length > 0 ? (
+                            categories.map(category => (
+                                <tr key={category._id}>
+                                    <td>{category.name}</td>
+                                    <td>
+                                        <button className="delete-button" onClick={() => handleDelete(category._id)}>Eliminar</button>
+                                        <Link to={`/edit-category/${category._id}`} className="edit-button">Editar</Link>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="2" className="no-categories">No hay categorías disponibles.</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };
