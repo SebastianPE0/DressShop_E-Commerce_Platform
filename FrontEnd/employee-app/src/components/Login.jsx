@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import EmployeeService from "../services/EmployeeService";
 import { useNavigate } from "react-router-dom";
-import "../index.css";
+import "../styles/Login.css";
 const Login = ({ onLogin }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
