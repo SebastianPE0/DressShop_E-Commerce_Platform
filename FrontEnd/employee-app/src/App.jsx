@@ -23,13 +23,13 @@ function App() {
     return (
         <Router>
             <Routes>
-                {/* Página inicial: Si el usuario no está autenticado, lo manda al Login */}
-                <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login onLogin={() => setIsAuthenticated(true)} />} />
+                {/* La página inicial SIEMPRE debe ser Login si el usuario NO está autenticado */}
+                <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
 
-                {/* Ruta específica para Login */}
+                {/* Ruta del Login */}
                 <Route path="/login" element={<Login onLogin={() => setIsAuthenticated(true)} />} />
 
-                {/* Rutas protegidas: Solo accesibles si el usuario está autenticado */}
+                {/* Rutas protegidas solo accesibles si está autenticado */}
                 <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}>
                     <Route path="employees" element={<EmployeeList />} />
                     <Route path="add-employee" element={<AddEmployee />} />
@@ -38,6 +38,9 @@ function App() {
                     <Route path="add-category" element={<AddCategory />} />
                     <Route path="edit-category/:id" element={<EditCategory />} />
                 </Route>
+
+                {/* Si el usuario intenta acceder a una ruta inexistente, lo enviamos a Login */}
+                <Route path="*" element={<Navigate to="/login" />} />
             </Routes>
         </Router>
     );
