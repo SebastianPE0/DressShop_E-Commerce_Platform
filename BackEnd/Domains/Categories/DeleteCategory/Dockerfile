@@ -14,5 +14,6 @@ COPY . .
 # Ecpose port
 EXPOSE 80
 
+
 # Start application
 CMD ["node", "server.js"]
