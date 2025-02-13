@@ -13,6 +13,7 @@ import (
 )
 
 func main() {
+	//TEST
 	// Cargar variables de entorno
 	err := godotenv.Load()
 	if err != nil {

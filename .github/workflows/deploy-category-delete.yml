@@ -3,7 +3,7 @@ name: Deploy delete-category
 on:
     push:
         branches:
-            - Fix_Merge_Repository
+            - Fix_BackEnd_GraphQL_DeleteCategory
         paths:
             - 'BackEnd/Domains/Categories/DeleteCategory/**'
 jobs:
@@ -44,4 +44,5 @@ jobs:
             sudo docker run -d --name delete-category --network host \
               -e MONGO_URI="${{ secrets.MONGO_URI }}" \
               -e GRAPHQL_SERVICE_URL="http://${{ secrets.HOST_DNS_GRAPHQL_QA }}/graphql" \
+              -e PORT=PORT=5000 \
               ${{ secrets.DOCKERHUB_USERNAME }}/delete-category:latest
