@@ -43,5 +43,6 @@ jobs:
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/get-products-by-category:latest
             sudo docker run -d --name get-products-by-category --network host \
               -e MONGO_URI="${{ secrets.MONGO_URI_PRODUCT }}" \
-              -e MONGO_DBNAME="product_db"
+              -e MONGO_DBNAME="product_db" \
+              -p 3001:3001 \
               ${{ secrets.DOCKERHUB_USERNAME }}/get-products-by-category:latest
