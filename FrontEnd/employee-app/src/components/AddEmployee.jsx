@@ -15,7 +15,7 @@ const AddEmployee = () => {
         try {
             await createEmployee(employee);
             alert("Empleado añadido correctamente");
-            navigate("/dashboard/employees"); // Redirigir a la lista de empleados
+            navigate("/dashboard/employees"); // ✅ Redirigir correctamente a la lista de empleados
         } catch (error) {
             console.error("Error añadiendo empleado:", error);
             alert("Hubo un error al añadir el empleado. Verifica los datos e intenta de nuevo.");

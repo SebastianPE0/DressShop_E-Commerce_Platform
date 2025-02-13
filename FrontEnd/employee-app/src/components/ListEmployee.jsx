@@ -34,8 +34,9 @@ const EmployeeList = () => {
             <h2>Lista de Empleados</h2>
             {/* Botón para agregar un nuevo empleado */}
             <button style={{ marginBottom: "10px", padding: "10px", backgroundColor: "green", color: "white", borderRadius: "5px" }}>
-                <Link to="/add" style={{ textDecoration: "none", color: "white" }}>Añadir Empleado</Link>
+                <Link to="/dashboard/add-employee" style={{ textDecoration: "none", color: "white" }}>Añadir Empleado</Link>
             </button>
+
 
             <ul>
                 {employees.map(employee => (
