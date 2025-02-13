@@ -3,13 +3,25 @@ import { getCategories } from "../../services/CategoryService";
 import DeleteCategory from "./DeleteCategory"; // Importar el componente de eliminación
 import { Link } from "react-router-dom";
 import "./CategoryList.css"; 
+import { useNavigate } from "react-router-dom";
 
 const CategoryList = () => {
     const [categories, setCategories] = useState([]);
-
+    const navigate = useNavigate();
     useEffect(() => {
+        // Verificar autenticación antes de cargar datos
+        const token = localStorage.getItem("token");
+        if (!token) {
+            console.warn("No hay token, redirigiendo a login...");
+            navigate("/login"); // Si no hay token, redirige al login
+            return;
+        }
+
+        console.log("Token encontrado en localStorage:", token);
         loadCategories();
-    }, []);
+    }, [navigate]);
+
+    
 
     const loadCategories = async () => {
         try {
@@ -17,13 +29,23 @@ const CategoryList = () => {
             setCategories(Array.isArray(data.categories) ? data.categories : []);
         } catch (error) {
             console.error("Error cargando categorías:", error);
+            alert("Hubo un problema al cargar las categorías.");
         }
     };
+    const handleAddCategory = () => {
+        navigate("/add-category"); // Redirige sin problemas a la pantalla de añadir categoría
+    };
+
 
     return (
         <div className="category-container">
             <h2 className="category-title">Lista de Categorías</h2>
-            <Link to="/add-category" className="add-category-button">Añadir Categoría</Link>
+            
+            {/* Botón en lugar de Link */}
+            <button onClick={handleAddCategory} className="add-category-button">
+                Añadir Categoría
+            </button>
+
             <div className="category-table-container">
                 <table className="category-table">
                     <thead>
@@ -39,7 +61,12 @@ const CategoryList = () => {
                                     <td>{category.name}</td>
                                     <td>
                                         <DeleteCategory id={category._id} onDelete={loadCategories} />
-                                        <Link to={`/edit-category/${category._id}`} className="edit-button">Editar</Link>
+                                        <button 
+                                            onClick={() => navigate(`/edit-category/${category._id}`)} 
+                                            className="edit-button"
+                                        >
+                                            Editar
+                                        </button>
                                     </td>
                                 </tr>
                             ))
