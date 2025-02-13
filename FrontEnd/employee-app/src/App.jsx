@@ -15,10 +15,12 @@ function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        const employeeAuth = EmployeeService.isAuthenticated();
-        const categoryAuth = CategoryService.isAuthenticated();
-        setIsAuthenticated(employeeAuth || categoryAuth);
+        const authStatus = localStorage.getItem("isAuthenticated") === "true";
+        setIsAuthenticated(authStatus);
     }, []);
+    
+    
+    
 
     return (
         <Router>
@@ -27,7 +29,8 @@ function App() {
                 <Route path="/" element={isAuthenticated ? <Navigate to="/login" /> : <Navigate to="/login" />} />
 
                 {/* Ruta del Login */}
-                <Route path="/login" element={<Login onLogin={() => setIsAuthenticated(true)} />} />
+                <Route path="/login" element={<Login onLogin={() => {localStorage.setItem("isAuthenticated", "true"); // Guardar autenticación
+                setIsAuthenticated(true);}} />} />
 
                 {/* Rutas protegidas solo accesibles si está autenticado */}
                 <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}>
