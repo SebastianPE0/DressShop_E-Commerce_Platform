@@ -24,7 +24,8 @@ function App() {
             <Routes>
                 {/* Ruta de Login */}
                 <Route path="/login" element={<Login onLogin={() => setIsAuthenticated(true)} />} />
-
+                {/* Redirigir "/" a "/categories" después del login */}
+                <Route path="/" element={isAuthenticated ? <Navigate to="/categories" /> : <Navigate to="/login" />} />
                 {/* Rutas protegidas: Si no está autenticado, lo redirige a Login */}
                 <Route path="/" element={isAuthenticated ? <EmployeeList /> : <Navigate to="/login" />} />
                 <Route path="/add" element={isAuthenticated ? <AddEmployee /> : <Navigate to="/login" />} />
