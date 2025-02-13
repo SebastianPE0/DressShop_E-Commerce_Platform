@@ -12,7 +12,7 @@ RUN npm install
 COPY . .
 
 # Ecpose port
-EXPOSE 80
+EXPOSE 8081
 
 # Start application
 CMD ["node", "server.js"]

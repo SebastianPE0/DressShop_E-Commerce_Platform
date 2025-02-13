@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const bodyParser = require("body-parser"); // ✅ Importado correctamente
+const bodyParser = require("body-parser");
 const connectDB = require("./src/config/db");
 require("dotenv").config();
 
@@ -9,12 +9,13 @@ const authMiddleware = require("./src/config/authMiddleware");
 
 const app = express();
 
+// Verificar si el middleware de autenticación está bien importado
 if (typeof authMiddleware !== "function") {
   console.error("❌ Error: authMiddleware no es una función válida.");
-  process.exit(1); // Detener ejecución si hay un problema con el middleware
+  process.exit(1);
 }
-//TEST
 
+// Configurar CORS
 app.use(
   cors({
     origin: "http://54.205.137.190",
@@ -24,17 +25,16 @@ app.use(
 );
 
 // Middlewares
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 app.use(authMiddleware); // ✅ Protege todas las rutas
 
-
+// Conectar a la base de datos
 connectDB();
 
-
+// Rutas
 app.use("/category", categoryRoutes);
 
-
-const PORT = process.env.PORT;
+const PORT = 8081;
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
 
 module.exports = app;
