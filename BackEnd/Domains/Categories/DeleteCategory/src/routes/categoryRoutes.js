@@ -1,8 +1,9 @@
 const express = require("express");
-const router = express.Router();
-const { deleteCategoryHandler } = require("../controllers/categoryController");
+const { deleteCategory } = require("../controllers/categoryController");
+const authMiddleware = require("../config/authMiddleware");
 
-// Ruta para eliminar una categoría
-router.delete("/:id", deleteCategoryHandler);
+const router = express.Router();
+
+router.delete("/categories/:id", authMiddleware, deleteCategory);
 
 module.exports = router;

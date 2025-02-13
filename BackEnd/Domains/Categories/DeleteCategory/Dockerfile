@@ -1,19 +1,20 @@
-# Use official image of Node.js
+# Imagen base de Node.js
 FROM node:18
 
-# workplace
+# Establecer el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# Copy files and package
-COPY package.json package-lock.json ./
+# Copiar los archivos de configuración de dependencias
+COPY package*.json ./
+
+# Instalar dependencias
 RUN npm install
 
-# Copy the code
+# Copiar el resto de los archivos del proyecto
 COPY . .
 
-# Ecpose port
-EXPOSE 80
+# Exponer el puerto definido en .env (por defecto 5000)
+EXPOSE 5000
 
-
-# Start application
-CMD ["node", "server.js"]
+# Comando para ejecutar el servidor
+CMD ["node", "src/server.js"]
