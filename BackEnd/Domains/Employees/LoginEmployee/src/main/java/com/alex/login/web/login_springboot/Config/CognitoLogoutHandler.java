@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 
 public class CognitoLogoutHandler extends SimpleUrlLogoutSuccessHandler {
     /**
-     * The domain of your user pools.
+     * The domain of yours user pools.
      */
     private String domain = "https://us-east-1judmxeur1.auth.us-east-1.amazoncognito.com";
 
