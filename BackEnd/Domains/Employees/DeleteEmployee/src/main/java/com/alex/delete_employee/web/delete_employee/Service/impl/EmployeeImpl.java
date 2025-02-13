@@ -14,7 +14,7 @@ public class EmployeeImpl  implements IEmployeeService{
 
     @Override
     public void deleteEmployee(String id) {
-        if (employeeRepo.existsById(id)) {
+        if (employeeRepo.findByEmployeeid(id) != null) { 
             employeeRepo.deleteById(id);
         } else {
             throw new RuntimeException("Employee not found with id: " + id);
