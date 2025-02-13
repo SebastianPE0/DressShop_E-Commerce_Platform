@@ -2,7 +2,9 @@ import axios from "axios";
 
 // URLs de los microservicios de Category en AWS EC2
 const API_CREATE = process.env.REACT_APP_BACKEND_URL_CREATE_CATEGORY;
-const API_READ = process.env.REACT_APP_BACKEND_URL_READ_CATEGORY;
+
+//const API_READ = process.env.REACT_APP_BACKEND_URL_READ_CATEGORY;
+const API_READ='http://ec2-3-83-111-91.compute-1.amazonaws.com/categories';
 const API_UPDATE = process.env.REACT_APP_BACKEND_URL_UPDATE_CATEGORY;
 const API_DELETE = process.env.REACT_APP_BACKEND_URL_DELETE_CATEGORY;
 
