@@ -27,7 +27,7 @@ func getCognitoJWKs() (jwk.Set, error) {
 	return jwks, nil
 }
 
-// Middleware de autenticación
+// Middleware de autenticación JWT
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
@@ -45,9 +45,9 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// Obtener claims y agregar usuario al contexto
+		// Agregar el usuario al contexto si el token es válido
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-			c.Set("user", claims["sub"]) // ID del usuario
+			c.Set("user", claims["sub"])
 		}
 
 		c.Next()
