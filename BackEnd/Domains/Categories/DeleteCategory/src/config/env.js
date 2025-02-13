@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const config = {
-  port: process.env.APP_PORT || 8081,
+  port: process.env.APP_PORT || 80,
   mongoUri: process.env.MONGO_URI,
   graphqlUrl: process.env.GRAPHQL_SERVICE_URL || "ec2-18-204-19-80.compute-1.amazonaws.com/graphql"
 };

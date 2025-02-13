@@ -34,7 +34,7 @@ connectDB();
 // Rutas
 app.use("/category", categoryRoutes);
 
-const PORT =  8081;
+const PORT =  80;
 app.listen(PORT, () => console.log(`✅ DeleteCategory Service running on port ${PORT}`));
 
 module.exports = app;
