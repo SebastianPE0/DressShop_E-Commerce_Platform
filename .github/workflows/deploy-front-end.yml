@@ -1,11 +1,12 @@
 name: Deploy frontend
 
 on:
-    push:
-        branches:
-            - Fix_Merge_Repository
-        paths:
-            - 'FrontEnd/employee-app/**'
+  push:
+    branches:
+      - Fix_Merge_Repository
+    paths:
+      - 'FrontEnd/employee-app/**'
+
 jobs:
   # Job para construir y subir la imagen del frontend a DockerHub
   build-and-push-frontend:
@@ -52,7 +53,7 @@ jobs:
           context: ./FrontEnd/employee-app
           file: ./FrontEnd/employee-app/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME2 }}/frontend:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME2 }}/frontend:v1
           build-args: |
             REACT_APP_BACKEND_URL_READ_CATEGORY=${{ secrets.HOST_DNS_GETALLCATEGORIES_QA }}
             REACT_APP_BACKEND_URL_CREATE_CATEGORY=${{ secrets.HOST_DNS_CREATECATEGORY_QA }}
@@ -89,21 +90,28 @@ jobs:
           username: ${{ secrets.USERNAME2 }}
           key: ${{ secrets.EC2_SSH_KEY2 }}
           script: |
-            # Detener cualquier servicio en el puerto 80 (como Nginx)
-            sudo systemctl stop nginx || true
+            # Verificar si Nginx está instalado antes de detenerlo
+            if systemctl list-units --full -all | grep -q "nginx.service"; then
+                sudo systemctl stop nginx
+            else
+                echo "Nginx no está instalado, continuando..."
+            fi
 
-            # Eliminar contenedores en ejecución en el puerto 80
-            docker stop frontend || true
-            docker rm frontend || true
+            # Asegurar que Docker esté en ejecución y corregir permisos
+            sudo systemctl start docker
+            sudo chmod 666 /var/run/docker.sock
 
-            # Verificar si algún otro proceso está usando el puerto 80 y eliminarlo
-            sudo fuser -k 80/tcp || true
+            # Detener y eliminar contenedor anterior si existe
+            sudo docker stop frontend || true
+            sudo docker rm frontend || true
 
-            # Descargar la imagen y ejecutar el contenedor
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/frontend:v1
-            docker run -d --name frontend -p 80:80 \
-            -e REACT_APP_BACKEND_URL_READ_CATEGORY=${{ secrets.HOST_DNS_GETALLCATEGORIES_QA }} \
-            -e REACT_APP_BACKEND_URL_CREATE_CATEGORY=${{ secrets.HOST_DNS_CREATECATEGORY_QA }} \
-            -e REACT_APP_BACKEND_URL_DELETE_CATEGORY=${{ secrets.HOST_DNS_DELETECATEGORY_QA }} \
-            -e REACT_APP_BACKEND_URL_UPDATE_CATEGORY=${{ secrets.HOST_DNS_UPDATECATEGORY_QA }} \
-            ${{ secrets.DOCKERHUB_USERNAME }}/frontend:v1   
+            # Descargar la imagen desde DockerHub
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/frontend:v1
+
+            # Ejecutar el contenedor con variables de entorno
+            sudo docker run -d --name frontend -p 80:80 \
+              -e REACT_APP_BACKEND_URL_READ_CATEGORY=${{ secrets.HOST_DNS_GETALLCATEGORIES_QA }} \
+              -e REACT_APP_BACKEND_URL_CREATE_CATEGORY=${{ secrets.HOST_DNS_CREATECATEGORY_QA }} \
+              -e REACT_APP_BACKEND_URL_DELETE_CATEGORY=${{ secrets.HOST_DNS_DELETECATEGORY_QA }} \
+              -e REACT_APP_BACKEND_URL_UPDATE_CATEGORY=${{ secrets.HOST_DNS_UPDATECATEGORY_QA }} \
+              ${{ secrets.DOCKERHUB_USERNAME2 }}/frontend:v1

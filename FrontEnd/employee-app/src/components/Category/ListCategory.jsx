@@ -11,7 +11,7 @@ const CategoryList = () => {
     const loadCategories = async () => {
         try {
             const data = await getCategories();
-            console.log("Categorías cargadas:", data); // <-- Agregar para depuración
+            console.log("Categorías cargadas:", data); // <-- Agregar par depuración
             setCategories(Array.isArray(data) ? data : []); // Asegurar que sea un array
         } catch (error) {
             console.error("Error cargando categorías:", error);
