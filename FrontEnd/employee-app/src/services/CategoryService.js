@@ -67,9 +67,14 @@ export const deleteCategory = async (id) => {
     try {
         await axios.delete(`${API_DELETE}/${id}`, authHeader());
     } catch (error) {
-        console.error("Error eliminando categoría", error.response ? error.response.data : error.message);
+        console.error("Error eliminando categoría:", error.response ? error.response.data : error.message);
         throw error;
     }
+};
+
+// **Verificar si el usuario está autenticado**
+export const isAuthenticated = () => {
+    return !!localStorage.getItem("token"); // Retorna true si hay token guardado
 };
 
 // **Exportar todas las funciones como un objeto CategoryService**
@@ -79,6 +84,7 @@ const CategoryService = {
     createCategory,
     updateCategory,
     deleteCategory,
+    isAuthenticated, // ← Agregado para mantener la estructura igual a EmployeeService.js
 };
 
 export default CategoryService;
