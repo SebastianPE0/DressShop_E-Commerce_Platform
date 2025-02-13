@@ -1,39 +1,47 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"os"
 
 	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/GetProductsByCategory/config"
-	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/GetProductsByCategory/controllers"
-	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/GetProductsByCategory/repositories"
 	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/GetProductsByCategory/routes"
-	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/GetProductsByCategory/services"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	config.LoadEnv()
-	db := config.ConnectDB()
-	productRepo := repositories.NewProductRepository(db)
-	productService := services.NewProductService(productRepo)
-	productController := controllers.NewProductController(productService)
+	// Cargar variables de entorno
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("❌ Error al cargar archivo .env")
+	}
 
+	// Conectar a MongoDB
+	config.ConnectDB()
+
+	// Configurar el servidor con Gin
 	r := gin.Default()
 
-	// Configuración de CORS
+	// Aplicar CORS
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://54.205.137.190"}, // Cambia esto a los dominios específicos si lo necesitas
+		AllowOrigins:     []string{"http://54.205.137.190"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
-		ExposeHeaders:    []string{"Content-Length"},
+		AllowHeaders:     []string{"Content-Type", "Authorization"},
 		AllowCredentials: true,
 	}))
 
-	r.Use(config.AuthMiddleware()) // Middleware de autenticación
-	routes.RegisterRoutes(r, productController)
-	//TEST
-	port := config.GetPort()
-	log.Printf("GetProductsByCategory service running on port %s", port)
+	// Configurar rutas
+	routes.SetupRoutes(r)
+
+	// Usar el puerto desde `.env`
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3001" // 🔥 Valor por defecto si no está definido en .env
+	}
+
+	fmt.Println("✅ Servidor ejecutándose en puerto", port)
 	r.Run(":" + port)
 }

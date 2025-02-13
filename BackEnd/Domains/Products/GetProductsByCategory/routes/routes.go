@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterRoutes(router *gin.Engine, controller *controllers.ProductController) {
-	router.GET("/products/by-category", controller.GetProductsByCategory)
+// Configurar rutas
+func SetupRoutes(r *gin.Engine) {
+	r.GET("/products/category/:categoryId", controllers.GetProductsByCategory)
 }

@@ -2,31 +2,30 @@ package repositories
 
 import (
 	"context"
+	"log"
 	"time"
 
+	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/GetProductsByCategory/config"
 	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/GetProductsByCategory/models"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type ProductRepository struct {
-	Collection *mongo.Collection
-}
+// Obtener productos por ID de categoría
+func GetProductsByCategory(categoryID string) ([]models.Product, error) {
+	collection := config.GetProductCollection()
 
-func NewProductRepository(db *mongo.Client) *ProductRepository {
-	return &ProductRepository{
-		Collection: db.Database("product_db").Collection("products"),
-	}
-}
+	var products []models.Product
 
-func (r *ProductRepository) GetProductsByCategory(categoryID string) ([]models.Product, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	var products []models.Product
+	// 🔥 Asegurar que el filtro busca correctamente `categoryid` como String
 	filter := bson.M{"category_id": categoryID}
-	cursor, err := r.Collection.Find(ctx, filter)
+	log.Printf("🔍 Buscando productos con categoryid: %s\n", categoryID) // Debug
+
+	cursor, err := collection.Find(ctx, filter)
 	if err != nil {
+		log.Println("❌ Error en consulta MongoDB:", err)
 		return nil, err
 	}
 	defer cursor.Close(ctx)
@@ -34,10 +33,14 @@ func (r *ProductRepository) GetProductsByCategory(categoryID string) ([]models.P
 	for cursor.Next(ctx) {
 		var product models.Product
 		if err := cursor.Decode(&product); err != nil {
+			log.Println("❌ Error al decodificar producto:", err)
 			return nil, err
 		}
 		products = append(products, product)
 	}
+
+	// 🔍 Debug: Verificar cuántos productos se encontraron
+	log.Printf("🔍 Productos encontrados: %d\n", len(products))
 
 	return products, nil
 }
