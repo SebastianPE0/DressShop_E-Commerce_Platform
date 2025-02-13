@@ -1,11 +1,11 @@
-name: Deploy Login
+name: Deploy frontend
 
 on:
     push:
         branches:
             - Fix_Merge_Repository
         paths:
-            - 'BackEnd/Domains/Employees/LoginEmployee/**'
+            - 'FrontEnd/employee-app/**'
 jobs:
   # Job para construir y subir la imagen del frontend a DockerHub
   build-and-push-frontend:

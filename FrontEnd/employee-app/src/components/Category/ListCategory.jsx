@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getCategories } from "../../services/CategoryService";
 
 const CategoryList = () => {
-    const [categories, setCategories] = useState([]); // Inicializa como array vacío
+    const [categories, setCategories] = useState([]); // Inicializa comos array vacío
 
     useEffect(() => {
         loadCategories();
