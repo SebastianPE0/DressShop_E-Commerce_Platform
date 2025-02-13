@@ -1,10 +1,14 @@
 const axios = require("axios");
 const Category = require("../models/category");
 
-const GRAPHQL_SERVICE_URL = process.env.GRAPHQL_SERVICE_URL;
+const GRAPHQL_SERVICE_URL = process.env.GRAPHQL_SERVICE_URL || "http://localhost:4000/graphql";
 
 // Verifica si hay productos en la categoría antes de eliminarla
 const checkProductsInCategory = async (categoryId, token) => {
+    if (!token) {
+        throw new Error("Token de autenticación no proporcionado.");
+    }
+
     const query = {
         query: `
             query GetProductsByCategory($categoryId: ID!) {
@@ -20,7 +24,7 @@ const checkProductsInCategory = async (categoryId, token) => {
         const response = await axios.post(GRAPHQL_SERVICE_URL, query, {
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`, // ✅ Se envía el token
+                "Authorization": token, // ✅ Se envía el token correctamente
             },
         });
 
@@ -34,19 +38,24 @@ const checkProductsInCategory = async (categoryId, token) => {
 
 // Elimina una categoría si no tiene productos asociados
 const deleteCategory = async (categoryId, token) => {
+    if (!categoryId) {
+        throw new Error("ID de categoría no proporcionado.");
+    }
+
     const hasProducts = await checkProductsInCategory(categoryId, token);
 
     if (hasProducts) {
         throw new Error("No se puede eliminar la categoría porque tiene productos asignados.");
     }
 
-    // Si no hay productos, eliminar la categoría
-    const deletedCategory = await Category.findByIdAndDelete(categoryId);
-    if (!deletedCategory) {
+    // Verifica si la categoría existe
+    const category = await Category.findById(categoryId);
+    if (!category) {
         throw new Error("Categoría no encontrada.");
     }
 
-    return { message: "Categoría eliminada exitosamente" };
+    await Category.findByIdAndDelete(categoryId);
+    return { message: "Categoría eliminada exitosamente." };
 };
 
 module.exports = { deleteCategory };

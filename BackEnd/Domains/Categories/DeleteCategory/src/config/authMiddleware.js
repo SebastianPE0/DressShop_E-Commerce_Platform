@@ -16,7 +16,7 @@ async function getKey(header, callback) {
   }
 }
 
-// Middleware de autenticación
+// Middleware de autenticación en GraphQL-Gateway
 function authMiddleware(req, res, next) {
   const authHeader = req.headers["authorization"];
 
@@ -32,8 +32,7 @@ function authMiddleware(req, res, next) {
       return res.status(401).json({ error: "Invalid or expired token" });
     }
     
-    // Almacenar la información del usuario en la solicitud
-    req.user = decoded;
+    req.user = decoded; // ✅ Almacena el usuario decodificado
     next();
   });
 }

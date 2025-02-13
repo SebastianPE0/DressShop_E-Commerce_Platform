@@ -18,7 +18,7 @@ if (typeof authMiddleware !== "function") {
 // Configurar CORS
 app.use(
   cors({
-    origin: "http://54.205.137.190",
+    origin: process.env.CORS_ORIGIN || "http://54.205.137.190",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -34,7 +34,7 @@ connectDB();
 // Rutas
 app.use("/category", categoryRoutes);
 
-const PORT = 8081;
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+const PORT =  8081;
+app.listen(PORT, () => console.log(`✅ DeleteCategory Service running on port ${PORT}`));
 
 module.exports = app;
