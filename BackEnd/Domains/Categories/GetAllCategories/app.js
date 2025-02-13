@@ -13,7 +13,7 @@ if (typeof authMiddleware !== "function") {
   process.exit(1); 
 }
 
-
+//TEST
 app.use(
   cors({
     origin: "http://54.205.137.190",
