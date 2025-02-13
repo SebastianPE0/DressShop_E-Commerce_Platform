@@ -3,7 +3,7 @@ name: CI/CD Pipeline for employee Services
 on:
   push:
     branches:
-      - Fix_Merge_Repository8
+      - Fix_Merge_Repository
       
 jobs:
   build-and-push-createEmployee:
