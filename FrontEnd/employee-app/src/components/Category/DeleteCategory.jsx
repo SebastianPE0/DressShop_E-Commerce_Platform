@@ -9,7 +9,7 @@ const DeleteCategory = ({ id, onDelete }) => {
 
     try {
       // 🔹 Consultamos GraphQL para verificar si hay productos en la categoría antes de eliminarla
-      const products = await CategoryService.getProductsByCategory(id);
+      const products = await CategoryService.deleteCategory(id);
       if (products.length > 0) {
         alert(" No se puede eliminar la categoría porque tiene productos asociados.");
         return;
