@@ -67,13 +67,21 @@ export const updateCategory = async (id, category) => {
 // Eliminar una categoría (DELETE)
 export const deleteCategory = async (id) => {
     try {
-        await axios.delete(`${API_DELETE}/${id}`, authHeader());
+        const token = localStorage.getItem("token");
+        if (!token) throw new Error("No hay token disponible. Inicia sesión.");
+
+        await axios.delete(`${API_DELETE}/${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+        });
     } catch (error) {
         console.error("Error eliminando categoría:", error.response ? error.response.data : error.message);
         throw error;
     }
+    
 };
-
 // **Verificar si el usuario está autenticado**
 export const isAuthenticated = () => {
     return !!localStorage.getItem("token"); // Retorna true si hay token guardado
