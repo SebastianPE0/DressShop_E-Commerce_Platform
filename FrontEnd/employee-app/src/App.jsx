@@ -23,13 +23,13 @@ function App() {
     return (
         <Router>
             <Routes>
-                {/* Página de Login */}
+                {/* Página inicial: Si el usuario no está autenticado, lo manda al Login */}
+                <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login onLogin={() => setIsAuthenticated(true)} />} />
+
+                {/* Ruta específica para Login */}
                 <Route path="/login" element={<Login onLogin={() => setIsAuthenticated(true)} />} />
 
-                {/* Redirigir a Login si no está autenticado */}
-                <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
-
-                {/* Dashboard con Navbar y Subrutas */}
+                {/* Rutas protegidas: Solo accesibles si el usuario está autenticado */}
                 <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}>
                     <Route path="employees" element={<EmployeeList />} />
                     <Route path="add-employee" element={<AddEmployee />} />

@@ -12,7 +12,7 @@ const Login = ({ onLogin }) => {
         try {
             await EmployeeService.login(email, password);
             onLogin();  // Cambia el estado de autenticación en App.jsx
-            navigate("/"); // Redirige a la listas de empleados
+            navigate("/dashboard"); // Redirige al Dashboard después del login
         } catch (error) {
             alert("Error en el inicio de sesión");
         }
