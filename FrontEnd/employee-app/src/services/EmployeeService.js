@@ -6,7 +6,7 @@ const API_CREATE = `http://3.84.236.96:8090/api/v1/employee/add`;
 const API_READ = `http://34.203.252.19:8094/api/v1/employee`;
 const API_UPDATE = `http://3.91.61.225:8092/api/v1/employees`;
 const API_DELETE = `http://34.227.171.49:8093/api/v1/employees/delete`;
-const API_AUTH = `http://ec2-54-204-76-194.compute-1.amazonaws.com:8091/auth`;
+const API_AUTH = `http://54.146.255.28:8091/auth`;
 
 // Obtener empleados (READ)
 export const getEmployees = async () => {

@@ -42,7 +42,7 @@ public class SecurityConfiguration {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.setAllowedOrigins(List.of(
-            "http://localhost:5173", // Para desarrollo local
+            "http://localhost:5173", // Para desarrollo locals
             "http://54.205.137.190" // Dominio del frontend en AWS
         ));
         config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
