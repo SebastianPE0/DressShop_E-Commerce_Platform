@@ -27,7 +27,7 @@ func CreateProduct(c *gin.Context) {
 	// Verificar si el campo categoryid se está enviando correctamente
 	if product.CategoryID == "" {
 		log.Println("⚠️ Error: categoryid está vacío")
-		c.JSON(http.StatusBadRequest, gin.H{"error": "El campo categoryid es requerido"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Remember. El campo category_id es requerido"})
 		return
 	}
 
