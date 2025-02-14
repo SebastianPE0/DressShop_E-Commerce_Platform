@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getCategories } from "../../services/CategoryService";
-import DeleteCategory from "./DeleteCategory"; // Importar el componente de eliminación
-import { Link } from "react-router-dom";
+import DeleteCategory from "./DeleteCategory";
+import { Link, useNavigate } from "react-router-dom";
 import "./CategoryList.css"; 
-
-import { useNavigate } from "react-router-dom";
 
 const CategoryList = () => {
     const [categories, setCategories] = useState([]);
@@ -14,15 +12,13 @@ const CategoryList = () => {
         const authStatus = localStorage.getItem("isAuthenticated") === "true";
         if (!authStatus) {
             console.warn("Usuario no autenticado, redirigiendo a login...");
-            navigate("/login"); // Si no está autenticado, redirige al login
+            navigate("/login"); 
             return;
         }
     
         console.log("Usuario autenticado, cargando categorías...");
         loadCategories();
-    }, [navigate]);
-
-    
+    }, []); // 👈 Evita recargar cada vez que `navigate` cambia
 
     const loadCategories = async () => {
         try {
@@ -34,18 +30,10 @@ const CategoryList = () => {
         }
     };
 
-    const handleAddCategory = () => {
-        navigate("/add-category"); // Redirige sin problemas a la pantalla de añadir categoría
-    };
-
-
-
     return (
         <div className="category-container">
             <h2 className="category-title">Lista de Categorías</h2>
 
-            
-            {/* Botón para agregar categoría (similar a empleados) */}
             <button style={{ marginBottom: "10px", padding: "10px", backgroundColor: "green", color: "white", borderRadius: "5px" }}>
                 <Link to="/dashboard/add-category" style={{ textDecoration: "none", color: "white" }}>Añadir Categoría</Link>
             </button>
@@ -65,14 +53,9 @@ const CategoryList = () => {
                                     <td>{category.name}</td>
                                     <td>
                                         <DeleteCategory id={category._id} onDelete={loadCategories} />
-
-                                        <button 
-                                            onClick={() => navigate(`/dashboard/edit-category/${category._id}`)} 
-                                            className="edit-button"
-                                        >
+                                        <button onClick={() => navigate(`/dashboard/edit-category/${category._id}`)} className="edit-button">
                                             Editar
                                         </button>
-
                                     </td>
                                 </tr>
                             ))

@@ -75,13 +75,18 @@ export const deleteCategory = async (id) => {
         const token = localStorage.getItem("token");
         if (!token) throw new Error("No hay token disponible. Inicia sesión.");
 
-        await axios.delete(API_DELETE, {  // Quitamos la concatenación con el `id`
+        if (!id) {
+            console.error("Error: El ID de la categoría es undefined.");
+            return;
+        }
+
+        await axios.delete(`${API_DELETE}/${id}`, { // 👈 Ahora el `id` se concatena en la URL
             headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
             },
-            data: { id }  // 👈 Enviamos el `id` en el body
         });
+
     } catch (error) {
         console.error("Error eliminando categoría:", error.response ? error.response.data : error.message);
         throw error;
