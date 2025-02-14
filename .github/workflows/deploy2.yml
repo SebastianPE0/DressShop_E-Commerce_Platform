@@ -27,8 +27,8 @@ jobs:
       - name: Log in to DockerHub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME2 }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD2 }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build and push create-employee
         uses: docker/build-push-action@v4
@@ -56,8 +56,8 @@ jobs:
       - name: Log in to DockerHub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME2 }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD2 }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build and push delete-employee
         uses: docker/build-push-action@v4
@@ -85,8 +85,8 @@ jobs:
       - name: Log in to DockerHub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME2 }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD2 }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build and push getall-employee
         uses: docker/build-push-action@v4
@@ -114,8 +114,8 @@ jobs:
       - name: Log in to DockerHub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME2 }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD2 }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build and push login-employee
         uses: docker/build-push-action@v4
@@ -143,8 +143,8 @@ jobs:
       - name: Log in to DockerHub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME2 }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD2 }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build and push update-employee
         uses: docker/build-push-action@v4
@@ -188,8 +188,8 @@ jobs:
       - name: Log in to DockerHub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME2 }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD2 }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build and push frontend to DockerHub
         uses: docker/build-push-action@v4
