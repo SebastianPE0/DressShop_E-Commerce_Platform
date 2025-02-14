@@ -18,7 +18,7 @@ func LoadEnv() {
 func GetPort() string {
 	port := os.Getenv("APP_PORT")
 	if port == "" {
-		port = "80" // Default port
+		port = "6003" // Default port
 	}
 	return port
 }
