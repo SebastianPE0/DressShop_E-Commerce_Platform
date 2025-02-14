@@ -14,8 +14,8 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**") // Aplica CORS a todas las rutas
-                        .allowedOrigins("http://localhost:5173") // Cambia al puerto de tu frontend
+                registry.addMapping("/**") 
+                        .allowedOrigins("http://localhost:5173") 
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
