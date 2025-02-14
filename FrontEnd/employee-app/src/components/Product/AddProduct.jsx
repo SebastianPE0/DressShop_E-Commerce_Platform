@@ -14,6 +14,8 @@ const AddProduct = () => {
     });
 
     const [categories, setCategories] = useState([]);
+    const [loadingCategories, setLoadingCategories] = useState(true);
+    const [errorLoadingCategories, setErrorLoadingCategories] = useState(false);
 
     useEffect(() => {
         // ✅ Verificar autenticación antes de cargar la página
@@ -29,17 +31,21 @@ const AddProduct = () => {
 
     // ✅ Cargar categorías disponibles
     const loadCategories = async () => {
+        setLoadingCategories(true);
+        setErrorLoadingCategories(false);
         try {
             const data = await getCategories();
-            if (data && Array.isArray(data.categories)) {
+            if (data && Array.isArray(data.categories) && data.categories.length > 0) {
                 setCategories(data.categories);
             } else {
-                setCategories([]); // Evita que se rompa el `map()`
+                setCategories([]);
+                setErrorLoadingCategories(true);
             }
         } catch (error) {
             console.error("Error cargando categorías:", error);
-            alert("Hubo un problema al cargar las categorías. Inténtalo más tarde.");
+            setErrorLoadingCategories(true);
         }
+        setLoadingCategories(false);
     };
 
     // ✅ Manejo de cambios en los inputs
@@ -67,54 +73,60 @@ const AddProduct = () => {
     return (
         <div>
             <h2>Añadir Producto</h2>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    name="name"
-                    value={product.name}
-                    onChange={handleChange}
-                    placeholder="Nombre del Producto"
-                    required
-                />
 
-                <input
-                    type="number"
-                    name="price"
-                    value={product.price}
-                    onChange={handleChange}
-                    placeholder="Precio"
-                    required
-                />
+            {loadingCategories ? (
+                <p>Cargando categorías...</p>
+            ) : errorLoadingCategories ? (
+                <p style={{ color: "red" }}>Error al cargar las categorías. Asegúrate de que hay categorías disponibles.</p>
+            ) : (
+                <form onSubmit={handleSubmit}>
+                    <input
+                        type="text"
+                        name="name"
+                        value={product.name}
+                        onChange={handleChange}
+                        placeholder="Nombre del Producto"
+                        required
+                    />
 
-                <input
-                    type="number"
-                    name="stock"
-                    value={product.stock}
-                    onChange={handleChange}
-                    placeholder="Stock Disponible"
-                    required
-                />
+                    <input
+                        type="number"
+                        name="price"
+                        value={product.price}
+                        onChange={handleChange}
+                        placeholder="Precio"
+                        required
+                    />
 
-                <select
-                    name="categoryId"
-                    value={product.categoryId}
-                    onChange={handleChange}
-                    required
-                >
-                    <option value="">Selecciona una categoría</option>
-                    {categories.length > 0 ? (
-                        categories.map((category) => (
+                    <input
+                        type="number"
+                        name="stock"
+                        value={product.stock}
+                        onChange={handleChange}
+                        placeholder="Stock Disponible"
+                        required
+                    />
+
+                    <select
+                        name="categoryId"
+                        value={product.categoryId}
+                        onChange={handleChange}
+                        required
+                        disabled={categories.length === 0} // Deshabilita si no hay categorías
+                    >
+                        <option value="">Selecciona una categoría</option>
+                        {categories.map((category) => (
                             <option key={category._id} value={category._id}>
                                 {category.name}
                             </option>
-                        ))
-                    ) : (
-                        <option disabled>No hay categorías disponibles</option>
-                    )}
-                </select>
+                        ))}
+                    </select>
 
-                <button type="submit">Añadir Producto</button>
-            </form>
+                    <button type="submit" disabled={categories.length === 0}>
+                        Añadir Producto
+                    </button>
+                </form>
+            )}
         </div>
     );
 };
