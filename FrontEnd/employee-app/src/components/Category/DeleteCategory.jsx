@@ -8,26 +8,19 @@ const DeleteCategory = ({ id, onDelete }) => {
     if (!confirmDelete) return;
 
     try {
-
-      // 🔹 Consultamos GraphQL para verificar si hay productos en la categoría antes de eliminarla
-      const products = await CategoryService.deleteCategory(id);
-      if (products.length > 0) {
-        alert(" No se puede eliminar la categoría porque tiene productos asociados.");
-        return;
-      }
-
-      // 🔹 Si no hay productos, eliminamos la categoría
+      // 🔹 Eliminamos la categoría directamente
       await CategoryService.deleteCategory(id);
-      onDelete(); // 🔄 Recargamos la lista de categorías automáticamente
 
+      // 🔄 Recargamos la lista de categorías automáticamente
+      onDelete();
     } catch (error) {
-      console.error(" Error eliminando categoría:", error);
-      alert(" Error eliminando categoría. Intenta de nuevo.");
+      console.error("Error eliminando categoría:", error);
+      alert("Error eliminando categoría. Intenta de nuevo.");
     }
   };
 
   return (
-    <button className="delete-button" onClick={handleDelete}> Eliminar</button> // 🔹 Aquí conectamos el botón con `handleDelete`
+    <button className="delete-button" onClick={handleDelete}>Eliminar</button> 
   );
 };
 
