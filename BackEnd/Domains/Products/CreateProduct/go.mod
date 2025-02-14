@@ -1,6 +1,6 @@
 module github.com/SebastianPE0/DressShop_E-Commerce-Platform/BackEnd/Products/CreateProduct
 
-go 1.21.0
+go 1.22
 
 toolchain go1.23.4
 
