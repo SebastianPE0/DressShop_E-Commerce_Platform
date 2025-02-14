@@ -4,7 +4,7 @@ on:
   push:
     branches:
 
-      - Fix_Merge_Repository
+      - Fix_Merge_Repository2
     paths:
       - 'FrontEnd/employee-app/**'
 
