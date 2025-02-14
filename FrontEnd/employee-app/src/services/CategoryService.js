@@ -1,13 +1,13 @@
 import axios from "axios";
 
 // URLs de los microservicios de Category en AWS EC2
-const API_CREATE = 'http://ec2-18-212-27-235.compute-1.amazonaws.com:5004/category/create';
+const API_CREATE = 'http://ec2-54-224-136-157.compute-1.amazonaws.com:5004/category/create';
 
 //const API_READ = process.env.REACT_APP_BACKEND_URL_READ_CATEGORY;
 
-const API_READ='http://ec2-54-89-217-86.compute-1.amazonaws.com:80/categories';
+const API_READ='http://ec2-3-94-79-101.compute-1.amazonaws.com:80/categories';
 const API_UPDATE = process.env.REACT_APP_BACKEND_URL_UPDATE_CATEGORY;
-const API_DELETE = 'http://ec2-3-91-155-5.compute-1.amazonaws.com:5000/api/categories/';
+const API_DELETE = 'http://ec2-3-83-52-181.compute-1.amazonaws.com:5000/api/categories/';
 
 
 // Función para obtener el token y agregarlo a los headers

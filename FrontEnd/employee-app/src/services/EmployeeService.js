@@ -5,7 +5,7 @@ const API_BASE_URL = "http://localhost"; // Cambia esto si usas un API Gateway
 const API_CREATE = `http://98.82.98.218:8090/api/v1/employee/add`;
 const API_READ = `http://54.205.137.190:8094/api/v1/employee`;
 const API_UPDATE = `http://54.146.255.28:8092/api/v1/employees`;
-const API_DELETE = `http://ec2-3-88-47-82.compute-1.amazonaws.com:8093/api/v1/employees/delete`;
+const API_DELETE = `http://ec2-23-20-93-116.compute-1.amazonaws.com:8093/api/v1/employees/delete`;
 const API_AUTH = `http://52.45.203.169:8091/auth`;
 
 // Obtener empleados (READ)
