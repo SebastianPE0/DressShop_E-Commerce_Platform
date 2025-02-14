@@ -55,6 +55,7 @@ export const createCategory = async (category) => {
     }
 };
 
+
 // Actualizar una categoría (UPDATE)
 export const updateCategory = async (id, category) => {
     try {
