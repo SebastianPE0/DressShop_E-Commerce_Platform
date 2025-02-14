@@ -5,7 +5,7 @@ on:
     branches:
       - Fix_Merged_Repository
     paths:
-      - 'change_deploy_action/**'
+      - 'Backend/Domains/GraphQL-Gateway/**'
 
 jobs:
   
