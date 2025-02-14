@@ -3,7 +3,7 @@ name: Deploy get_all-category
 on:
     push:
         branches:
-            - Fix_BackEnd_GraphQL_DeleteCategory
+            - Fix_Merge_Repository
         paths:
             - 'BackEnd/Domains/Categories/GetAllCategories/**'
 jobs:
