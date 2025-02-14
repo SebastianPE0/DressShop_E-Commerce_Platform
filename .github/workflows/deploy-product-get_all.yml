@@ -36,7 +36,7 @@ jobs:
         with:
           host: ${{ secrets.HOST_DNS_GETALLPRODUCTS_QA }}
           username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ secrets.EC2_SSH_KEY2 }}
           script: |
             sudo docker stop get-all-products || true
             sudo docker rm get-all-products || true
