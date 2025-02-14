@@ -36,7 +36,7 @@ jobs:
           context: ./BackEnd/Domains/Employees/CreateEmployee
           file: ./BackEnd/Domains/Employees/CreateEmployee/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME2 }}/create-employee:v1
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/create-employee:v1
 
   build-and-push-deleteEmployee:
     runs-on: ubuntu-latest
@@ -65,7 +65,7 @@ jobs:
           context: ./BackEnd/Domains/Employees/DeleteEmployee
           file: ./BackEnd/Domains/Employees/DeleteEmployee/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME2 }}/delete-employee:v1
+          tags: ${{ secrets.DOCKERHUB_USERNAME}}/delete-employee:v1
   build-and-push-getallEmployee:
     runs-on: ubuntu-latest
     steps:
@@ -94,7 +94,7 @@ jobs:
           context: ./BackEnd/Domains/Employees/GetAllEmployee
           file: ./BackEnd/Domains/Employees/GetAllEmployee/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME2 }}/getallemployee-employee:v1
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/getallemployee-employee:v1
   build-and-push-loginEmployee:
     runs-on: ubuntu-latest
     steps:
@@ -123,7 +123,7 @@ jobs:
           context: ./BackEnd/Domains/Employees/LoginEmployee
           file: ./BackEnd/Domains/Employees/LoginEmployee/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME2 }}/login-employee:v1
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/login-employee:v1
   build-and-push-updateEmployee:
     runs-on: ubuntu-latest
     steps:
@@ -152,7 +152,7 @@ jobs:
           context: ./BackEnd/Domains/Employees/UpdateEmployee
           file: ./BackEnd/Domains/Employees/UpdateEmployee/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME2 }}/update-employee:v1
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/update-employee:v1
   build-and-push-frontend:
     runs-on: ubuntu-latest
     steps:
@@ -197,7 +197,7 @@ jobs:
           context: ./FrontEnd/employee-app
           file: ./FrontEnd/employee-app/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME2 }}/frontend:v1
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/frontend:v1
           build-args: |
             REACT_APP_BACKEND_URL_READ_CATEGORY=${{ secrets.HOST_DNS_GETALLCATEGORIES_QA }}
             REACT_APP_BACKEND_URL_CREATE_CATEGORY=${{ secrets.HOST_DNS_CREATECATEGORY_QA }}
@@ -218,12 +218,12 @@ jobs:
           script: |
             sudo docker stop create-employee || true
             sudo docker rm create-employee || true
-            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/create-employee:v1
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/create-employee:v1
             sudo docker run -d --name create-employee -p 8090:8090 \
               -e DB_URL="${{ secrets.DB_URL }}" \
              -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
              -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
-              ${{ secrets.DOCKERHUB_USERNAME2 }}/create-employee:v1 
+              ${{ secrets.DOCKERHUB_USERNAME }}/create-employee:v1 
   deploy-deleteEmployee:
     needs: build-and-push-deleteEmployee
     runs-on: ubuntu-latest
@@ -237,12 +237,12 @@ jobs:
           script: |
            sudo docker stop delete-employee || true
             sudo docker rm delete-employee || true
-            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/delete-employee:v1
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/delete-employee:v1
             sudo docker run -d --name delete-employee -p 8093:8093 \
              -e DB_URL="${{ secrets.DB_URL }}" \
              -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
              -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
-              ${{ secrets.DOCKERHUB_USERNAME2 }}/delete-employee:v1                   
+              ${{ secrets.DOCKERHUB_USERNAME }}/delete-employee:v1                   
   deploy-getallEmployee:
     needs: build-and-push-getallEmployee
     runs-on: ubuntu-latest
@@ -256,12 +256,12 @@ jobs:
           script: |
            sudo docker stop getallemployee-employee || true
             sudo docker rm getallemployee-employee || true
-            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/getallemployee-employee:v1
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/getallemployee-employee:v1
             sudo docker run -d --name getallemployee-employee -p 8094:8094 \
               -e DB_URL="${{ secrets.DB_URL }}" \
              -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
              -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
-              ${{ secrets.DOCKERHUB_USERNAME2 }}/getallemployee-employee:v1   
+              ${{ secrets.DOCKERHUB_USERNAME }}/getallemployee-employee:v1   
   deploy-loginEmployee:
     needs: build-and-push-loginEmployee
     runs-on: ubuntu-latest
@@ -275,12 +275,12 @@ jobs:
           script: |
             sudo docker stop login-employee || true
             sudo docker rm login-employee || true
-            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/login-employee:v1
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/login-employee:v1
             sudo docker run -d --name login-employee -p 8091:8091 \
               -e DB_URL="${{ secrets.DB_URL }}" \
              -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
              -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
-              ${{ secrets.DOCKERHUB_USERNAME2 }}/login-employee:v1 
+              ${{ secrets.DOCKERHUB_USERNAME }}/login-employee:v1 
   deploy-updateEmployee:
     needs: build-and-push-updateEmployee
     runs-on: ubuntu-latest
@@ -294,12 +294,12 @@ jobs:
           script: |
             sudo docker stop update-employee || true
             sudo docker rm update-employee || true
-            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/update-employee:v1
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/update-employee:v1
             sudo docker run -d --name update-employee -p 8092:8092 \
               -e DB_URL="${{ secrets.DB_URL }}" \
              -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
              -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
-              ${{ secrets.DOCKERHUB_USERNAME2 }}/update-employee:v1 
+              ${{ secrets.DOCKERHUB_USERNAME}}/update-employee:v1 
   deploy-frontend:
     needs: build-and-push-frontend
     runs-on: ubuntu-latest
@@ -345,7 +345,7 @@ jobs:
             sudo docker rm frontend || true
 
             # Descargar la imagen desde DockerHub
-            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/frontend:v1
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/frontend:v1
 
             # Ejecutar el contenedor con variables de entorno
             sudo docker run -d --name frontend -p 80:80 \
@@ -353,7 +353,7 @@ jobs:
               -e REACT_APP_BACKEND_URL_CREATE_CATEGORY=${{ secrets.HOST_DNS_CREATECATEGORY_QA }} \
               -e REACT_APP_BACKEND_URL_DELETE_CATEGORY=${{ secrets.HOST_DNS_DELETECATEGORY_QA }} \
               -e REACT_APP_BACKEND_URL_UPDATE_CATEGORY=${{ secrets.HOST_DNS_UPDATECATEGORY_QA }} \
-              ${{ secrets.DOCKERHUB_USERNAME2 }}/frontend:v1
+              ${{ secrets.DOCKERHUB_USERNAME }}/frontend:v1
   
 
                                       
