@@ -25,7 +25,7 @@ func ConnectDB() {
 	}
 
 	fmt.Println("✅ Conectado a MongoDB")
-	DB = client.Database(GetEnv("DB_NAME"))
+	DB = client.Database("product_db")
 }
 
 // Obtener colección de productos
