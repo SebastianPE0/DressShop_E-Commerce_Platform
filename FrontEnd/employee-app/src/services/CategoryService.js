@@ -47,7 +47,10 @@ export const getCategoryById = async (id) => {
 // Crear una nueva categoría (CREATE)
 export const createCategory = async (category) => {
     try {
-        const response = await axios.post(API_CREATE, category, authHeader());
+        const response = await axios.post(API_CREATE, {
+            name: category.name,
+            description: category.description
+        }, authHeader());
         return response.data;
     } catch (error) {
         console.error("Error creando categoría", error.response ? error.response.data : error.message);
