@@ -4,7 +4,7 @@ dotenv.config();
 
 const Category = require("../models/category");
 
-const GRAPHQL_GATEWAY_URL = process.env.GRAPHQL_GATEWAY_URL;
+const GRAPHQL_GATEWAY_URL = "http://52.4.35.158:4000/graphql";
 
 // 🔹 Verificar que la variable se está cargando
 console.log("🔍 GRAPHQL_GATEWAY_URL:", GRAPHQL_GATEWAY_URL);

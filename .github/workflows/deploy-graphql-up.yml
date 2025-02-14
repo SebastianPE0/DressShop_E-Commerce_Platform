@@ -42,7 +42,7 @@ jobs:
             sudo docker rm graphql-gateway || true
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/graphql-gateway:latest
             sudo docker run -d --name graphql-gateway -p 4000:4000 \
-              -e CATEGORY_SERVICE_URL="http://${{ secrets.HOST_DNS_GETBYIDCATEGORY_QA }}/api/category" \
+              -e CATEGORY_SERVICE_URL="http://${{ secrets.HOST_DNS_GETBYIDCATEGORY_QA }}:3000/api/category" \
               -e PRODUCT_SERVICE_URL="http://${{ secrets.HOST_DNS_GETPRODUCTSBYCATEGORY_QA }}:3001/products/category" \
               -e PORT=4000\
               -e JWT_ISSUER="https://cognito-idp.us-east-1.amazonaws.com/us-east-1_JudMXeuR1" \
