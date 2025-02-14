@@ -3,7 +3,7 @@ name: Deploy create-product
 on:
     push:
         branches:
-            - Fix_Merge_Repository
+            - Fix_BackEnd_GraphQL_DeleteCategory
         paths:
             - 'BackEnd/Domains/Products/CreateProduct/**'
 jobs:
@@ -41,7 +41,7 @@ jobs:
             sudo docker stop create-product || true
             sudo docker rm create-product || true
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/create-product:latest
-            sudo docker run -d --name create-product --network host \
+            sudo docker run -d --name create-product -p 6001:6001 \
               -e MONGO_URI="${{ secrets.MONGO_URI_PRODUCT }}" \
               -e GRAPHQL_URL="http://${{ secrets.HOST_DNS_GRAPHQL_QA }}/graphql" \
               ${{ secrets.DOCKERHUB_USERNAME }}/create-product:latest

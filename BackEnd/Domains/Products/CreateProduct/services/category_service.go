@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/SebastianPE0/DressShop_E-Commerce-Platform/BackEnd/Products/CreateProduct/config"
 	"github.com/gin-gonic/gin"
 )
 
@@ -39,7 +38,7 @@ func ValidateCategory(categoryID string, c *gin.Context) bool {
 		return false
 	}
 
-	log.Printf("🔍 Enviando consulta GraphQL a %s: %s\n", config.GetEnv("GRAPHQL_GATEWAY_URL"), string(queryBody))
+	log.Printf("🔍 Enviando consulta GraphQL a %s: %s\n", "http://52.4.35.158:4000/graphql", string(queryBody))
 
 	// Obtener el token del header
 	token := c.GetHeader("Authorization")
@@ -49,7 +48,7 @@ func ValidateCategory(categoryID string, c *gin.Context) bool {
 	}
 
 	// Crear la petición HTTP con el token en el header
-	req, err := http.NewRequest("POST", config.GetEnv("GRAPHQL_GATEWAY_URL"), bytes.NewBuffer(queryBody))
+	req, err := http.NewRequest("POST", "http://52.4.35.158:4000/graphql", bytes.NewBuffer(queryBody))
 	if err != nil {
 		log.Println("❌ Error al crear la solicitud HTTP:", err)
 		return false

@@ -8,7 +8,7 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-
+EXPOSE 4000
 # Compilar el código
 RUN go build -o main .
 
