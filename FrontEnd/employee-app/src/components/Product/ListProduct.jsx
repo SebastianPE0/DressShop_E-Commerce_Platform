@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { getProducts } from "../../services/ProductService";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ProductList = () => {
     const [products, setProducts] = useState([]);
     const navigate = useNavigate();
-    useEffect(() => {
-           const authStatus = localStorage.getItem("isAuthenticated") === "true";
-           if (!authStatus) {
-               console.warn("Usuario no autenticado, redirigiendo a login...");
-               navigate("/login"); // Si no está autenticado, redirige al login
-               return;
-           }
-       
-           console.log("Usuario autenticado, cargando productos...");
-           loadCategories();
-       }, [navigate]);
-   
 
+    useEffect(() => {
+        // ✅ Verificar autenticación correctamente
+        const authStatus = localStorage.getItem("isAuthenticated") === "true";
+        if (!authStatus) {
+            console.warn("Usuario no autenticado, redirigiendo a login...");
+            navigate("/login");
+            return;
+        }
+
+        console.log("Usuario autenticado, cargando productos...");
+        loadProducts(); // ✅ Llamar a la función correcta
+    }, []);
+
+    // ✅ Corrección: Llamar a `getProducts()` en lugar de `loadCategories()`
     const loadProducts = async () => {
         try {
             const data = await getProducts();
