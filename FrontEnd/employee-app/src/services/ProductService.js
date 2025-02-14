@@ -2,7 +2,7 @@ import axios from "axios";
 
 // URLs de los microservicios de Product en AWS EC2
 const API_CREATE = "http://ec2-3-91-76-0.compute-1.amazonaws.com:6001/product";
-//const API_READ =;
+const API_READ ="http://ec2-54-227-185-92.compute-1.amazonaws.com:6003/products";
 //const API_UPDATE = ;
 //const API_DELETE =;
 
