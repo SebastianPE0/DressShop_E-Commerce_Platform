@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const AddCategory = () => {
     const navigate = useNavigate();
-    const [category, setCategory] = useState({ categoryname: "", description: "" });
+    const [category, setCategory] = useState({ name: "", description: "" });
 
     const handleChange = (e) => {
         setCategory({ ...category, [e.target.name]: e.target.value });
@@ -27,8 +27,8 @@ const AddCategory = () => {
             <form onSubmit={handleSubmit}>
                 <input 
                     type="text" 
-                    name="categoryname" 
-                    value={category.categoryname} 
+                    name="name" 
+                    value={category.name} 
                     onChange={handleChange} 
                     placeholder="Nombre de la Categoría" 
                     required 
