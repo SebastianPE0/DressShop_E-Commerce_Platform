@@ -3,7 +3,7 @@ name: Deploy create-category
 on:
     push:
         branches:
-            - Feature_BackEnd_CategoryDomain_AddMicroservice_DeleteCategory
+            - Fix_Merge_Repository
         paths:
             - 'BackEnd/Domains/Categories/CreateCategory/**'
 jobs:
@@ -41,6 +41,6 @@ jobs:
             sudo docker stop create-category || true
             sudo docker rm create-category || true
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/create-category:latest
-            sudo docker run -d --name create-category --network host \
+            sudo docker run -d --name create-category -p 5010:5010 \
               -e MONGO_URI="${{ secrets.MONGO_URI }}" \
               ${{ secrets.DOCKERHUB_USERNAME }}/create-category:latest
