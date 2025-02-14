@@ -6,7 +6,7 @@ const authMiddleware = require("./src/config/authMiddleware");
 
 const app = express();
 
-// 📌 Configurar CORS (Permitir solo el frontend en EC2)
+//Configurar CORS (Permitir solo el frontend en EC2)
 app.use(
   cors({
     origin: "http://3.214.134.68",
@@ -19,4 +19,4 @@ app.use(bodyParser.json());
 app.use(authMiddleware); // Protege todas las rutas
 app.use("/category", categoryRoutes);
 
-module.exports = app; // 📌 Ya NO inicia el servidor aquí.
+module.exports = app; 

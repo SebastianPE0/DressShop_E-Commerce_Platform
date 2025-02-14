@@ -12,13 +12,13 @@ import (
 )
 
 func main() {
-
+	//TEST
 	config.ConnectDB()
 
 	r := gin.Default()
 
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://54.205.137.190"},
+		AllowOrigins:     []string{"http://3.214.134.68"},
 		AllowMethods:     []string{"GET", "POST"},
 		AllowHeaders:     []string{"Content-Type", "Authorization"},
 		AllowCredentials: true,

@@ -20,7 +20,7 @@ func main() {
 		log.Fatal("❌ Error al cargar archivo .env")
 	}
 
-	// Conectar a MongoDB
+	// TEST
 	config.ConnectDB()
 
 	// Configurar el servidor con Gin

@@ -7,7 +7,7 @@ const authMiddleware = require("./src/config/authMiddleware");
 
 const app = express();
 
-//TEST
+//TEST2
 if (typeof authMiddleware !== "function") {
   console.error("Error: authMiddleware no es una función válida.");
   process.exit(1); 
