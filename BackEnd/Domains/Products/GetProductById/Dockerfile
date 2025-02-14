@@ -15,7 +15,7 @@ COPY . .
 RUN go build -o get-product-by-id-service main.go
 
 # Expose service port
-EXPOSE 80
+EXPOSE 6002
 
 # Command to run the service
 

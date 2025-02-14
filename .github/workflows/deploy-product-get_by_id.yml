@@ -3,7 +3,7 @@ name: Deploy get_ByID-product
 on:
     push:
         branches:
-            - Fix_Merge_Repository
+            - Fix_BackEnd_GraphQL_DeleteCategory
         paths:
             - 'BackEnd/Domains/Products/GetProductById/**'
 jobs:
@@ -41,6 +41,6 @@ jobs:
             sudo docker stop get-products-by-id || true
             sudo docker rm get-products-by-id || true
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/get-products-by-id:latest
-            sudo docker run -d --name get-products-by-id --network host \
+            sudo docker run -d --name get-products-by-id -p 6002:6002 \
               -e MONGO_URI="${{ secrets.MONGO_URI_PRODUCT }}" \
               ${{ secrets.DOCKERHUB_USERNAME }}/get-products-by-id:latest
