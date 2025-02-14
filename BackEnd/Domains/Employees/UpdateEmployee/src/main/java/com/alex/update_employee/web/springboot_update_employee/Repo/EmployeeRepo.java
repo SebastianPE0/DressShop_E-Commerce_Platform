@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 @EnableJpaRepositories
 @Repository
-public interface EmployeeRepo extends JpaRepository<Employee, Long>{
+public interface EmployeeRepo extends JpaRepository<Employee, String>{
      Optional<Employee> findOneByEmailAndPassword(String email, String password);
     Employee findByEmail(String email);
-    Employee findById(long id);
+    //Employee findById(String id);
 }

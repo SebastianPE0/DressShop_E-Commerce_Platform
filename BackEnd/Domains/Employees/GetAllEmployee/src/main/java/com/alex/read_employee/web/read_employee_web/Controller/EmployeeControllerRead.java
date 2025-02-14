@@ -17,7 +17,7 @@ import com.alex.read_employee.web.read_employee_web.Service.IEmployeeService;
 @RestController
 @CrossOrigin(origins = {
     "http://localhost:5173",
-    "http://ec2-34-238-121-154.compute-1.amazonaws.com"
+    "http://3.214.134.68"
 })
 @RequestMapping("/api/v1/employee")
 public class EmployeeControllerRead {
@@ -32,7 +32,7 @@ public class EmployeeControllerRead {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Employee>> getEmployeeById(@PathVariable Long id) {
+    public ResponseEntity<Optional<Employee>> getEmployeeById(@PathVariable String id) {
         Optional<Employee> employee = service.getEmployeeById(id);
         if (employee.isPresent()) {
             return ResponseEntity.ok(employee);

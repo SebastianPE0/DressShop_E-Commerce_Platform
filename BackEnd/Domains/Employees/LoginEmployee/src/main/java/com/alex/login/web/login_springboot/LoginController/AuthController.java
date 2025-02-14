@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 @CrossOrigin(origins = {
     "http://localhost:5173",
-    "http://54.205.137.190"
+    "http://3.214.134.68"
 })
 public class AuthController {
     private final CognitoService cognitoService;

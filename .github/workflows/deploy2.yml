@@ -3,7 +3,7 @@ name: CI/CD Pipeline for employee Services
 on:
   push:
     branches:
-      - Fix_Merge_Repository8
+      - Fix_Merge_Repository
       
 jobs:
   build-and-push-createEmployee:
@@ -190,13 +190,19 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME2 }}
           password: ${{ secrets.DOCKERHUB_PASSWORD2 }}
 
-      - name: Build and push frontend
+      - name: Build and push frontend to DockerHub
         uses: docker/build-push-action@v4
         with:
           context: ./FrontEnd/employee-app
           file: ./FrontEnd/employee-app/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME2 }}/frontend:v1
+          build-args: |
+            REACT_APP_BACKEND_URL_READ_CATEGORY=${{ secrets.HOST_DNS_GETALLCATEGORIES_QA }}
+            REACT_APP_BACKEND_URL_CREATE_CATEGORY=${{ secrets.HOST_DNS_CREATECATEGORY_QA }}
+            REACT_APP_BACKEND_URL_DELETE_CATEGORY=${{ secrets.HOST_DNS_DELETECATEGORY_QA }}
+            REACT_APP_BACKEND_URL_UPDATE_CATEGORY=${{ secrets.HOST_DNS_UPDATECATEGORY_QA }}
+
 
   deploy-createEmployee:
     needs: build-and-push-createEmployee
@@ -232,7 +238,7 @@ jobs:
             sudo docker rm delete-employee || true
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/delete-employee:v1
             sudo docker run -d --name delete-employee -p 8093:8093 \
-              -e DB_URL="${{ secrets.DB_URL }}" \
+             -e DB_URL="${{ secrets.DB_URL }}" \
              -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
              -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
               ${{ secrets.DOCKERHUB_USERNAME2 }}/delete-employee:v1                   
@@ -297,6 +303,24 @@ jobs:
     needs: build-and-push-frontend
     runs-on: ubuntu-latest
     steps:
+      - name: Install Docker if not present
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS_FRONTEND }}
+          username: ${{ secrets.USERNAME2 }}
+          key: ${{ secrets.EC2_SSH_KEY2 }}
+          script: |
+            if ! command -v docker &> /dev/null; then
+                echo "Docker no encontrado. Instalando..."
+                sudo apt update
+                sudo apt install -y docker.io
+                sudo systemctl enable docker
+                sudo systemctl start docker
+                echo "Docker instalado correctamente."
+            else
+                echo "Docker ya está instalado."
+            fi
+
       - name: Deploy Frontend to EC2
         uses: appleboy/ssh-action@master
         with:
@@ -304,11 +328,32 @@ jobs:
           username: ${{ secrets.USERNAME2 }}
           key: ${{ secrets.EC2_SSH_KEY2 }}
           script: |
+            # Verificar si Nginx está instalado antes de detenerlo
+            if systemctl list-units --full -all | grep -q "nginx.service"; then
+                sudo systemctl stop nginx
+            else
+                echo "Nginx no está instalado, continuando..."
+            fi
+
+            # Asegurar que Docker esté en ejecución y corregir permisos
+            sudo systemctl start docker
+            sudo chmod 666 /var/run/docker.sock
+
+            # Detener y eliminar contenedor anterior si existe
             sudo docker stop frontend || true
             sudo docker rm frontend || true
+
+            # Descargar la imagen desde DockerHub
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME2 }}/frontend:v1
+
+            # Ejecutar el contenedor con variables de entorno
             sudo docker run -d --name frontend -p 80:80 \
-              ${{ secrets.DOCKERHUB_USERNAME2 }}/frontend:v1   
+              -e REACT_APP_BACKEND_URL_READ_CATEGORY=${{ secrets.HOST_DNS_GETALLCATEGORIES_QA }} \
+              -e REACT_APP_BACKEND_URL_CREATE_CATEGORY=${{ secrets.HOST_DNS_CREATECATEGORY_QA }} \
+              -e REACT_APP_BACKEND_URL_DELETE_CATEGORY=${{ secrets.HOST_DNS_DELETECATEGORY_QA }} \
+              -e REACT_APP_BACKEND_URL_UPDATE_CATEGORY=${{ secrets.HOST_DNS_UPDATECATEGORY_QA }} \
+              ${{ secrets.DOCKERHUB_USERNAME2 }}/frontend:v1
+  
 
                                       
 
