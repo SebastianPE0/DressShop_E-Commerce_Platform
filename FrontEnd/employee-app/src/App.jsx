@@ -6,9 +6,7 @@ import Login from "./components/Login";
 import CategoryList from "./components/Category/ListCategory";
 import AddCategory from "./components/Category/AddCategory";
 import EditCategory from "./components/Category/EditCategory";
-import ListProduct from "./components/Product/ListProduct"; // ✅ Nuevo
 import AddProduct from "./components/Product/AddProduct"; // ✅ Nuevo
-import EditProduct from "./components/Product/EditProduct"; // ✅ Nuevo
 import { useState, useEffect } from "react";
 import Dashboard from "./components/Dashboard";
 
@@ -47,9 +45,9 @@ function App() {
                     <Route path="edit-category/:id" element={<EditCategory />} />
 
                     {/* Productos */}
-                    <Route path="products" element={<ListProduct />} />
+                    
                     <Route path="add-product" element={<AddProduct />} />
-                    <Route path="edit-product/:id" element={<EditProduct />} />
+                    
                 </Route>
 
                 {/* Cualquier otra ruta redirige a login */}
