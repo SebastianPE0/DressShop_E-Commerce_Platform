@@ -3,7 +3,6 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const categoryRoutes = require("./src/routes/categoryRoutes");
 const authMiddleware = require("./src/config/authMiddleware");
-console.log(typeof authMiddleware);
 
 const app = express();
 
@@ -20,9 +19,4 @@ app.use(bodyParser.json());
 app.use(authMiddleware); // Protege todas las rutas
 app.use("/category", categoryRoutes);
 
-// 📌 Asegurar que `PORT` tenga un valor por defecto
-const PORT =  5010;
-
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-
-module.exports = app;
+module.exports = app; // 📌 Ya NO inicia el servidor aquí.

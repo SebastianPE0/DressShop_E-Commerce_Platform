@@ -1,11 +1,20 @@
 const app = require('./app');
 const connectDB = require('./src/config/db');
-const config = require('./src/config/env'); // Importar configuración centralizada
 
-// Connect to DB
-connectDB();
+// 📌 Verificar si `MONGO_URI` está bien definida
+if (!process.env.MONGO_URI) {
+  console.error("❌ Error: MONGO_URI no está definida.");
+  process.exit(1);
+}
 
-// Start server (TEST YML )
-app.listen(config.appPort, () => {
-  console.log(`CreateCategory service running on port ${config.appPort}`);
+// Conectar a la base de datos
+connectDB().then(() => {
+  // Iniciar el servidor después de la conexión a MongoDB
+  const PORT = process.env.PORT || 5004;
+  app.listen(PORT, () => {
+    console.log(`🚀 CreateCategory service running on port ${PORT}`);
+  });
+}).catch(err => {
+  console.error("❌ No se pudo conectar a MongoDB:", err);
+  process.exit(1);
 });
