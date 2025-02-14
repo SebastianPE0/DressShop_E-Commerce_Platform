@@ -109,23 +109,23 @@ http://<HOST_AWS>/category/id
 #### List of Microservices:
 - CreateEmployee
 ```
-http://<HOST_AWS>/category/id
+http://98.82.98.218:8090/api/v1/employee/add
 ```
 - DeleteEmployee
 ```
-http://<HOST_AWS>/category/id
+http://<HOST_AWS>:8093/api/v1/employees/delete
 ```
 - LoginEmployee
 ```
-http://<HOST_AWS>/category/id
+http://52.45.203.169:8091/auth
 ```
 - GetAllEmployee
 ```
-http://<HOST_AWS>/category/id
+http://54.205.137.190:8094/api/v1/employee
 ```
 - UpdateEmployee
 ```
-http://<HOST_AWS>/category/id
+http://54.146.255.28:8092/api/v1/employees
 ```
 
 ### **GraphQL-Gateway (Node.js)**
@@ -156,7 +156,8 @@ http://52.4.35.158:4000/graphql
 ```
 ---
 #Architecture
-![image](https://github.com/user-attachments/assets/d70962bd-7782-4cbc-8884-e621a9343665)
+![image](https://github.com/user-attachments/assets/9dcf2dbc-06aa-4db1-b2d7-9696ea9ac35a)
+
 
 ---
 
