@@ -6,7 +6,7 @@ require('dotenv').config();
 
 const app = express();
 
-// Configurar CORS
+// Configurar TEST
 app.use(
     cors({
         origin: "http://3.214.134.68",
