@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import CategoryList from "./components/Category/ListCategory";
 import AddCategory from "./components/Category/AddCategory";
 import EditCategory from "./components/Category/EditCategory";
+import AddProduct from "./components/Product/AddProduct"; // ✅ Nuevo
 import { useState, useEffect } from "react";
 import Dashboard from "./components/Dashboard";
 
@@ -20,7 +21,7 @@ function App() {
     return (
         <Router>
             <Routes>
-                {/* Redirigir al login si no está autenticados */}
+                {/* Redirigir al login si no está autenticado */}
                 <Route path="/" element={isAuthenticated ? <Navigate to="/login" /> : <Navigate to="/login" />} />
 
                 {/* Ruta del Login */}
@@ -33,12 +34,20 @@ function App() {
 
                 {/* Dashboard con rutas protegidas */}
                 <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}>
+                    {/* Empleados */}
                     <Route path="employees" element={<EmployeeList />} />
                     <Route path="add-employee" element={<AddEmployee />} /> 
                     <Route path="edit-employee/:id" element={<EditEmployee />} />
+
+                    {/* Categorías */}
                     <Route path="categories" element={<CategoryList />} />
                     <Route path="add-category" element={<AddCategory />} />
                     <Route path="edit-category/:id" element={<EditCategory />} />
+
+                    {/* Productos */}
+                    
+                    <Route path="add-product" element={<AddProduct />} />
+                    
                 </Route>
 
                 {/* Cualquier otra ruta redirige a login */}

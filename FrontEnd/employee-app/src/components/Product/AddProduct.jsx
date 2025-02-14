@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { createProduct, getCategories } from "../../services/ProductService";
+import { createProduct } from "../../services/ProductService"; // Solo importar `createProduct`
+import { getCategories } from "../../services/CategoryService"; // Importar correctamente `getCategories`
 import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {

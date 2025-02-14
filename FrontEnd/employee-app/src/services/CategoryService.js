@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // URLs de los microservicios de Category en AWS EC2
-const API_CREATE = process.env.REACT_APP_BACKEND_URL_CREATE_CATEGORY;
+const API_CREATE = 'http://ec2-44-203-201-190.compute-1.amazonaws.com:5004/category/create';
 
 //const API_READ = process.env.REACT_APP_BACKEND_URL_READ_CATEGORY;
 
@@ -54,6 +54,7 @@ export const createCategory = async (category) => {
         throw error;
     }
 };
+
 
 // Actualizar una categoría (UPDATE)
 export const updateCategory = async (id, category) => {
