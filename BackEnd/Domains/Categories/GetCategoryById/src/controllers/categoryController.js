@@ -15,5 +15,5 @@ const getCategoryById = async (req, res) => {
         res.status(500).json({ error: "Error interno del servidor" });
     }
 };
-
+//TEST
 module.exports = { getCategoryById };
