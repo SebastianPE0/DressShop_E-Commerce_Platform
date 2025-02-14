@@ -7,7 +7,7 @@ const authMiddleware = require("./src/config/authMiddleware");
 
 const app = express();
 
-
+//TEST
 if (typeof authMiddleware !== "function") {
   console.error("Error: authMiddleware no es una función válida.");
   process.exit(1); 
@@ -16,7 +16,7 @@ if (typeof authMiddleware !== "function") {
 //TEST
 app.use(
   cors({
-    origin: "http://54.205.137.190",
+    origin: "http://3.214.134.68",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })

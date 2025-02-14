@@ -26,9 +26,9 @@ func GetEnv(key, defaultValue string) string {
 
 // GetPort retrieves the application port from environment variables.
 func GetPort() string {
-	port := os.Getenv("APP_PORT")
+	port := os.Getenv("PORT")
 	if port == "" {
-		port = "80" // Default port
+		port = "3001" // Default port
 	}
 	return port
 }

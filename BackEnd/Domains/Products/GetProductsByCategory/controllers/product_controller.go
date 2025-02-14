@@ -1,32 +1,23 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 
-	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/GetProductsByCategory/services"
+	"github.com/SebastianPE0/DressShop_E-Commerce_Platform/BackEnd/Products/GetProductsByCategory/repositories"
 	"github.com/gin-gonic/gin"
 )
 
-type ProductController struct {
-	Service *services.ProductService
-}
+// Obtener productos por categoría
+func GetProductsByCategory(c *gin.Context) {
+	categoryID := c.Param("categoryId")
 
-func NewProductController(service *services.ProductService) *ProductController {
-	return &ProductController{Service: service}
-}
-
-func (c *ProductController) GetProductsByCategory(ctx *gin.Context) {
-	categoryID := ctx.Query("category_id")
-	if categoryID == "" {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Missing category_id"})
-		return
-	}
-
-	products, err := c.Service.GetProductsByCategory(categoryID)
+	products, err := repositories.GetProductsByCategory(categoryID)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		log.Println("❌ Error al obtener productos por categoría:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al obtener productos"})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, products)
+	c.JSON(http.StatusOK, gin.H{"products": products})
 }

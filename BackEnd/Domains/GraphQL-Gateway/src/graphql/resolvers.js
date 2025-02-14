@@ -1,70 +1,53 @@
-const axios = require('axios');
-require('dotenv').config();
-
-const CATEGORY_SERVICE_URL = process.env.CATEGORY_SERVICE_URL;
-const PRODUCT_SERVICE_URL = process.env.PRODUCT_SERVICE_URL;
-
-const getCategoryById = async (id, token) => {
-  try {
-    console.log(`Fetching category from: ${CATEGORY_SERVICE_URL}/${id}`);
-
-    const response = await axios.get(`${CATEGORY_SERVICE_URL}/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,  // ✅ Pasar el token recibido desde el frontend
-      }
-    });
-
-    if (response.data) {
-      return {
-        id: response.data._id, 
-        name: response.data.name,
-        description: response.data.description,
-      };
-    }
-
-    return null; 
-  } catch (error) {
-    console.error(`Error fetching category ${id}:`, error.response?.data || error.message);
-    return null;
-  }
-};
-
-const getProductsByCategory = async (categoryId, token) => {
-  try {
-    const url = `${PRODUCT_SERVICE_URL}?category_id=${categoryId}`;
-    console.log(`🔍 Sending request to: ${url}`);
-
-    const response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,  // ✅ Pasar el token recibido desde el frontend
-      }
-    });
-
-    console.log("Response from product service:", response.data);
-
-    return response.data;
-  } catch (error) {
-    console.error(`Error fetching products by category ${categoryId}:`, error.response?.data || error.message);
-    return [];
-  }
-};
+const categoryService = require('../services/categoryService');
+const productService = require('../services/productService');
 
 const resolvers = {
   Query: {
-    category: async (_, { id }, context) => {
-      console.log("🔐 Token recibido:", context.token);  // ✅ Verificar si llega el token
-      if (!context.token) {
-        throw new Error("Unauthorized: Token is required");
-      }
-      return await getCategoryById(id, context.token);
-    },
+    getCategoryById: async (_, { id }) => {
+      console.log(`🔍 Buscando categoría en GraphQL para ID: ${id}`);
+      
+      const category = await categoryService.getCategoryById(id);
 
-    getProductsByCategory: async (_, { categoryId }, context) => {
-      console.log("🔐 Token recibido:", context.token);
-      if (!context.token) {
-        throw new Error("Unauthorized: Token is required");
+      if (!category) {
+          console.log("❌ No se encontró la categoría.");
+          return null;
       }
-      return await getProductsByCategory(categoryId, context.token);
+
+      console.log("🔍 Categoría encontrada en GraphQL:", category);
+
+      // Convertimos _id de MongoDB a id para GraphQL
+      return {
+          id: category._id.toString(), // Transformar ObjectId a String
+          name: category.name,
+          description: category.description,
+          createdAt: category.createdAt,
+          updatedAt: category.updatedAt
+      };
+    },
+    getProductsByCategory: async (_, { categoryId }) => {
+      console.log(`🔍 Buscando productos en GraphQL para categoryId: ${categoryId}`);
+
+      if (!categoryId) {
+        console.log("❌ categoryId no proporcionado.");
+        return null;
+      }
+
+      const response = await productService.getProductsByCategory(categoryId);
+
+      if (!response || !response.products || response.products.length === 0) {
+          console.log("❌ No se encontraron productos.");
+          return [];
+      }
+
+      console.log("🔍 Productos encontrados en GraphQL:", response.products);
+
+      return response.products.map(product => ({
+          id: product.id.toString(),
+          name: product.name,
+          price: product.price,
+          stock: product.stock,
+          categoryid: product.category_id
+      }));
     },
   },
 };

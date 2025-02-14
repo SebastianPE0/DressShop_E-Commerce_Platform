@@ -5,6 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// SetupRoutes configura las rutas del servidor con Gin
 func SetupRoutes(router *gin.Engine) {
-	router.POST("/create", controllers.CreateProduct)
+	protectedRoutes := router.Group("/")
+	{
+		protectedRoutes.POST("/product", controllers.CreateProduct)
+	}
 }

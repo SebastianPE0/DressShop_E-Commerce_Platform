@@ -8,6 +8,7 @@ const DeleteCategory = ({ id, onDelete }) => {
     if (!confirmDelete) return;
 
     try {
+
       // 🔹 Consultamos GraphQL para verificar si hay productos en la categoría antes de eliminarla
       const products = await CategoryService.deleteCategory(id);
       if (products.length > 0) {
@@ -18,6 +19,7 @@ const DeleteCategory = ({ id, onDelete }) => {
       // 🔹 Si no hay productos, eliminamos la categoría
       await CategoryService.deleteCategory(id);
       onDelete(); // 🔄 Recargamos la lista de categorías automáticamente
+
     } catch (error) {
       console.error(" Error eliminando categoría:", error);
       alert(" Error eliminando categoría. Intenta de nuevo.");

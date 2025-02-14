@@ -3,11 +3,13 @@ import { getCategories } from "../../services/CategoryService";
 import DeleteCategory from "./DeleteCategory"; // Importar el componente de eliminación
 import { Link } from "react-router-dom";
 import "./CategoryList.css"; 
+
 import { useNavigate } from "react-router-dom";
 
 const CategoryList = () => {
     const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
+
     useEffect(() => {
         const authStatus = localStorage.getItem("isAuthenticated") === "true";
         if (!authStatus) {
@@ -31,14 +33,17 @@ const CategoryList = () => {
             alert("Hubo un problema al cargar las categorías.");
         }
     };
+
     const handleAddCategory = () => {
         navigate("/add-category"); // Redirige sin problemas a la pantalla de añadir categoría
     };
 
 
+
     return (
         <div className="category-container">
             <h2 className="category-title">Lista de Categorías</h2>
+
             
             {/* Botón para agregar categoría (similar a empleados) */}
             <button style={{ marginBottom: "10px", padding: "10px", backgroundColor: "green", color: "white", borderRadius: "5px" }}>
@@ -60,12 +65,14 @@ const CategoryList = () => {
                                     <td>{category.name}</td>
                                     <td>
                                         <DeleteCategory id={category._id} onDelete={loadCategories} />
+
                                         <button 
                                             onClick={() => navigate(`/dashboard/edit-category/${category._id}`)} 
                                             className="edit-button"
                                         >
                                             Editar
                                         </button>
+
                                     </td>
                                 </tr>
                             ))

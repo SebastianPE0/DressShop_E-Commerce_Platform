@@ -1,61 +1,34 @@
 const axios = require("axios");
-const Category = require("../models/category");
+const categoryRepository = require("../repositories/categoryRepository");
 
-const GRAPHQL_SERVICE_URL = process.env.GRAPHQL_SERVICE_URL || "http://localhost:4000/graphql";
+const GRAPHQL_URL = process.env.GRAPHQL_GATEWAY_URL;
 
-// Verifica si hay productos en la categoría antes de eliminarla
-const checkProductsInCategory = async (categoryId, token) => {
-    if (!token) {
-        throw new Error("Token de autenticación no proporcionado.");
-    }
+const checkProductsInCategory = async (categoryId) => {
+  try {
+    const response = await axios.post(GRAPHQL_URL, {
+      query: `query { getProductsByCategory(categoryId: "${categoryId}") { id } }`,
+    });
 
-    const query = {
-        query: `
-            query GetProductsByCategory($categoryId: ID!) {
-                getProductsByCategory(categoryId: $categoryId) {
-                    id
-                }
-            }
-        `,
-        variables: { categoryId },
-    };
-
-    try {
-        const response = await axios.post(GRAPHQL_SERVICE_URL, query, {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": token, // ✅ Se envía el token correctamente
-            },
-        });
-
-        const products = response.data.data?.getProductsByCategory || [];
-        return products.length > 0;
-    } catch (error) {
-        console.error("❌ Error al consultar GraphQL-Gateway:", error.response?.data || error.message);
-        throw new Error("No se pudo verificar si la categoría tiene productos asociados.");
-    }
+    const products = response.data.data.getProductsByCategory;
+    return products && products.length > 0;
+  } catch (error) {
+    console.error("❌ Error en checkProductsInCategory:", error);
+    return false;
+  }
 };
 
-// Elimina una categoría si no tiene productos asociados
-const deleteCategory = async (categoryId, token) => {
-    if (!categoryId) {
-        throw new Error("ID de categoría no proporcionado.");
-    }
+const deleteCategory = async (categoryId) => {
+  const categoryExists = await categoryRepository.findCategoryById(categoryId);
+  if (!categoryExists) {
+    throw new Error("Categoría no encontrada");
+  }
 
-    const hasProducts = await checkProductsInCategory(categoryId, token);
+  const hasProducts = await checkProductsInCategory(categoryId);
+  if (hasProducts) {
+    throw new Error("No se puede eliminar la categoría porque tiene productos asignados.");
+  }
 
-    if (hasProducts) {
-        throw new Error("No se puede eliminar la categoría porque tiene productos asignados.");
-    }
-
-    // Verifica si la categoría existe
-    const category = await Category.findById(categoryId);
-    if (!category) {
-        throw new Error("Categoría no encontrada.");
-    }
-
-    await Category.findByIdAndDelete(categoryId);
-    return { message: "Categoría eliminada exitosamente." };
+  return await categoryRepository.deleteCategory(categoryId);
 };
 
 module.exports = { deleteCategory };
