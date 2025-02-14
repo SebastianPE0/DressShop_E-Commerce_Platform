@@ -46,7 +46,7 @@ function App() {
 
                     {/* Productos */}
                     
-                    <Route path="add-product" element={<AddProduct />} />
+                    <Route path="prooducts" element={<ListProduct />} />
                     
                 </Route>
 
