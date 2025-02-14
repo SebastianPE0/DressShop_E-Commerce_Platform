@@ -3,7 +3,7 @@ name: Deploy get_all-product
 on:
     push:
         branches:
-            - Feature_BackEnd_CategoryDomain_AddMicroservice_DeleteCategory
+            - Fix_Merge_Repository
         paths:
             - 'BackEnd/Domains/Products/GetProducts/**'
 jobs:
@@ -41,6 +41,6 @@ jobs:
             sudo docker stop get-all-products || true
             sudo docker rm get-all-products || true
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/get-all-products:latest
-            sudo docker run -d --name get-all-products --network host \
+            sudo docker run -d --name get-all-products -p 6003:6003 \
               -e MONGO_URI="${{ secrets.MONGO_URI_PRODUCT }}" \
               ${{ secrets.DOCKERHUB_USERNAME }}/get-all-products:latest

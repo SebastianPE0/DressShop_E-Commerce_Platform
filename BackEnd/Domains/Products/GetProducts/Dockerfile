@@ -1,4 +1,4 @@
-FROM golang:1.20
+FROM golang:1.22
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ COPY . .
 RUN go build -o get-products-service main.go
 
 # Exponer el puerto
-EXPOSE 80
+EXPOSE 6003
 
 # Ejecutar el servicio
 CMD ["./get-products-service"]
