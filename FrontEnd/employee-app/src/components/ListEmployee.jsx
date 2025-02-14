@@ -22,20 +22,29 @@ const EmployeeList = () => {
         if (window.confirm("¿Estás seguro de que deseas eliminar este empleado?")) {
             try {
                 await deleteEmployee(id);
+                alert("Empleado eliminado correctamente");
                 loadEmployees(); // Recargar la lista después de eliminar
             } catch (error) {
                 console.error("Error eliminando empleado:", error);
+    
+                // Si el error es de autenticación, redirigir al login
+                if (error.response && error.response.status === 401) {
+                    localStorage.removeItem("isAuthenticated");
+                    window.location.href = "/login"; // Forzar redirección
+                }
             }
         }
     };
+    
 
     return (
         <div className="container">
             <h2>Lista de Empleados</h2>
             {/* Botón para agregar un nuevo empleado */}
             <button style={{ marginBottom: "10px", padding: "10px", backgroundColor: "green", color: "white", borderRadius: "5px" }}>
-                <Link to="/add" style={{ textDecoration: "none", color: "white" }}>Añadir Empleado</Link>
+                <Link to="/dashboard/add-employee" style={{ textDecoration: "none", color: "white" }}>Añadir Empleado</Link>
             </button>
+
 
             <ul>
                 {employees.map(employee => (
@@ -47,12 +56,13 @@ const EmployeeList = () => {
                             Eliminar
                         </button>
 
-                        {/* Botón de Editar */}
+                       {/* Botón de Editar */}
                         <button style={{ marginLeft: "10px", backgroundColor: "blue", color: "white", padding: "5px", borderRadius: "5px" }}>
-                            <Link to={`/edit/${employee.employeeid}`} style={{ textDecoration: "none", color: "white" }}>
-                                Editar
-                            </Link>
+                           <Link to={`/dashboard/edit-employee/${employee.employeeid}`} style={{ textDecoration: "none", color: "white" }}>
+                               Editar
+                           </Link>
                         </button>
+
                     </li>
                 ))}
             </ul>

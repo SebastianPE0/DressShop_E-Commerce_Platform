@@ -19,7 +19,7 @@ public class EmployeeImpl  implements IEmployeeService {
     private PasswordEncoder passwordEncoder;  // Asegúrate de inyectar el PasswordEncoder
 
     @Override
-    public Employee updateEmployee(Long id, EmployeeDTO employeeDTO) {
+    public Employee updateEmployee(String id, EmployeeDTO employeeDTO) {
         // Busca el empleado en la base de datos por id
         Optional<Employee> optionalEmployee = employeeRepo.findById(id);  // Encuentra al empleado por id
 

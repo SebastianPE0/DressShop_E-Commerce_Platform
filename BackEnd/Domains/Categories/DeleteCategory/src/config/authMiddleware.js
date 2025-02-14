@@ -16,7 +16,6 @@ async function getKey(header, callback) {
   }
 }
 
-// Middleware de autenticación en GraphQL-Gateway
 function authMiddleware(req, res, next) {
   const authHeader = req.headers["authorization"];
 

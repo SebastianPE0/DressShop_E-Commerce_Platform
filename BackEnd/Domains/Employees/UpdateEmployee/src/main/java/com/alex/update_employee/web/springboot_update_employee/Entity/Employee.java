@@ -1,14 +1,17 @@
 package com.alex.update_employee.web.springboot_update_employee.Entity;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "employee")
 public class Employee {
     @Id
-    @Column(name = "employee_id", length = 45)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long employeeid;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "employee_id", updatable = false, nullable = false, length = 45)
+    private String employeeid;
 
     @Column(name = "employee_name", length = 255)
     private String employeename;
@@ -20,7 +23,7 @@ public class Employee {
     private String password;
 
    
-    public Employee (Long employeeid, String employeename, String email, String password) {
+    public Employee (String employeeid, String employeename, String email, String password) {
         this.employeeid = employeeid;
         this.employeename = employeename;
         this.email=email;
@@ -31,11 +34,11 @@ public class Employee {
 
     }
 
-    public Long getEmployeeid() {
+    public String getEmployeeid() {
         return employeeid;
     }
 
-    public void setEmployeeid(Long employeeid) {
+    public void setEmployeeid(String employeeid) {
         this.employeeid = employeeid;
     }
 

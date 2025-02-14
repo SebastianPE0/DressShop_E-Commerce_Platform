@@ -29,9 +29,16 @@ const EditEmployee = () => {
         try {
             await updateEmployee(id, employee);
             alert("Empleado actualizado correctamente");
-            navigate("/");
+            navigate("/dashboard/employees"); // ✅ Redirigir a la lista de empleados después de actualizar
         } catch (error) {
             console.error("Error actualizando empleado:", error);
+    
+            // Si hay error de autenticación, cerrar sesión y redirigir al login
+            if (error.response && error.response.status === 401) {
+                alert("Sesión expirada. Inicia sesión nuevamente.");
+                localStorage.removeItem("isAuthenticated");
+                navigate("/login");
+            }
         }
     };
 

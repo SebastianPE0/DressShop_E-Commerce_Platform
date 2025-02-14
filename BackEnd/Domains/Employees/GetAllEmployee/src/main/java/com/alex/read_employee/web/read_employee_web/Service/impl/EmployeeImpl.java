@@ -20,7 +20,7 @@ public class EmployeeImpl  implements IEmployeeService {
     }
 
     @Override
-    public Optional<Employee> getEmployeeById(Long id) {
+    public Optional<Employee> getEmployeeById(String id) {
         return employeeRepo.findById(id);
     }
 }
