@@ -44,9 +44,7 @@ const Login = ({ onLogin }) => {
                         />
                     </div>
                     <button className="login-button" type="submit">Iniciar Sesión</button>
-                    <p className="register-text">
-                        ¿No tienes una cuenta? <a href="#">Regístrate</a>
-                    </p>
+                   
                 </form>
             </div>
         </div>

@@ -6,7 +6,7 @@ const API_CREATE = process.env.REACT_APP_BACKEND_URL_CREATE_CATEGORY;
 //const API_READ = process.env.REACT_APP_BACKEND_URL_READ_CATEGORY;
 const API_READ='http://ec2-54-167-168-57.compute-1.amazonaws.com/categories';
 const API_UPDATE = process.env.REACT_APP_BACKEND_URL_UPDATE_CATEGORY;
-const API_DELETE = 'http://ec2-54-197-179-156.compute-1.amazonaws.com:5000/api/categories';
+const API_DELETE = 'http://ec2-44-202-156-204.compute-1.amazonaws.com:5000/api/categories';
 
 // Función para obtener el token y agregarlo a los headers
 const authHeader = () => {

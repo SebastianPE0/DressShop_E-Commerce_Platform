@@ -9,15 +9,14 @@ const CategoryList = () => {
     const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
     useEffect(() => {
-        // Verificar autenticación antes de cargar datos
-        const token = localStorage.getItem("token");
-        if (!token) {
-            console.warn("No hay token, redirigiendo a login...");
-            navigate("/login"); // Si no hay token, redirige al login
+        const authStatus = localStorage.getItem("isAuthenticated") === "true";
+        if (!authStatus) {
+            console.warn("Usuario no autenticado, redirigiendo a login...");
+            navigate("/login"); // Si no está autenticado, redirige al login
             return;
         }
-
-        console.log("Token encontrado en localStorage:", token);
+    
+        console.log("Usuario autenticado, cargando categorías...");
         loadCategories();
     }, [navigate]);
 
