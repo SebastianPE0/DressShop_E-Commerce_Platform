@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for Microservices
+name: CI/CD Pipeline for ALL Microservices
 
 on:
   push:

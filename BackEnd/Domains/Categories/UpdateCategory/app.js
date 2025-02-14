@@ -16,7 +16,7 @@ if (typeof authMiddleware !== "function") {
 
 app.use(
   cors({
-    origin: "http://ec2-3-80-74-169.compute-1.amazonaws.com",
+    origin: "http://3.214.134.68", 
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
