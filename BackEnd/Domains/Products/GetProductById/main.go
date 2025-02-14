@@ -9,7 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// TEST
 func main() {
 	//TEST DEPLOY
 	config.LoadEnv()
