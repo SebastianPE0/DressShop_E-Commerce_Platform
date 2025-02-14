@@ -11,7 +11,6 @@ import (
 
 func main() {
 	//TEST DEPLOY
-	config.LoadEnv()
 
 	// Conectar a MongoDB
 	config.ConnectDB()

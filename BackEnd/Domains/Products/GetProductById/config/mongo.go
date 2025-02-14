@@ -39,5 +39,5 @@ func ConnectDB() {
 
 // GetDB obtiene la instancia de la base de datos
 func GetDB() *mongo.Database {
-	return client.Database(os.Getenv("MONGO_DB_NAME"))
+	return client.Database("product_db")
 }
