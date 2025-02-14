@@ -8,18 +8,17 @@ const ProductList = () => {
 
     useEffect(() => {
         // ✅ Verificar autenticación correctamente
-        const authStatus = localStorage.getItem("isAuthenticated") === "true";
-        if (!authStatus) {
+        const authStatus = localStorage.getItem("isAuthenticated");
+        if (!authStatus || authStatus !== "true") {
             console.warn("Usuario no autenticado, redirigiendo a login...");
             navigate("/login");
             return;
         }
 
         console.log("Usuario autenticado, cargando productos...");
-        loadProducts(); // ✅ Llamar a la función correcta
-    }, []);
+        loadProducts();
+    }, [navigate]);
 
-    // ✅ Corrección: Llamar a `getProducts()` en lugar de `loadCategories()`
     const loadProducts = async () => {
         try {
             const data = await getProducts();
