@@ -3,7 +3,7 @@ name: Deploy graphQL-deploy
 on:
     push:
         branches:
-            - Fix_BackEnd_GraphQL_DeleteCategory
+            - Fix_Merge_Repository
         paths:
             - 'BackEnd/Domains/GraphQL-Gateway/**'
 jobs:
