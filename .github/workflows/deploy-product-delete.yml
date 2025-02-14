@@ -41,6 +41,6 @@ jobs:
             sudo docker stop delete-product || true
             sudo docker rm delete-product || true
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/delete-product:latest
-            sudo docker run -d --name delete-product -p 5000:5000 \
+            sudo docker run -d --name delete-product -p 6003:6003 \
               -e MONGO_URI="${{ secrets.MONGO_URI_PRODUCT }}" \
               ${{ secrets.DOCKERHUB_USERNAME }}/delete-product:latest
