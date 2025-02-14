@@ -21,10 +21,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Permitir CORS
-            .csrf(csrf -> csrf.disable()) // Deshabilitar CSRF
+            .csrf(csrf -> csrf.disable()) 
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/v1/employee/add").permitAll() // Permitir creación de empleados sin autenticación
+                .requestMatchers("/api/v1/employee/add").permitAll() 
                 .anyRequest().authenticated()
             );
 
