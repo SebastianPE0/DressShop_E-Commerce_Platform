@@ -17,7 +17,6 @@ app.use(
 
 app.use(express.json());
 
-// Aplicar autenticación a las rutas protegidas
 app.use(authMiddleware);
 
 setupRoutes(app);

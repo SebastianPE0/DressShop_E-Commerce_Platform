@@ -10,9 +10,7 @@ import (
 )
 
 func main() {
-	//TEST DEPLO1
-
-	// Conectar a MongoDB
+	
 	config.ConnectDB()
 
 	// Crear instancia de Gin

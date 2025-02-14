@@ -21,7 +21,7 @@ func main() {
 		AllowHeaders:     []string{"Content-Type", "Authorization"},
 		AllowCredentials: true,
 	}))
-	//DEPLOY
+	
 	r.Use(config.AuthMiddleware())
 
 	routes.SetupRoutes(r)

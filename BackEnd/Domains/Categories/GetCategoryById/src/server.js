@@ -6,7 +6,6 @@ require('dotenv').config();
 
 const app = express();
 
-// Configurar TEST
 app.use(
     cors({
         origin: "http://3.214.134.68",
@@ -17,13 +16,11 @@ app.use(
 
 app.use(express.json());
 
-// Conectar a la base de datos
 connectDB();
 
-// Configurar rutas
 app.use('/api', categoryRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`✅ GetCategoryById corriendo en puerto ${PORT}`);
+    console.log(` GetCategoryById corriendo en puerto ${PORT}`);
 });
