@@ -6,7 +6,7 @@ import Login from "./components/Login";
 import CategoryList from "./components/Category/ListCategory";
 import AddCategory from "./components/Category/AddCategory";
 import EditCategory from "./components/Category/EditCategory";
-import AddProduct from "./components/Product/AddProduct"; // ✅ Nuevo
+import  ProductList from "./components/Product/ListProduct"; // ✅ Nuevo
 import { useState, useEffect } from "react";
 import Dashboard from "./components/Dashboard";
 
@@ -46,7 +46,7 @@ function App() {
 
                     {/* Productos */}
                     
-                    <Route path="prooducts" element={<ListProduct />} />
+                    <Route path="prooducts" element={<ProductList />} />
                     
                 </Route>
 
