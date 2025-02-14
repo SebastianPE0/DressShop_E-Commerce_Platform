@@ -40,9 +40,9 @@ const CategoryList = () => {
         <div className="category-container">
             <h2 className="category-title">Lista de Categorías</h2>
             
-            {/* Botón en lugar de Link */}
-            <button onClick={handleAddCategory} className="add-category-button">
-                Añadir Categoría
+            {/* Botón para agregar categoría (similar a empleados) */}
+            <button style={{ marginBottom: "10px", padding: "10px", backgroundColor: "green", color: "white", borderRadius: "5px" }}>
+                <Link to="/dashboard/add-category" style={{ textDecoration: "none", color: "white" }}>Añadir Categoría</Link>
             </button>
 
             <div className="category-table-container">
@@ -61,7 +61,7 @@ const CategoryList = () => {
                                     <td>
                                         <DeleteCategory id={category._id} onDelete={loadCategories} />
                                         <button 
-                                            onClick={() => navigate(`/edit-category/${category._id}`)} 
+                                            onClick={() => navigate(`/dashboard/edit-category/${category._id}`)} 
                                             className="edit-button"
                                         >
                                             Editar

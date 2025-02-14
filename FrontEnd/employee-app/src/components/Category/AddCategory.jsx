@@ -15,7 +15,7 @@ const AddCategory = () => {
         try {
             await createCategory(category);
             alert("Categoría añadida correctamente");
-            navigate("/categories");
+            navigate("/dashboard/categories"); // ✅ Redirige correctamente a la lista de categorías
         } catch (error) {
             console.error("Error añadiendo categoría:", error);
         }
