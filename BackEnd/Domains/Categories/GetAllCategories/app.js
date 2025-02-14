@@ -7,13 +7,13 @@ const authMiddleware = require("./src/config/authMiddleware");
 
 const app = express();
 
-//TEST23
+
 if (typeof authMiddleware !== "function") {
   console.error("Error: authMiddleware no es una función válida.");
   process.exit(1); 
 }
 
-//TEST
+
 app.use(
   cors({
     origin: "http://3.214.134.68",
@@ -22,7 +22,6 @@ app.use(
   })
 );
 
-// 📌 Middlewares
 app.use(express.json()); 
 app.use(authMiddleware); 
 
@@ -30,6 +29,6 @@ app.use("/categories", categoryRoutes);
 
 
 const PORT = process.env.PORT ;
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(` Server running on port ${PORT}`));
 
 module.exports = app;

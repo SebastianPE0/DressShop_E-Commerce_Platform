@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	//TEST
+	
 	config.ConnectDB()
 
 	r := gin.Default()

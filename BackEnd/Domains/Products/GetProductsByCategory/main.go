@@ -13,17 +13,16 @@ import (
 )
 
 func main() {
-	//TEST23
-	// Cargar variables de entorno
+	
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("❌ Error al cargar archivo .env")
 	}
 
-	// TEST
+	
 	config.ConnectDB()
 
-	// Configurar el servidor con Gin
+	
 	r := gin.Default()
 
 	// Aplicar CORS
