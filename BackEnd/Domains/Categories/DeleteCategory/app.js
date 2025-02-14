@@ -7,7 +7,7 @@ dotenv.config();
 
 const app = express();
 
-// 🔹 Configurar TEST1
+// 🔹 Configurar TEST
 app.use(
     cors({
         origin: "http://3.214.134.68", // URL del frontend
