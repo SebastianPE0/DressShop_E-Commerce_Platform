@@ -7,7 +7,7 @@ import CategoryList from "./components/Category/ListCategory";
 import AddCategory from "./components/Category/AddCategory";
 import EditCategory from "./components/Category/EditCategory";
 import  ProductList from "./components/Product/ListProduct";
-import  ProductList from "./components/Product/AddProduct"; // ✅ Nuevo
+import  AddProduct from "./components/Product/AddProduct"; // ✅ Nuevo
 import { useState, useEffect } from "react";
 import Dashboard from "./components/Dashboard";
 
