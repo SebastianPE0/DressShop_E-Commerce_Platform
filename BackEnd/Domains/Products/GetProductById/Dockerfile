@@ -11,12 +11,11 @@ RUN go mod download
 # Copy the source code
 COPY . .
 
-# Compile the service
-RUN go build -o get-product-by-id-service main.go
-
 # Expose service port
 EXPOSE 6002
 
+RUN go build -o main .
 # Command to run the service
 
-CMD ["./get-product-by-id-service"]
+CMD ["./main"]
+
